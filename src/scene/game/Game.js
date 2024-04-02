@@ -45,7 +45,7 @@ ArcticMadness.scene.Game.prototype.constructor = ArcticMadness.scene.Game;
 ArcticMadness.scene.Game.prototype.init = function() {
     rune.scene.Scene.prototype.init.call(this);
     
-    var text = new rune.text.BitmapField("Hello World!");
+    var text = new rune.text.BitmapField("Arctic Madness!");
     text.autoSize = true;
     text.center = this.application.screen.center;
     
