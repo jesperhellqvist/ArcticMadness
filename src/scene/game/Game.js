@@ -44,8 +44,15 @@ ArcticMadness.scene.Game.prototype.constructor = ArcticMadness.scene.Game;
  */
 ArcticMadness.scene.Game.prototype.init = function() {
     rune.scene.Scene.prototype.init.call(this);
+    var bg = new rune.display.Graphic(0,0,400,400,"bg2");
+    // bg.scaleX = 0.5;
+    // bg.scaleY = 0.5;
+    bg.autoSize = true;
+   
+  
+    this.stage.addChild(bg);
     
-    var text = new rune.text.BitmapField("Arctic Madness!");
+    var text = new rune.text.BitmapField("Arctic Madness!!");
     text.autoSize = true;
     text.center = this.application.screen.center;
 
