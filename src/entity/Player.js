@@ -5,7 +5,7 @@
 
 
 
-ArcticMadness.entity.Player = function() {
+ArcticMadness.entity.Player = function(x, y, pinguin) {
 
         this.health = 100; // Player health
         
@@ -17,7 +17,7 @@ ArcticMadness.entity.Player = function() {
         /**
         * Calls the constructor method of the super class.
         */
-        rune.display.Sprite.call(this, 100, 100, 32, 32, "penguin");
+        rune.display.Sprite.call(this, x, y, 32, 32, pinguin);
     };
 
     //--------------------------------------------------------------------------
@@ -41,6 +41,7 @@ ArcticMadness.entity.Player = function() {
     ArcticMadness.entity.Player.prototype.update = function(step) {
         rune.display.Sprite.prototype.update.call(this, step);
         this.m_handleInput();
+        this.m_handleHitBox();
     };
 
     ArcticMadness.entity.Player.prototype.dispose = function() {
@@ -79,4 +80,10 @@ ArcticMadness.entity.Player = function() {
             this.animation.gotoAndPlay("idle");
             
         }
+    };
+
+    ArcticMadness.entity.Player.prototype.m_handleHitBox = function() {
+       this.hitbox.set();
+       this.debug = true;
+       this.debugColor = "#FF0000";
     };

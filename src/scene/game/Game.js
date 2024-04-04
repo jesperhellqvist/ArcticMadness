@@ -53,7 +53,7 @@ ArcticMadness.scene.Game.prototype.init = function() {
     text.autoSize = true;
     text.center = this.application.screen.center;
 
-    var player = new ArcticMadness.entity.Player();
+    var player = new ArcticMadness.entity.Player(100, 100, "penguin");
    
 
 
@@ -84,5 +84,5 @@ ArcticMadness.scene.Game.prototype.update = function(step) {
  */
 ArcticMadness.scene.Game.prototype.dispose = function() {
     rune.scene.Scene.prototype.dispose.call(this);
-    
+
 };
