@@ -84,4 +84,5 @@ ArcticMadness.scene.Game.prototype.update = function(step) {
  */
 ArcticMadness.scene.Game.prototype.dispose = function() {
     rune.scene.Scene.prototype.dispose.call(this);
+    
 };
