@@ -39,4 +39,5 @@ ArcticMadness.entity.Player = function() {
         this.x = 100;
         this.y = 100;
         this.speed = 2;
+
     };
