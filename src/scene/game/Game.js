@@ -44,7 +44,7 @@ ArcticMadness.scene.Game.prototype.constructor = ArcticMadness.scene.Game;
  */
 ArcticMadness.scene.Game.prototype.init = function() {
     rune.scene.Scene.prototype.init.call(this);
-    var bg = new rune.display.Graphic(0,0,384,216,"bg_216");
+    var bg = new rune.display.Graphic(0,0,960,540,"bg_540");
 
   
     
@@ -54,11 +54,11 @@ ArcticMadness.scene.Game.prototype.init = function() {
     text.center = this.application.screen.center;
 
     var player = new ArcticMadness.entity.Player();
-    player.init();
-    this.stage.addChild(player);
+   
 
 
     this.stage.addChild(bg);
+    this.stage.addChild(player);
     this.stage.addChild(text);
 };
 
