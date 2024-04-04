@@ -47,12 +47,18 @@ ArcticMadness.scene.Game.prototype.init = function() {
     var bg = new rune.display.Graphic(0,0,384,216,"bg_216");
 
   
-    this.stage.addChild(bg);
+    
     
     var text = new rune.text.BitmapField("Arctic Madness!!");
     text.autoSize = true;
     text.center = this.application.screen.center;
-    
+
+    var player = new ArcticMadness.entity.Player();
+    player.init();
+    this.stage.addChild(player);
+
+
+    this.stage.addChild(bg);
     this.stage.addChild(text);
 };
 

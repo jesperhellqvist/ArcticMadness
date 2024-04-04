@@ -48,6 +48,16 @@ var ArcticMadness = function() {
     m_this.scene = {};
 
     /**
+     * This package contains the entities that are used within the application.
+     * Entities are used to represent objects that can be placed in a scene.
+     * 
+     * @namespace entity
+     * @memberof ArcticMadness
+     * @since 1.0
+     */
+    m_this.entity = {};
+
+    /**
      * This package contains the application's most vital classes.
      *
      * @namespace system
