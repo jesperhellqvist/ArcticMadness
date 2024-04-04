@@ -43,6 +43,8 @@ ArcticMadness.data.Requests.prototype.constructor = ArcticMadness.data.Requests;
  */
 ArcticMadness.data.Requests.prototype.m_construct = function() {
     rune.resource.Requests.prototype.m_construct.call(this);
-    this.add("bg2", "./../asset/bg2.png");
+    this.add("bg", "./../asset/bg.png");
+	this.add("bg2", "./../asset/bg2.png");
 	this.add("penguin", "./../asset/penguin.png");
+	this.add("penguin2", "./../asset/penguin2.png");
 };
