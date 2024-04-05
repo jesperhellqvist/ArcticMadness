@@ -54,31 +54,46 @@ ArcticMadness.entity.Player = function(x, y, pinguin) {
 
     ArcticMadness.entity.Player.prototype.m_handleInput = function() {
         if(this.keyboard.pressed("A")) {
-            this.x -= 2;
+            if(this.x <= 0){
+                this.x = 0;
+                return;
+            }
+            this.x -= 5;
             this.flippedX = true;
             this.animation.gotoAndPlay("walk");
-            
         }
        else if(this.keyboard.pressed("D")) {
-            this.x += 2;
+            if(this.x >= 925){
+                this.x = 925;
+                return;
+            }
+            this.x += 5;
             this.flippedX = false;
             this.animation.gotoAndPlay("walk");
             
         }
        else if(this.keyboard.pressed("W")) {
-            this.y -= 1;
+            if(this.y <= 0){
+                this.y = 0;
+                return;
+            }
+
+            this.y -= 5;
             this.animation.gotoAndPlay("walk");
           
     
         }
        else if(this.keyboard.pressed("S")) {
-            this.y += 1;
+            if(this.y >= 505){
+                this.y = 505;
+                return;
+            }
+            this.y += 5;
             this.animation.gotoAndPlay("walk");
            
         }
         else {
             this.animation.gotoAndPlay("idle");
-            
         }
     };
 
