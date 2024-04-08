@@ -22,7 +22,7 @@ ArcticMadness.entity.Player = function (x, y, penguin, controls) {
     /**
     * Calls the constructor method of the super class.
     */
-    rune.display.Sprite.call(this, x, y, 32, 32, penguin);
+    rune.display.Sprite.call(this, x, y, 64, 64, penguin);
 };
 
 //--------------------------------------------------------------------------
