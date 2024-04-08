@@ -5,7 +5,7 @@
 
 
 
-ArcticMadness.entity.Player = function (x, y, pinguin, controls) {
+ArcticMadness.entity.Player = function (x, y, penguin, controls) {
 
     this.health = 100; // Player health
     this.controls = controls; // Player controls on keyboard
@@ -22,7 +22,7 @@ ArcticMadness.entity.Player = function (x, y, pinguin, controls) {
     /**
     * Calls the constructor method of the super class.
     */
-    rune.display.Sprite.call(this, x, y, 32, 32, pinguin);
+    rune.display.Sprite.call(this, x, y, 32, 32, penguin);
 };
 
 //--------------------------------------------------------------------------
