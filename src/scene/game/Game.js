@@ -44,7 +44,7 @@ ArcticMadness.scene.Game.prototype.constructor = ArcticMadness.scene.Game;
  */
 ArcticMadness.scene.Game.prototype.init = function() {
     rune.scene.Scene.prototype.init.call(this);
-    var bg = new rune.display.Graphic(0,0,960,540,"bg");
+    var bg = new rune.display.Graphic(0,0,960,540,"bg2");
 
   
     
@@ -53,12 +53,17 @@ ArcticMadness.scene.Game.prototype.init = function() {
     text.autoSize = true;
     text.center = this.application.screen.center;
 
-    var player = new ArcticMadness.entity.Player(100, 100, "penguin");
+    var player = new ArcticMadness.entity.Player(100, 100, "penguin", {left: "A", right: "D", up: "W", down: "S", jump: "SPACE"});
+    var player2 = new ArcticMadness.entity.Player(200, 200, "penguin", {left: "LEFT", right: "RIGHT", up: "UP", down: "DOWN", jump: "SPACE"});
+  
+
    
 
 
     this.stage.addChild(bg);
     this.stage.addChild(player);
+    this.stage.addChild(player2);
+  
     this.stage.addChild(text);
 };
 
