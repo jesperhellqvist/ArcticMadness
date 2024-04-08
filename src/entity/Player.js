@@ -39,8 +39,8 @@ ArcticMadness.entity.Player.prototype.constructor = ArcticMadness.entity.Player;
 ArcticMadness.entity.Player.prototype.init = function () {
     rune.display.Sprite.prototype.init.call(this);
 
-    this.animation.create("idle", [0, 1], 8, true);
-    this.animation.create("walk", [4, 5, 6, 7], 10, true);
+    this.animation.create("idle", [0, 1,2], 8, true);
+    this.animation.create("walk", [3, 4], 10, true);
     this.m_setPhysics();
 };
 
