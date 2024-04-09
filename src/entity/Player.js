@@ -135,5 +135,5 @@ ArcticMadness.entity.Player.prototype.m_setPhysics = function () {
 ArcticMadness.entity.Player.prototype.m_handleHitBox = function () {
   this.hitbox.set();
   this.debug = true;
-  this.debugColor = "#FF0000";
+  
 };
