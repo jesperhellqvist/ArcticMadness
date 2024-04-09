@@ -7,6 +7,7 @@ ArcticMadness.entity.Player = function (x, y, penguin, controls) {
   this.controls = controls; // Player controls on keyboard
   this.x = x; // Player x position
   this.y = y; // Player y position
+  this.angle = 0; // Player angle
   //this.topSpeed = 3; // Player top speed
 
   //--------------------------------------------------------------------------
@@ -64,6 +65,7 @@ ArcticMadness.entity.Player.prototype.m_handleInput = function (controls) {
       this.x -= 5;
       this.velocity.x -= 0.15;
       this.flippedX = true;
+      this.angle = 270;
       this.animation.gotoAndPlay("walk");
     }
   }
@@ -74,6 +76,7 @@ ArcticMadness.entity.Player.prototype.m_handleInput = function (controls) {
       this.x += 5;
       this.velocity.x += 0.15;
       this.flippedX = false;
+        this.angle = 90;
       this.animation.gotoAndPlay("walk");
     }
   }
@@ -83,6 +86,7 @@ ArcticMadness.entity.Player.prototype.m_handleInput = function (controls) {
     } else {
       this.y -= 5;
       this.velocity.y -= 0.15;
+      this.angle = 0;
       this.animation.gotoAndPlay("walk");
     }
   }
@@ -92,12 +96,13 @@ ArcticMadness.entity.Player.prototype.m_handleInput = function (controls) {
     } else {
       this.y += 5;
       this.velocity.y += 0.15;
+        this.angle = 180;
       this.animation.gotoAndPlay("walk");
     }
   }
 
   if (this.keyboard.justPressed(controls.shoot)) {
-    this.m_handleShoot();
+    this.m_handleShoot(this.angle);
   }
   
   if (
@@ -106,13 +111,15 @@ ArcticMadness.entity.Player.prototype.m_handleInput = function (controls) {
     !this.keyboard.pressed(controls.up) &&
     !this.keyboard.pressed(controls.down)
   ) {
+    this.flippedX = false;
     this.animation.gotoAndPlay("idle");
   }
 };
 
-ArcticMadness.entity.Player.prototype.m_handleShoot = function () {
-    this.bullet = new ArcticMadness.entity.Bullet(this.x, this.y);
-    this.bullet.y = this.y + 40;
+ArcticMadness.entity.Player.prototype.m_handleShoot = function (angle) {
+    console.log(angle);
+    this.bullet = new ArcticMadness.entity.Bullet(this.x, this.y, angle);
+    this.bullet.y = this.y + 30;
     this.stage.addChild(this.bullet);
     };
 

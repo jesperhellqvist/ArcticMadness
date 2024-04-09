@@ -46,6 +46,7 @@ ArcticMadness.data.Requests.prototype.m_construct = function() {
     this.add("bg", "./../asset/bg.png");
 	this.add("bg2", "./../asset/bg2.png");
 	this.add("box", "./../asset/box.png");
+	this.add("fish", "./../asset/fish.png");
 	this.add("penguin", "./../asset/penguin.png");
 	this.add("penguin64", "./../asset/penguin64.png");
 	this.add("penguinnopiksel", "./../asset/penguinnopiksel.png");

@@ -54,7 +54,7 @@ ArcticMadness.scene.Game.prototype.init = function() {
     text.center = this.application.screen.center;
 
     var player = new ArcticMadness.entity.Player(100, 100, "penguin64", {left: "A", right: "D", up: "W", down: "S", shoot: "SPACE"});
-    var player2 = new ArcticMadness.entity.Player(200, 200, "penguin64", {left: "LEFT", right: "RIGHT", up: "UP", down: "DOWN", shoot: "SPACE"});
+    // var player2 = new ArcticMadness.entity.Player(200, 200, "penguin64", {left: "LEFT", right: "RIGHT", up: "UP", down: "DOWN", shoot: "SPACE"});
 
   
   
@@ -64,7 +64,7 @@ ArcticMadness.scene.Game.prototype.init = function() {
 
     this.stage.addChild(bg);
     this.stage.addChild(player);
-    this.stage.addChild(player2);
+   // this.stage.addChild(player2);
   
     this.stage.addChild(text);
 };
