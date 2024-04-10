@@ -31,8 +31,8 @@ ArcticMadness.system.Main = function() {
         useKeyboard:true,
         framerate: 30,
         debug: true,
-        screenResolutionX: 960,
-        screenResolutionY: 540
+        screenResolutionX: 1280,
+        screenResolutionY: 720
     });
 };
 

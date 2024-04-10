@@ -8,6 +8,15 @@ ArcticMadness.entity.Player = function (x, y, penguin, controls) {
   this.x = x; // Player x position
   this.y = y; // Player y position
   this.angle = 0; // Player angle
+  this.gamepad = this.gamepads.get(0);
+  
+  
+ 
+  
+  
+  console.log(this.gamepad);
+
+  
   //this.topSpeed = 3; // Player top speed
 
   //--------------------------------------------------------------------------
@@ -45,6 +54,10 @@ ArcticMadness.entity.Player.prototype.init = function () {
 ArcticMadness.entity.Player.prototype.update = function (step) {
   rune.display.Sprite.prototype.update.call(this, step);
 
+  if(this.gamepad.stickLeftLeft){
+    this.x--;
+  }
+
   this.m_handleInput(this.controls);
   this.m_handleHitBox();
 };
@@ -70,8 +83,8 @@ ArcticMadness.entity.Player.prototype.m_handleInput = function (controls) {
     }
   }
   if (this.keyboard.pressed(controls.right)) {
-    if (this.x >= 925) {
-      this.x = 925;
+    if (this.x >= 1250) {
+      this.x = 1250;
     } else {
       this.x += 5;
       this.velocity.x += 0.15;
@@ -91,8 +104,8 @@ ArcticMadness.entity.Player.prototype.m_handleInput = function (controls) {
     }
   }
   if (this.keyboard.pressed(controls.down)) {
-    if (this.y >= 505) {
-      this.y = 505;
+    if (this.y >= 700) {
+      this.y = 700;
     } else {
       this.y += 5;
       this.velocity.y += 0.15;
@@ -114,6 +127,9 @@ ArcticMadness.entity.Player.prototype.m_handleInput = function (controls) {
     this.flippedX = false;
     this.animation.gotoAndPlay("idle");
   }
+
+
+  
 };
 
 ArcticMadness.entity.Player.prototype.m_handleShoot = function (angle) {

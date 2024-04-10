@@ -44,7 +44,7 @@ ArcticMadness.scene.Game.prototype.constructor = ArcticMadness.scene.Game;
  */
 ArcticMadness.scene.Game.prototype.init = function() {
     rune.scene.Scene.prototype.init.call(this);
-    var bg = new rune.display.Graphic(0,0,960,540,"bg2");
+    var bg = new rune.display.Graphic(0,0,1280,720,"bg_720");
 
   
     
