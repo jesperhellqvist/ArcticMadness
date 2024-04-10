@@ -37,8 +37,11 @@ ArcticMadness.entity.Player.prototype.init = function () {
   rune.display.Sprite.prototype.init.call(this);
   console.log("Player initialized");
 
-  this.animation.create("idle", [0, 1, 2], 8, true);
-  this.animation.create("walk", [3, 4], 10, true);
+  this.animation.create("idle", [0, 1, 2,3,4], 8, true);
+  this.animation.create("walk", [5,6,7,8], 10, true);
+  this.animation.create("down", [10,11,12,13,14], 10, true);
+  this.animation.create("up", [15,16,17], 10, true);
+  
   this.m_setPhysics();
 };
 
@@ -87,7 +90,7 @@ ArcticMadness.entity.Player.prototype.m_handleInput = function (controls) {
       this.y -= 5;
       this.velocity.y -= 0.15;
       this.angle = 0;
-      this.animation.gotoAndPlay("walk");
+      this.animation.gotoAndPlay("up");
     }
   }
   if (this.keyboard.pressed(controls.down)) {
@@ -97,7 +100,7 @@ ArcticMadness.entity.Player.prototype.m_handleInput = function (controls) {
       this.y += 5;
       this.velocity.y += 0.15;
         this.angle = 180;
-      this.animation.gotoAndPlay("walk");
+      this.animation.gotoAndPlay("down");
     }
   }
 
