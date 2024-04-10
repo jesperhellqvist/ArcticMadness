@@ -45,9 +45,11 @@ ArcticMadness.data.Requests.prototype.m_construct = function() {
     rune.resource.Requests.prototype.m_construct.call(this);
     this.add("bg", "./../asset/bg.png");
 	this.add("bg2", "./../asset/bg2.png");
+	this.add("bg_720", "./../asset/bg_720.png");
 	this.add("box", "./../asset/box.png");
 	this.add("fish", "./../asset/fish.png");
 	this.add("penguin", "./../asset/penguin.png");
 	this.add("penguin64", "./../asset/penguin64.png");
+	this.add("penguin_texture_64", "./../asset/penguin_texture_64.png");
 	this.add("penguinnopiksel", "./../asset/penguinnopiksel.png");
 };
