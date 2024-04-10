@@ -124,10 +124,10 @@ ArcticMadness.entity.Player.prototype.m_handleShoot = function (angle) {
     };
 
 ArcticMadness.entity.Player.prototype.m_setPhysics = function () {
-  this.velocity.drag.x = 0.05;
-  this.velocity.drag.y = 0.05;
-  this.velocity.max.y = 1.8;
-  this.velocity.max.x = 1.8;
+  this.velocity.drag.x = 0.02;
+  this.velocity.drag.y = 0.02;
+  this.velocity.max.y = 2.5;
+  this.velocity.max.x = 2.5;
 };
 
 
@@ -135,5 +135,6 @@ ArcticMadness.entity.Player.prototype.m_setPhysics = function () {
 ArcticMadness.entity.Player.prototype.m_handleHitBox = function () {
   this.hitbox.set();
   this.debug = true;
+  this.debugColor = "#FF0000";
   
 };

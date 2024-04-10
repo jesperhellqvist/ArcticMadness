@@ -77,7 +77,7 @@ ArcticMadness.entity.Bullet.prototype.m_setPhysics = function () {
 ArcticMadness.entity.Bullet.prototype.m_handleHitBox = function () {
     this.hitbox.set();
     this.debug = true;
-    this.debugColor = "#das ";
+    this.debugColor = "#FF0000";
 
 
   if (this.x >= this.application.screen.width || this.y >= this.application.screen.height || this.x <= 0 || this.y <= 0) {
