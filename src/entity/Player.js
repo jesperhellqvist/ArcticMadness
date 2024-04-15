@@ -9,8 +9,7 @@ ArcticMadness.entity.Player = function (x, y, penguin, controls, gamepad) {
   this.y = y; // Player y position
   this.angle = 0; // Player angle
   this.gamepad = gamepad; // Player gamepad
-
-  
+  console.log(this.gamepad);
 
   //this.topSpeed = 3; // Player top speed
 
@@ -39,21 +38,21 @@ ArcticMadness.entity.Player.prototype.constructor = ArcticMadness.entity.Player;
 
 ArcticMadness.entity.Player.prototype.init = function () {
   rune.display.Sprite.prototype.init.call(this);
-  console.log("Player initialized");
-
-  this.animation.create("idle", [0, 1, 2, 3, 4], 8, true);
-  this.animation.create("walk", [5, 6, 7, 8], 10, true);
-  this.animation.create("down", [10, 11, 12, 13, 14], 10, true);
-  this.animation.create("up", [15, 16, 17], 10, true);
+  // this.animation.create("idle", [0, 1, 2, 3, 4], 8, true);
+  // this.animation.create("walk", [5, 6, 7, 8], 10, true);
+  // this.animation.create("down", [10, 11, 12, 13, 14], 10, true);
+  // this.animation.create("up", [15, 16, 17], 10, true);
 
   this.m_setPhysics();
 };
 
 ArcticMadness.entity.Player.prototype.update = function (step) {
   rune.display.Sprite.prototype.update.call(this, step);
-//this.m_handleInput(this.controls);
+  //this.m_handleInput(this.controls);
   this.m_handleInputGamepad();
-  
+  this.m_handleRightStick();
+  this.m_handleButton7();
+
   this.m_handleHitBox();
 };
 
@@ -125,56 +124,66 @@ ArcticMadness.entity.Player.prototype.m_handleInput = function (controls) {
 };
 
 ArcticMadness.entity.Player.prototype.m_handleInputGamepad = function () {
- if(this.gamepad.justPressed(0)){
-  this.m_handleShoot(this.angle);
- }
-
- if(this.gamepad.stickLeftLeft){
-  if (this.x <= 0) {
-    this.x = 0;
-  } else {
-    this.x -= 5;
-    this.velocity.x -= 0.15;
-    this.flippedX = true;
-    this.angle = 270;
-    this.animation.gotoAndPlay("walk");
+  if (this.gamepad.stickLeftLeft) {
+    console.log("left");
+    if (this.x <= 0) {
+      this.x = 0;
+    } else {
+      this.x -= 3;
+      this.velocity.x -= 0.15;
+      this.flippedX = false;
+    }
   }
- }
 
-  if(this.gamepad.stickLeftRight){
+  if (this.gamepad.stickLeftRight) {
     if (this.x >= 1250) {
       this.x = 1250;
     } else {
-      this.x += 5;
+      this.x += 3;
       this.velocity.x += 0.15;
       this.flippedX = false;
-      this.angle = 90;
-      this.animation.gotoAndPlay("walk");
     }
   }
 
-  if(this.gamepad.stickLeftUp){
+  if (this.gamepad.stickLeftUp) {
     if (this.y <= 0) {
       this.y = 0;
     } else {
-      this.y -= 5;
+      this.y -= 3;
       this.velocity.y -= 0.15;
-      this.angle = 0;
-      this.animation.gotoAndPlay("up");
+      this.flippedX = false;
     }
   }
 
-  if(this.gamepad.stickLeftDown){
+  if (this.gamepad.stickLeftDown) {
     if (this.y >= 700) {
       this.y = 700;
     } else {
-      this.y += 5;
+      this.y += 3;
       this.velocity.y += 0.15;
-      this.angle = 180;
-      this.animation.gotoAndPlay("down");
+      this.flippedX = false;
     }
   }
-  
+};
+
+ArcticMadness.entity.Player.prototype.m_handleRightStick = function () {
+  var stickRightX = this.gamepad.stickRight.x;
+  var stickRightY = this.gamepad.stickRight.y;
+
+  var radian = Math.atan2(stickRightY, stickRightX);
+  var angle = rune.util.Math.radiansToDegrees(radian);
+
+  if (angle < 0) {
+    angle += 360;
+  }
+  this.angle = angle;
+  this.rotation = angle + 90;
+};
+
+ArcticMadness.entity.Player.prototype.m_handleButton7 = function () {
+  if (this.gamepad.justPressed(7)) {
+    this.m_handleShoot(this.angle);
+  }
 };
 
 ArcticMadness.entity.Player.prototype.m_handleShoot = function (angle) {

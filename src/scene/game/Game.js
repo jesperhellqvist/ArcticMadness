@@ -49,7 +49,7 @@ ArcticMadness.scene.Game.prototype.init = function () {
   text.autoSize = true;
   text.center = this.application.screen.center;
 
-  var player = new ArcticMadness.entity.Player(100, 100, "penguin_texture_64", {
+  var player = new ArcticMadness.entity.Player(100, 100, "arrow", {
     left: "A",
     right: "D",
     up: "W",

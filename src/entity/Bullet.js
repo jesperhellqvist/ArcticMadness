@@ -37,7 +37,7 @@ ArcticMadness.entity.Bullet.prototype.init = function () {
 ArcticMadness.entity.Bullet.prototype.update = function (step) {
   rune.display.Sprite.prototype.update.call(this, step);
 
-  this.shoot(this.angle);
+  this.m_shoot(this.angle);
   this.m_handleHitBox();
 };
 
@@ -46,21 +46,38 @@ ArcticMadness.entity.Bullet.prototype.dispose = function () {
   console.log("Bullet disposed");
 };
 
-ArcticMadness.entity.Bullet.prototype.shoot = function (angle) {
+ArcticMadness.entity.Bullet.prototype.m_shoot = function (angle) {
+  console.log(angle);
+  var radian = rune.util.Math.degreesToRadians(angle);
+  var speed = 10;
+  this.flippedX = true;
+  this.flippedY = true;
+  this.rotation = angle;
+
+
+  this.velocity.x = rune.util.Math.cos(radian) * speed;
+  this.velocity.y = rune.util.Math.sin(radian) * speed;
+
+ 
+  
+
+  
+
+
     
-  if (angle == 0) {
-    this.rotation = 90;
-    this.y -= 30;
-  } else if (angle == 90) {
-    this.rotation = 180;
-    this.x += 30;
-  } else if (angle == 180) {
-    this.rotation = 270;
-    this.y += 30;
-  } else if (angle == 270) {
-    this.rotation = 0;
-    this.x -= 30;
-  }
+  // if (angle == 0) {
+  //   this.rotation = 90;
+  //   this.y -= 30;
+  // } else if (angle == 90) {
+  //   this.rotation = 180;
+  //   this.x += 30;
+  // } else if (angle == 180) {
+  //   this.rotation = 270;
+  //   this.y += 30;
+  // } else if (angle == 270) {
+  //   this.rotation = 0;
+  //   this.x -= 30;
+  // }
 
 
 };
