@@ -38,10 +38,10 @@ ArcticMadness.entity.Player.prototype.constructor = ArcticMadness.entity.Player;
 
 ArcticMadness.entity.Player.prototype.init = function () {
   rune.display.Sprite.prototype.init.call(this);
-  // this.animation.create("idle", [0, 1, 2, 3, 4], 8, true);
+  this.animation.create("idle", [0, 1, 2, 3], 8, true);
   // this.animation.create("walk", [5, 6, 7, 8], 10, true);
   // this.animation.create("down", [10, 11, 12, 13, 14], 10, true);
-  // this.animation.create("up", [15, 16, 17], 10, true);
+  // this.animation.create("up", [15, 16, 17,18], 10, true);
   this.m_createGun();
   this.m_setPhysics();
 };
@@ -162,19 +162,20 @@ ArcticMadness.entity.Player.prototype.m_handleInputGamepad = function () {
       this.y += 3;
       this.velocity.y += 0.15;
       this.flippedX = false;
+
     }
   }
 };
 
 
 ArcticMadness.entity.Player.prototype.m_createGun = function () {
-  this.gun = new ArcticMadness.entity.Gun(this.x, this.y, this.gamepad);
+  this.gun = new ArcticMadness.entity.Gun(this.x, this.y, this.gamepad, this);
   this.stage.addChild(this.gun);
 }
 
 ArcticMadness.entity.Player.prototype.m_setGunPosition = function () {
-  this.gun.x = this.x + 14;
-  this.gun.y = this.y + 17;
+  this.gun.x = this.x + 26;
+  this.gun.y = this.y + 20;
 }
 
 
