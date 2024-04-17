@@ -9,7 +9,6 @@ ArcticMadness.entity.Player = function (x, y, penguin, controls, gamepad) {
   this.y = y; // Player y position
   this.angle = 0; // Player angle
   this.gamepad = gamepad; // Player gamepad
-  console.log(this.gamepad);
 
   //this.topSpeed = 3; // Player top speed
 
@@ -38,7 +37,7 @@ ArcticMadness.entity.Player.prototype.constructor = ArcticMadness.entity.Player;
 
 ArcticMadness.entity.Player.prototype.init = function () {
   rune.display.Sprite.prototype.init.call(this);
-  this.animation.create("idle", [0, 1, 2, 3], 8, true);
+  // this.animation.create("idle", [0, 1, 2, 3], 8, true);
   // this.animation.create("walk", [5, 6, 7, 8], 10, true);
   // this.animation.create("down", [10, 11, 12, 13, 14], 10, true);
   // this.animation.create("up", [15, 16, 17,18], 10, true);
@@ -131,7 +130,7 @@ ArcticMadness.entity.Player.prototype.m_handleInputGamepad = function () {
     } else {
       this.x -= 3;
       this.velocity.x -= 0.15;
-      this.flippedX = false;
+      // this.flippedX = false;
     }
   }
 
@@ -141,7 +140,7 @@ ArcticMadness.entity.Player.prototype.m_handleInputGamepad = function () {
     } else {
       this.x += 3;
       this.velocity.x += 0.15;
-      this.flippedX = false;
+      // this.flippedX = false;
     }
   }
 
@@ -151,7 +150,7 @@ ArcticMadness.entity.Player.prototype.m_handleInputGamepad = function () {
     } else {
       this.y -= 3;
       this.velocity.y -= 0.15;
-      this.flippedX = false;
+      // this.flippedX = false;
     }
   }
 
@@ -161,24 +160,35 @@ ArcticMadness.entity.Player.prototype.m_handleInputGamepad = function () {
     } else {
       this.y += 3;
       this.velocity.y += 0.15;
-      this.flippedX = false;
-
+      // this.flippedX = false;
     }
   }
 };
 
-
 ArcticMadness.entity.Player.prototype.m_createGun = function () {
   this.gun = new ArcticMadness.entity.Gun(this.x, this.y, this.gamepad, this);
   this.stage.addChild(this.gun);
-}
+};
 
 ArcticMadness.entity.Player.prototype.m_setGunPosition = function () {
+
   this.gun.x = this.x + 26;
   this.gun.y = this.y + 20;
-}
+  if(this.gamepad.stickRightLeft ){
+    this.gun.x = this.x + 10;
+    this.gun.y = this.y + 20;
+  }
+  if(this.gamepad.stickRightRight ){
 
+  this.gun.x = this.x + 26;
+  this.gun.y = this.y + 20;
+  }
+  if(this.gamepad.stickRightUp ){
 
+    this.gun.x = this.x + 26;
+    this.gun.y = this.y + 10;
+  }
+};
 
 // ArcticMadness.entity.Player.prototype.m_handleRightStick = function () {
 //   var stickRightX = this.gamepad.stickRight.x;
@@ -208,8 +218,8 @@ ArcticMadness.entity.Player.prototype.m_setGunPosition = function () {
 // };
 
 ArcticMadness.entity.Player.prototype.m_setPhysics = function () {
-  this.velocity.drag.x = 0.02;
-  this.velocity.drag.y = 0.02;
+  this.velocity.drag.x = 0.04;
+  this.velocity.drag.y = 0.04;
   this.velocity.max.y = 2.5;
   this.velocity.max.x = 2.5;
 };
