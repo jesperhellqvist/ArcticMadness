@@ -9,7 +9,9 @@ ArcticMadness.entity.Player = function (x, y, penguin, controls, gamepad) {
   this.y = y; // Player y position
   this.angle = 0; // Player angle
   this.gamepad = gamepad; // Player gamepad
-  console.log(this.gamepad);
+  this.enemy = null; // Reference to the enemy object
+
+ 
 
   //this.topSpeed = 3; // Player top speed
 
@@ -42,7 +44,7 @@ ArcticMadness.entity.Player.prototype.init = function () {
   // this.animation.create("walk", [5, 6, 7, 8], 10, true);
   // this.animation.create("down", [10, 11, 12, 13, 14], 10, true);
   // this.animation.create("up", [15, 16, 17,18], 10, true);
-  this.m_createGun();
+  this.m_createGun(this.enemy);
   this.m_setPhysics();
 };
 
@@ -55,6 +57,12 @@ ArcticMadness.entity.Player.prototype.update = function (step) {
   this.m_setGunPosition();
   this.m_handleHitBox();
 };
+
+ArcticMadness.entity.Player.prototype.hitTestEnemy = function (enemy) {
+  this.enemy = enemy;
+
+  
+}
 
 ArcticMadness.entity.Player.prototype.dispose = function () {
   rune.display.Sprite.prototype.dispose.call(this);
@@ -168,8 +176,9 @@ ArcticMadness.entity.Player.prototype.m_handleInputGamepad = function () {
 };
 
 
-ArcticMadness.entity.Player.prototype.m_createGun = function () {
-  this.gun = new ArcticMadness.entity.Gun(this.x, this.y, this.gamepad, this);
+ArcticMadness.entity.Player.prototype.m_createGun = function (enemy) {
+ 
+  this.gun = new ArcticMadness.entity.Gun(this.x, this.y, this.gamepad, enemy, this);
   this.stage.addChild(this.gun);
 }
 
@@ -215,7 +224,6 @@ ArcticMadness.entity.Player.prototype.m_setPhysics = function () {
 };
 
 ArcticMadness.entity.Player.prototype.m_handleHitBox = function () {
-  this.hitbox.set();
   this.debug = true;
   this.debugColor = "#FF0000";
 };

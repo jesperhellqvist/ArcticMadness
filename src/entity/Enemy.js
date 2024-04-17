@@ -50,6 +50,7 @@ ArcticMadness.entity.Enemy.prototype.update = function (step) {
 
 ArcticMadness.entity.Enemy.prototype.dispose = function () {
     rune.display.Sprite.prototype.dispose.call(this);
+    console.log("Enemy disposed");
     };
 
 //------------------------------------------------------------------------------

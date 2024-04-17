@@ -2,10 +2,11 @@
 // Constructor scope
 //--------------------------------
 
-ArcticMadness.entity.Bullet = function (x, y, angle) {
+ArcticMadness.entity.Bullet = function (x, y, angle, enemy) {
   this.x = x;
   this.y = y;
   this.angle = angle;
+  this.enemy = enemy;
   //--------------------------------------------------------------------------
   // Super call
   //--------------------------------------------------------------------------
@@ -38,7 +39,7 @@ ArcticMadness.entity.Bullet.prototype.update = function (step) {
   rune.display.Sprite.prototype.update.call(this, step);
 
   this.m_shoot(this.angle);
-  this.m_handleHitBox();
+  this.m_handleHitBox(this.enemy);
 };
 
 ArcticMadness.entity.Bullet.prototype.dispose = function () {
@@ -47,57 +48,45 @@ ArcticMadness.entity.Bullet.prototype.dispose = function () {
 };
 
 ArcticMadness.entity.Bullet.prototype.m_shoot = function (angle) {
-  console.log(angle);
   var radian = rune.util.Math.degreesToRadians(angle);
   var speed = 10;
   this.flippedX = true;
   this.flippedY = true;
   this.rotation = angle;
 
-
   this.velocity.x = rune.util.Math.cos(radian) * speed;
   this.velocity.y = rune.util.Math.sin(radian) * speed;
-
- 
-  
-
-  
-
-
-    
-  // if (angle == 0) {
-  //   this.rotation = 90;
-  //   this.y -= 30;
-  // } else if (angle == 90) {
-  //   this.rotation = 180;
-  //   this.x += 30;
-  // } else if (angle == 180) {
-  //   this.rotation = 270;
-  //   this.y += 30;
-  // } else if (angle == 270) {
-  //   this.rotation = 0;
-  //   this.x -= 30;
-  // }
-
-
 };
 
 //------------------------------------------------------------------------------
 // Private methods
 //------------------------------------------------------------------------------
 
+// Function to set the physics of the bullet
+
 ArcticMadness.entity.Bullet.prototype.m_setPhysics = function () {
   this.velocity.drag.x = 0.05;
   this.velocity.drag.y = 0.05;
-}; 
+};
+
+// Function to handle the hitbox of the bullet and check if it hits the enemy
 
 ArcticMadness.entity.Bullet.prototype.m_handleHitBox = function () {
-    this.hitbox.set();
-    this.debug = true;
-    this.debugColor = "#FF0000";
+  this.debug = true;
+  this.debugColor = "#FF0000";
 
+  if (this.hitTestObject(this.enemy)) {  // If the bullet hits the enemy, the enemy and the bullet are disposed
+    console.log("hit");
+    this.parent.removeChild(this.enemy, true);
+    this.parent.removeChild(this, true);
+  }
 
-  if (this.x >= this.application.screen.width || this.y >= this.application.screen.height || this.x <= 0 || this.y <= 0) {
+  if ( // If the bullet is out of the screen, it is disposed
+    this.x >= this.application.screen.width ||
+    this.y >= this.application.screen.height ||
+    this.x <= 0 ||
+    this.y <= 0
+  ) {
     this.parent.removeChild(this, true);
   }
 };
