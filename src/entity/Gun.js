@@ -2,12 +2,14 @@
 // Constructor scope
 //--------------------------------
 
-ArcticMadness.entity.Gun = function (x, y, gamepad, player) {
+ArcticMadness.entity.Gun = function (x, y, gamepad, enemy, player) {
   this.x = x;
   this.y = y;
   this.gamepad = gamepad;
   this.angle = 0;
+  this.enemy = enemy;
   this.player = player;
+  console.log(this.enemy);
 
   //--------------------------------------------------------------------------
   // Super call
@@ -43,6 +45,16 @@ ArcticMadness.entity.Gun.prototype.update = function (step) {
   this.m_handleInputStickRight();
   this.m_handleButton7();
 };
+
+ArcticMadness.entity.Gun.prototype.dispose = function () {
+  rune.display.Sprite.prototype.dispose.call(this);
+};
+
+//------------------------------------------------------------------------------
+// Private prototype methods
+//------------------------------------------------------------------------------
+
+// This method creates the gun object and adds it to the stage.
 
 ArcticMadness.entity.Gun.prototype.m_handleInputStickRight = function () {
   var stickRightX = this.gamepad.stickRight.x;
@@ -82,9 +94,12 @@ ArcticMadness.entity.Gun.prototype.m_handleInputStickRight = function () {
   }
   this.pivotX = 12;
   this.pivotY = 22;
+
   this.angle = angle;
   this.rotation = angle;
 };
+
+// This method handles the shoot button.
 
 ArcticMadness.entity.Gun.prototype.m_handleButton7 = function () {
   if (this.gamepad.justPressed(7)) {
@@ -92,7 +107,13 @@ ArcticMadness.entity.Gun.prototype.m_handleButton7 = function () {
   }
 };
 
+// This method handles the shoot. It creates a bullet and adds it to the stage.
 ArcticMadness.entity.Gun.prototype.m_handleShoot = function (angle) {
-  var bullet = new ArcticMadness.entity.Bullet(this.x, this.y, angle);
+  var bullet = new ArcticMadness.entity.Bullet(
+    this.x,
+    this.y,
+    angle,
+    this.enemy
+  );
   this.stage.addChild(bullet);
 };

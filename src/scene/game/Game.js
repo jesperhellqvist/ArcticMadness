@@ -56,12 +56,15 @@ ArcticMadness.scene.Game.prototype.init = function () {
     down: "S",
     shoot: "SPACE",
   }, this.gamepads.get(0));
-  //  var player2 = new ArcticMadness.entity.Player(200, 200, "penguin_texture_64", {left: "LEFT", right: "RIGHT", up: "UP", down: "DOWN", shoot: "SPACE"});
+
+
+ 
+  var enemy = new ArcticMadness.entity.Enemy(200, 200, player);
+  player.hitTestEnemy(enemy);
 
   this.stage.addChild(bg);
   this.stage.addChild(player);
-  //this.stage.addChild(player2);
-
+  this.stage.addChild(enemy);
   this.stage.addChild(text);
 };
 
