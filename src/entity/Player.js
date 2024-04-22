@@ -2,7 +2,6 @@
 // Constructor scope
 //--------------------------------
 
-
 ArcticMadness.entity.Player = function (x, y, penguin, controls, gamepad) {
   this.health = 100; // Player health
   this.controls = controls; // Player controls on keyboard
@@ -11,8 +10,6 @@ ArcticMadness.entity.Player = function (x, y, penguin, controls, gamepad) {
   this.angle = 0; // Player angle
   this.gamepad = gamepad; // Player gamepad
   this.enemy = null; // Reference to the enemy object
-
- 
 
   //this.topSpeed = 3; // Player top speed
 
@@ -51,8 +48,8 @@ ArcticMadness.entity.Player.prototype.init = function () {
 
 ArcticMadness.entity.Player.prototype.update = function (step) {
   rune.display.Sprite.prototype.update.call(this, step);
-  //this.m_handleInput(this.controls);
-  this.m_handleInputGamepad();
+  this.m_handleInput(this.controls);
+  //this.m_handleInputGamepad();
   // this.m_handleRightStick();
   // this.m_handleButton7();
   this.m_setGunPosition();
@@ -61,9 +58,7 @@ ArcticMadness.entity.Player.prototype.update = function (step) {
 
 ArcticMadness.entity.Player.prototype.hitTestEnemy = function (enemy) {
   this.enemy = enemy;
-
-  
-}
+};
 
 ArcticMadness.entity.Player.prototype.dispose = function () {
   rune.display.Sprite.prototype.dispose.call(this);
@@ -118,7 +113,7 @@ ArcticMadness.entity.Player.prototype.m_handleInput = function (controls) {
   }
 
   if (this.keyboard.justPressed(controls.shoot)) {
-    this.m_handleShoot(this.angle);
+    console.log("shoot");
   }
 
   if (
@@ -175,31 +170,30 @@ ArcticMadness.entity.Player.prototype.m_handleInputGamepad = function () {
   }
 };
 
-
 ArcticMadness.entity.Player.prototype.m_createGun = function (enemy) {
- 
-  this.gun = new ArcticMadness.entity.Gun(this.x, this.y, this.gamepad, enemy, this);
+  this.gun = new ArcticMadness.entity.Gun(
+    this.x,
+    this.y,
+    this.gamepad,
+    enemy,
+    this
+  );
   this.stage.addChild(this.gun);
 };
 
 ArcticMadness.entity.Player.prototype.m_setGunPosition = function () {
-
   this.gun.x = this.x + 26;
   this.gun.y = this.y + 20;
 
-
-  if(this.gamepad.stickRightLeft ){
-
+  if (this.gamepad.stickRightLeft) {
     this.gun.x = this.x + 10;
     this.gun.y = this.y + 20;
   }
-  if(this.gamepad.stickRightRight ){
-
-  this.gun.x = this.x + 26;
-  this.gun.y = this.y + 20;
+  if (this.gamepad.stickRightRight) {
+    this.gun.x = this.x + 26;
+    this.gun.y = this.y + 20;
   }
-  if(this.gamepad.stickRightUp ){
-
+  if (this.gamepad.stickRightUp) {
     this.gun.x = this.x + 26;
     this.gun.y = this.y + 10;
   }

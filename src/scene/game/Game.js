@@ -45,6 +45,16 @@ ArcticMadness.scene.Game.prototype.init = function () {
   rune.scene.Scene.prototype.init.call(this);
   
   this.stage.map.load("map");
+  var timer = this.timers.create
+  ({
+    duration: 1000,
+    onTick: function () {
+      map.changeRandomTile();
+    },
+    repeat: 10,
+    scope: this,
+  });
+  var map = new ArcticMadness.map.Map(this.stage.map);
 
   var player = new ArcticMadness.entity.Player(700, 0, "64_penguin_nogun", {
     left: "A",
