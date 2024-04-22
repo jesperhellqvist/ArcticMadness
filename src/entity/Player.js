@@ -185,7 +185,10 @@ ArcticMadness.entity.Player.prototype.m_setGunPosition = function () {
 
   this.gun.x = this.x + 26;
   this.gun.y = this.y + 20;
+
+
   if(this.gamepad.stickRightLeft ){
+
     this.gun.x = this.x + 10;
     this.gun.y = this.y + 20;
   }
@@ -200,33 +203,6 @@ ArcticMadness.entity.Player.prototype.m_setGunPosition = function () {
     this.gun.y = this.y + 10;
   }
 };
-
-// ArcticMadness.entity.Player.prototype.m_handleRightStick = function () {
-//   var stickRightX = this.gamepad.stickRight.x;
-//   var stickRightY = this.gamepad.stickRight.y;
-
-//   var radian = Math.atan2(stickRightY, stickRightX);
-//   var angle = rune.util.Math.radiansToDegrees(radian);
-
-//   if (angle < 0) {
-//     angle += 360;
-//   }
-//   this.angle = angle;
-//   this.rotation = angle + 90;
-// };
-
-// ArcticMadness.entity.Player.prototype.m_handleButton7 = function () {
-//   if (this.gamepad.justPressed(7)) {
-//     this.m_handleShoot(this.angle);
-//   }
-// };
-
-// ArcticMadness.entity.Player.prototype.m_handleShoot = function (angle) {
-//   console.log(angle);
-//   this.bullet = new ArcticMadness.entity.Bullet(this.x, this.y, angle);
-//   this.bullet.y = this.y + 30;
-//   this.stage.addChild(this.bullet);
-// };
 
 ArcticMadness.entity.Player.prototype.m_setPhysics = function () {
   this.velocity.drag.x = 0.04;
