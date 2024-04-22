@@ -18,7 +18,7 @@ ArcticMadness.entity.Gun = function (x, y, gamepad, enemy, player) {
   /**
    * Calls the constructor method of the super class.
    */
-  rune.display.Sprite.call(this, this.x, this.y, 32, 32, "guntest");
+  rune.display.Sprite.call(this, this.x, this.y, 32, 32, "gun_directions2");
 };
 
 //------------------------------------------------------------------------------
@@ -38,6 +38,10 @@ ArcticMadness.entity.Gun.prototype.init = function () {
   this.player.animation.create("walk", [5, 6, 7, 8], 10, true);
   this.player.animation.create("down", [10, 11, 12, 13, 14], 10, true);
   this.player.animation.create("up", [15, 16, 17, 18], 10, true);
+  this.animation.create("gunright", [0], 10, true);
+  this.animation.create("gunleft", [1], 10, true);
+  this.animation.create("gundown", [3], 10, true);
+  this.animation.create("gunup", [3], 10, true);
 };
 
 ArcticMadness.entity.Gun.prototype.update = function (step) {
@@ -66,37 +70,34 @@ ArcticMadness.entity.Gun.prototype.m_handleInputStickRight = function () {
   if (angle < 0) {
     angle += 360;
   }
-  //between 14 and 16 a clock
-  if (
-    (angle < 45 && angle < 90 && angle < -1) ||
-    (angle > 315 && angle < 360)
-  ) {
+  console.log(angle);
+  //Right
+  if ((angle < 45 && angle > 0) || (angle > 315 && angle < 360)) {
+    this.flippedX = false;
     this.player.flippedX = false;
-    this.flippedY = false;
     this.player.animation.gotoAndPlay("walk");
+    this.animation.gotoAndPlay("gunright");
   }
-  
-  //Between 16 and 20 a clock
+
+  //Down
   if (angle > 45 && angle < 135) {
-    this.flippedY = false;
     this.player.animation.gotoAndPlay("down");
+    this.animation.gotoAndPlay("gundown");
   }
-  //Between 20 and 22 a clock
+  //Left
   if (angle > 135 && angle < 225) {
     this.player.flippedX = true;
-    this.flippedY = true;
     this.player.animation.gotoAndPlay("walk");
+    this.animation.gotoAndPlay("gunleft");
   }
-  //Between 22 and 14 a clock
+  //Up
   if (angle > 225 && angle < 315) {
-    this.flippedY = false;
     this.player.animation.gotoAndPlay("up");
+    this.animation.gotoAndPlay("gunup");
   }
-  this.pivotX = 12;
-  this.pivotY = 22;
 
   this.angle = angle;
-  this.rotation = angle;
+  this.rotation = angle; 
 };
 
 // This method handles the shoot button.

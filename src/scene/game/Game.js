@@ -44,8 +44,9 @@ ArcticMadness.scene.Game.prototype.constructor = ArcticMadness.scene.Game;
 ArcticMadness.scene.Game.prototype.init = function () {
   rune.scene.Scene.prototype.init.call(this);
   
+  this.stage.map.load("map");
 
-  var player = new ArcticMadness.entity.Player(100, 100, "64_penguin_nogun", {
+  var player = new ArcticMadness.entity.Player(700, 0, "64_penguin_nogun", {
     left: "A",
     right: "D",
     up: "W",
@@ -61,7 +62,7 @@ ArcticMadness.scene.Game.prototype.init = function () {
 
   this.stage.addChild(player);
   this.stage.addChild(enemy);
-  this.stage.addChild(text);
+
 };
 
 /**

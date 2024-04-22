@@ -186,7 +186,10 @@ ArcticMadness.entity.Player.prototype.m_setGunPosition = function () {
 
   this.gun.x = this.x + 26;
   this.gun.y = this.y + 20;
+
+
   if(this.gamepad.stickRightLeft ){
+
     this.gun.x = this.x + 10;
     this.gun.y = this.y + 20;
   }
