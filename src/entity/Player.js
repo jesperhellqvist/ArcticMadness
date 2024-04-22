@@ -2,6 +2,7 @@
 // Constructor scope
 //--------------------------------
 
+
 ArcticMadness.entity.Player = function (x, y, penguin, controls, gamepad) {
   this.health = 100; // Player health
   this.controls = controls; // Player controls on keyboard

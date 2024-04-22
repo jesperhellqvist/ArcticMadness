@@ -32,6 +32,9 @@ ArcticMadness.entity.Bullet.prototype.constructor = ArcticMadness.entity.Bullet;
 
 ArcticMadness.entity.Bullet.prototype.init = function () {
   rune.display.Sprite.prototype.init.call(this);
+  this.animation.create("idle", [0], 8, true);
+  this.animation.gotoAndPlay("idle");
+  this.animation.create("hit", [2], 10, true);
   this.m_setPhysics();
 };
 
@@ -76,6 +79,7 @@ ArcticMadness.entity.Bullet.prototype.m_handleHitBox = function () {
   this.debugColor = "#FF0000";
 
   if (this.hitTestObject(this.enemy)) {  // If the bullet hits the enemy, the enemy and the bullet are disposed
+    this.animation.gotoAndPlay("hit");
     console.log("hit");
     this.parent.removeChild(this.enemy, true);
     this.parent.removeChild(this, true);
