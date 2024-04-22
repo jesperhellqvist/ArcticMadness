@@ -43,11 +43,7 @@ ArcticMadness.scene.Game.prototype.constructor = ArcticMadness.scene.Game;
  */
 ArcticMadness.scene.Game.prototype.init = function () {
   rune.scene.Scene.prototype.init.call(this);
-  var bg = new rune.display.Graphic(0, 0, 1280, 720, "bg_720");
-
-  var text = new rune.text.BitmapField("Arctic Madness!!");
-  text.autoSize = true;
-  text.center = this.application.screen.center;
+  
 
   var player = new ArcticMadness.entity.Player(100, 100, "64_penguin_nogun", {
     left: "A",
@@ -62,7 +58,7 @@ ArcticMadness.scene.Game.prototype.init = function () {
   var enemy = new ArcticMadness.entity.Enemy(200, 200, player);
   player.hitTestEnemy(enemy);
 
-  this.stage.addChild(bg);
+
   this.stage.addChild(player);
   this.stage.addChild(enemy);
   this.stage.addChild(text);

@@ -57,6 +57,17 @@ var ArcticMadness = function() {
      */
     m_this.entity = {};
 
+
+    /**
+     * This package contains the map that are used to manage the application.
+     * Map are used to represent the game world.
+     * 
+     * @namespace map
+     * @memberof ArcticMadness
+     * @since 1.0
+     */
+    m_this.map = {};
+
     /**
      * This package contains the application's most vital classes.
      *
