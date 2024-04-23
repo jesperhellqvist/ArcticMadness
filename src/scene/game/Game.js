@@ -43,36 +43,49 @@ ArcticMadness.scene.Game.prototype.constructor = ArcticMadness.scene.Game;
  */
 ArcticMadness.scene.Game.prototype.init = function () {
   rune.scene.Scene.prototype.init.call(this);
-  
+
   this.stage.map.load("map");
-  var timer = this.timers.create
-  ({
-    duration: 1000,
-    onTick: function () {
-      map.changeRandomTile();
+
+  var player = new ArcticMadness.entity.Player(
+    700,
+    100,
+    "64_penguin_nogun",
+    {
+      left: "A",
+      right: "D",
+      up: "W",
+      down: "S",
+      shoot: "SPACE",
     },
-    repeat: 10,
-    scope: this,
-  });
-  var map = new ArcticMadness.map.Map(this.stage.map);
-
-  var player = new ArcticMadness.entity.Player(700, 0, "64_penguin_nogun", {
-    left: "A",
-    right: "D",
-    up: "W",
-    down: "S",
-    shoot: "SPACE",
-  }, this.gamepads.get(0));
+    this.gamepads.get(0)
+  );
 
 
- 
+
+    
+
+  //var players = new ArcticMadness.entity.Players(this);
+  
+  //this.stage.addChild(players);
+
   var enemy = new ArcticMadness.entity.Enemy(200, 200, player);
   player.hitTestEnemy(enemy);
 
 
+
+  var map = new ArcticMadness.map.Map(this.stage.map, player, enemy, this);
+  // var timer = this.timers.create({
+  //   duration: 1000,
+  //   onTick: function () {
+  //     map.changeRandomTile();
+  //   },
+  //   repeat: 10,
+  //   scope: this,
+  // });
+
+
   this.stage.addChild(player);
   this.stage.addChild(enemy);
-
 };
 
 /**

@@ -48,8 +48,8 @@ ArcticMadness.entity.Player.prototype.init = function () {
 
 ArcticMadness.entity.Player.prototype.update = function (step) {
   rune.display.Sprite.prototype.update.call(this, step);
-  this.m_handleInput(this.controls);
-  //this.m_handleInputGamepad();
+  //this.m_handleInput(this.controls);
+  this.m_handleInputGamepad();
   // this.m_handleRightStick();
   // this.m_handleButton7();
   this.m_setGunPosition();
@@ -129,7 +129,6 @@ ArcticMadness.entity.Player.prototype.m_handleInput = function (controls) {
 
 ArcticMadness.entity.Player.prototype.m_handleInputGamepad = function () {
   if (this.gamepad.stickLeftLeft) {
-    console.log("left");
     if (this.x <= 0) {
       this.x = 0;
     } else {
@@ -207,6 +206,9 @@ ArcticMadness.entity.Player.prototype.m_setPhysics = function () {
 };
 
 ArcticMadness.entity.Player.prototype.m_handleHitBox = function () {
+  // if (this.hitTestObject(this.enemy)) {
+  // }
+  
   this.debug = true;
   this.debugColor = "#FF0000";
 };

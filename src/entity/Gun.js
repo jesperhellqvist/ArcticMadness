@@ -70,7 +70,7 @@ ArcticMadness.entity.Gun.prototype.m_handleInputStickRight = function () {
   if (angle < 0) {
     angle += 360;
   }
-  console.log(angle);
+ 
   //Right
   if ((angle < 45 && angle > 0) || (angle > 315 && angle < 360)) {
     this.flippedX = false;
