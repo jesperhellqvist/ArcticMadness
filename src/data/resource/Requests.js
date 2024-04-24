@@ -52,6 +52,7 @@ ArcticMadness.data.Requests.prototype.m_construct = function() {
 	this.add("gun_directions2", "./../asset/gun_directions2.png");
 	this.add("guntest", "./../asset/guntest.png");
 	this.add("map", "./../asset/map.json");
+	this.add("map_texture", "./../asset/map_texture.png");
 	this.add("penguin_texture_64", "./../asset/penguin_texture_64.png");
 	this.add("water64_test", "./../asset/water64_test.png");
 };
