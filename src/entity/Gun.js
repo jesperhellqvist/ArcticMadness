@@ -2,9 +2,10 @@
 // Constructor scope
 //--------------------------------
 
-ArcticMadness.entity.Gun = function (x, y, gamepad, enemy, player) {
+ArcticMadness.entity.Gun = function (x, y, color, gamepad, enemy, player) {
   this.x = x;
   this.y = y;
+  this.color = color;
   this.gamepad = gamepad;
   this.angle = 0;
   this.enemy = enemy;
@@ -124,6 +125,7 @@ ArcticMadness.entity.Gun.prototype.m_handleShoot = function (angle) {
   var bullet = new ArcticMadness.entity.Bullet(
     this.x,
     this.y,
+    this.color,
     angle,
     this.enemy
   );

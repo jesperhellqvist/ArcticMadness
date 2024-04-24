@@ -2,7 +2,7 @@
 // Constructor scope
 //--------------------------------
 
-ArcticMadness.entity.Player = function (x, y, penguin, controls, gamepad) {
+ArcticMadness.entity.Player = function (x, y, penguin, color, controls, gamepad) {
   this.health = 100; // Player health
   this.controls = controls; // Player controls on keyboard
   this.x = x; // Player x position
@@ -10,6 +10,7 @@ ArcticMadness.entity.Player = function (x, y, penguin, controls, gamepad) {
   this.angle = 0; // Player angle
   this.gamepad = gamepad; // Player gamepad
   this.enemy = null; // Reference to the enemy object
+  this.color = color; // Player color
 
   //this.topSpeed = 3; // Player top speed
 
@@ -38,6 +39,10 @@ ArcticMadness.entity.Player.prototype.constructor = ArcticMadness.entity.Player;
 
 ArcticMadness.entity.Player.prototype.init = function () {
   rune.display.Sprite.prototype.init.call(this);
+  this.texture.replaceColor(
+    new rune.color.Color24(133, 144, 255),
+    new rune.color.Color24(this.color.r, this.color.g, this.color.b)
+  );
   // this.animation.create("idle", [0, 1, 2, 3], 8, true);
   // this.animation.create("walk", [5, 6, 7, 8], 10, true);
   // this.animation.create("down", [10, 11, 12, 13, 14], 10, true);
@@ -173,6 +178,7 @@ ArcticMadness.entity.Player.prototype.m_createGun = function (enemy) {
   this.gun = new ArcticMadness.entity.Gun(
     this.x,
     this.y,
+    this.color,
     this.gamepad,
     enemy,
     this
@@ -184,18 +190,18 @@ ArcticMadness.entity.Player.prototype.m_setGunPosition = function () {
   this.gun.x = this.x + 26;
   this.gun.y = this.y + 20;
 
-  if (this.gamepad.stickRightLeft) {
-    this.gun.x = this.x + 10;
-    this.gun.y = this.y + 20;
-  }
-  if (this.gamepad.stickRightRight) {
-    this.gun.x = this.x + 26;
-    this.gun.y = this.y + 20;
-  }
-  if (this.gamepad.stickRightUp) {
-    this.gun.x = this.x + 26;
-    this.gun.y = this.y + 10;
-  }
+  // if (this.gamepad.stickRightLeft) {
+  //   this.gun.x = this.x + 10;
+  //   this.gun.y = this.y + 20;
+  // }
+  // if (this.gamepad.stickRightRight) {
+  //   this.gun.x = this.x + 26;
+  //   this.gun.y = this.y + 20;
+  // }
+  // if (this.gamepad.stickRightUp) {
+  //   this.gun.x = this.x + 26;
+  //   this.gun.y = this.y + 10;
+  // }
 };
 
 ArcticMadness.entity.Player.prototype.m_setPhysics = function () {
@@ -208,7 +214,7 @@ ArcticMadness.entity.Player.prototype.m_setPhysics = function () {
 ArcticMadness.entity.Player.prototype.m_handleHitBox = function () {
   // if (this.hitTestObject(this.enemy)) {
   // }
-  
+
   this.debug = true;
   this.debugColor = "#FF0000";
 };

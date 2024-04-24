@@ -49,7 +49,11 @@ ArcticMadness.scene.Game.prototype.init = function () {
   var player = new ArcticMadness.entity.Player(
     700,
     100,
-    "64_penguin_nogun",
+    "64_penguin_nogun",{
+      r:"250",
+      g:"0",
+      b:"0",
+    },
     {
       left: "A",
       right: "D",
@@ -58,6 +62,24 @@ ArcticMadness.scene.Game.prototype.init = function () {
       shoot: "SPACE",
     },
     this.gamepads.get(0)
+  );
+
+  var player2 = new ArcticMadness.entity.Player(
+    700,
+    100,
+    "64_penguin_nogun",{
+      r:"0",
+      g:"0",
+      b:"250",
+    },
+    {
+      left: "A",
+      right: "D",
+      up: "W",
+      down: "S",
+      shoot: "SPACE",
+    },
+    this.gamepads.get(1)
   );
 
 
@@ -85,6 +107,7 @@ ArcticMadness.scene.Game.prototype.init = function () {
 
 
   this.stage.addChild(player);
+  this.stage.addChild(player2);
   this.stage.addChild(enemy);
 };
 

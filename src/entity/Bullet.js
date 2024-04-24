@@ -2,11 +2,13 @@
 // Constructor scope
 //--------------------------------
 
-ArcticMadness.entity.Bullet = function (x, y, angle, enemy) {
+ArcticMadness.entity.Bullet = function (x, y, color, angle, enemy) {
   this.x = x;
   this.y = y;
+  this.color = color;
   this.angle = angle;
   this.enemy = enemy;
+
   //--------------------------------------------------------------------------
   // Super call
   //--------------------------------------------------------------------------
@@ -32,6 +34,10 @@ ArcticMadness.entity.Bullet.prototype.constructor = ArcticMadness.entity.Bullet;
 
 ArcticMadness.entity.Bullet.prototype.init = function () {
   rune.display.Sprite.prototype.init.call(this);
+  this.texture.replaceColor(
+    new rune.color.Color24(133,144,255),
+    new rune.color.Color24(this.color.r,this.color.g,this.color.b)
+  );
   this.animation.create("idle", [0], 8, true);
   this.animation.gotoAndPlay("idle");
   this.animation.create("hit", [2], 10, true);
