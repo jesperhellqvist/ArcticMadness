@@ -36,7 +36,9 @@ ArcticMadness.entity.Enemy.prototype.constructor = ArcticMadness.entity.Enemy;
 
 ArcticMadness.entity.Enemy.prototype.init = function () {
   rune.display.Sprite.prototype.init.call(this);
-  this.animation.create("walk", [0], 8, true);
+  this.animation.create("walk", [1, 2], 2, true);
+  
+  
 };
 
 // This is the update method, which is called every frame.
@@ -65,8 +67,11 @@ ArcticMadness.entity.Enemy.prototype.m_followPlayer = function () {
 
     if (this.x < this.playerPositionX) {
         this.x += 1;
+        this.flippedX = true;
+        this.animation.gotoAndPlay("walk");
     } else if (this.x > this.playerPositionX) {
         this.x -= 1;
+        this.flippedX = false;
     }
     if (this.y < this.playerPositionY) {
         this.y += 1;
