@@ -95,7 +95,7 @@ ArcticMadness.scene.Game.prototype.init = function () {
 
 
 
-  var map = new ArcticMadness.map.Map(this.stage.map, player, enemy, this);
+  var map = new ArcticMadness.map.Map(this.stage.map, player, enemy, this, this.gamepads.get(0));
   // var timer = this.timers.create({
   //   duration: 1000,
   //   onTick: function () {
