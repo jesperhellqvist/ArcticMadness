@@ -128,6 +128,8 @@ ArcticMadness.map.Map.prototype.m_checkPlayerInWater = function () {
     this.player.gun.alpha = 0;
 
     this.player.animation.gotoAndPlay("drown");
+   
+  
   } else {
     this.player.isInWater = false;
   }

@@ -21,6 +21,7 @@ ArcticMadness.entity.Player = function (
   this.gun = null; // Reference to the gun object
   this.isInWater = false; // Player is in water
   this.isRepairing = false; // Player is repairing ice
+  this.isAlive = true; // Player is alive
 
   //this.topSpeed = 3; // Player top speed
 
@@ -70,6 +71,8 @@ ArcticMadness.entity.Player.prototype.init = function () {
 
 ArcticMadness.entity.Player.prototype.update = function (step) {
   rune.display.Sprite.prototype.update.call(this, step);
+
+  this.m_checkPlayerHealth();
 
   if (!this.isInWater) {
     this.m_handleInput(this.controls);
@@ -236,4 +239,10 @@ ArcticMadness.entity.Player.prototype.m_handleHitBox = function () {
 
   this.debug = true;
   this.debugColor = "#FF0000";
+};
+
+ArcticMadness.entity.Player.prototype.m_checkPlayerHealth = function () {
+  if (this.health <= 0) {
+    this.isAlive = false;
+  }
 };
