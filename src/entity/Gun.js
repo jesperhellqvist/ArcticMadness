@@ -36,21 +36,15 @@ ArcticMadness.entity.Gun.prototype.constructor = ArcticMadness.entity.Gun;
 ArcticMadness.entity.Gun.prototype.init = function () {
   rune.display.Sprite.prototype.init.call(this);
   //Moving animations
-  this.player.animation.create("idle", [0, 1, 2, 3], 8, true);
-  this.player.animation.create("walk", [5, 6, 7, 8], 10, true);
-  this.player.animation.create("down", [10, 11, 12, 13, 14], 10, true);
-  this.player.animation.create("up", [15, 16, 17, 18], 10, true);
-  //Looking animations, standing still, different directions
-  this.player.animation.create("lookup", [15], 10, true);
-  this.player.animation.create("lookdown", [10], 10, true);
-  this.player.animation.create("lookside", [5], 10, true);
   this.animation.create("gun", [3], 10, true); //Same gun, test version
 };
 
 ArcticMadness.entity.Gun.prototype.update = function (step) {
   rune.display.Sprite.prototype.update.call(this, step);
-  this.m_handleInputStickRight();
-  this.m_handleButton7();
+  if (!this.player.isInWater) {
+    this.m_handleInputStickRight();
+    this.m_handleButton7();
+  }
 };
 
 ArcticMadness.entity.Gun.prototype.dispose = function () {

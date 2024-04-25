@@ -20,18 +20,14 @@ ArcticMadness.map.Map = function (map, player, enemy, game, gamepad) {
 //------------------------------------------------------------------------------
 
 ArcticMadness.map.Map.prototype.init = function () {
-  this.player.animation.create("idle", [0, 1, 2, 3], 8, true);
-  this.player.animation.create("drown", [20, 21], 8, true);
-  this.player.animation.create("repair", [25, 26, 27, 28], 8, true);
-  
   this.changeRandomTile();
-
 };
-
 
 ArcticMadness.map.Map.prototype.update = function (step) {
   this.m_checkPlayerInWater();
-  this.m_handleInputGamepad();
+  if (!this.player.isInWater) {
+    this.m_handleInputGamepad();
+  }
 };
 
 ArcticMadness.map.Map.prototype.changeRandomTile = function () {
@@ -60,7 +56,6 @@ ArcticMadness.map.Map.prototype.changeRandomTile = function () {
 };
 
 ArcticMadness.map.Map.prototype.repairIce = function () {
-  console.log("Repairing ice");
   var playerTileIndex = this.tileLayer.getTileIndexOf(
     this.player.centerX,
     this.player.centerY
@@ -72,16 +67,17 @@ ArcticMadness.map.Map.prototype.repairIce = function () {
   );
 
   if (playerTile === 20 || playerTile === 21) {
-    
+   //this.player.animation.gotoAndPlay("repair");
     this.tileLayer.setTileValueAt(playerTileIndex, 2);
     var timer = this.tileTimers[playerTileIndex];
     if (timer) {
+      // If the tile has a timer, stop it
       timer.stop();
       delete this.tileTimers[playerTileIndex];
       this.changeRandomTile();
     }
   }
-  this.player.animation.gotoAndPlay("idle");
+ // this.player.animation.gotoAndPlay("idle");
   this.repairTimer = null;
 };
 
@@ -90,14 +86,11 @@ ArcticMadness.map.Map.prototype.repairIce = function () {
 //--------------------------------------------------------------------------
 
 ArcticMadness.map.Map.prototype.m_handleInputGamepad = function () {
-  if(this.player.animation.currentAnimation === "drown") {
-    return;
-  }
-
   if (this.gamepad.pressed(2)) {
+    this.player.animation.gotoAndPlay("repair");
     if (!this.repairTimer) {
-      this.player.animation.gotoAndPlay("repair");
-      
+      console.log("Repairing ice");
+     
       this.player.gun.alpha = 0; // Hide the gun
       this.repairTimer = this.game.timers.create(
         {
@@ -112,11 +105,12 @@ ArcticMadness.map.Map.prototype.m_handleInputGamepad = function () {
       );
     }
   } else {
+
     if (this.repairTimer) {
-      this.player.animation.gotoAndPlay("idle");
       this.repairTimer.stop();
       this.repairTimer = null;
     }
+    this.player.animation.gotoAndPlay("idle");
     this.player.gun.alpha = 1; // Show the gun
   }
 };
@@ -130,15 +124,13 @@ ArcticMadness.map.Map.prototype.m_checkPlayerInWater = function () {
     this.player.x = playerTile.x;
     this.player.y = playerTile.y;
     this.player.health -= 1;
-    
+    this.player.isInWater = true;
+    this.player.gun.alpha = 0;
+
     this.player.animation.gotoAndPlay("drown");
-    console.log("Player health: " + this.player.health);
-    
-    if (this.player.health <= 0) {
-      
-      
-    }
-  } 
+  } else {
+    this.player.isInWater = false;
+  }
 };
 
 ArcticMadness.map.Map.prototype.m_createTimer = function (

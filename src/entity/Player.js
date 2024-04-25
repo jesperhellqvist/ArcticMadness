@@ -2,7 +2,14 @@
 // Constructor scope
 //--------------------------------
 
-ArcticMadness.entity.Player = function (x, y, penguin, color, controls, gamepad) {
+ArcticMadness.entity.Player = function (
+  x,
+  y,
+  penguin,
+  color,
+  controls,
+  gamepad
+) {
   this.health = 100; // Player health
   this.controls = controls; // Player controls on keyboard
   this.x = x; // Player x position
@@ -12,6 +19,8 @@ ArcticMadness.entity.Player = function (x, y, penguin, color, controls, gamepad)
   this.enemy = null; // Reference to the enemy object
   this.color = color; // Player color
   this.gun = null; // Reference to the gun object
+  this.isInWater = false; // Player is in water
+  this.isRepairing = false; // Player is repairing ice
 
   //this.topSpeed = 3; // Player top speed
 
@@ -44,22 +53,31 @@ ArcticMadness.entity.Player.prototype.init = function () {
     new rune.color.Color24(133, 144, 255),
     new rune.color.Color24(this.color.r, this.color.g, this.color.b)
   );
-  // this.animation.create("idle", [0, 1, 2, 3], 8, true);
-  // this.animation.create("walk", [5, 6, 7, 8], 10, true);
-  // this.animation.create("down", [10, 11, 12, 13, 14], 10, true);
-  // this.animation.create("up", [15, 16, 17,18], 10, true);
+
+  this.animation.create("drown", [20, 21], 8, true);
+  this.animation.create("repair", [25, 26, 27, 28], 8, true);
+  this.animation.create("idle", [0, 1, 2, 3], 8, true);
+  this.animation.create("walk", [5, 6, 7, 8], 10, true);
+  this.animation.create("down", [10, 11, 12, 13, 14], 10, true);
+  this.animation.create("up", [15, 16, 17, 18], 10, true);
+  //Looking animations, standing still, different directions
+  this.animation.create("lookup", [15], 10, true);
+  this.animation.create("lookdown", [10], 10, true);
+  this.animation.create("lookside", [5], 10, true);
   this.m_createGun(this.enemy);
   this.m_setPhysics();
 };
 
 ArcticMadness.entity.Player.prototype.update = function (step) {
   rune.display.Sprite.prototype.update.call(this, step);
-  //this.m_handleInput(this.controls);
-  this.m_handleInputGamepad();
-  // this.m_handleRightStick();
-  // this.m_handleButton7();
-  this.m_setGunPosition();
-  this.m_handleHitBox();
+
+  if (!this.isInWater) {
+    this.m_handleInput(this.controls);
+    this.m_handleInputGamepad();
+    this.m_setGunPosition();
+    this.m_handleHitBox();
+  }
+
 };
 
 ArcticMadness.entity.Player.prototype.hitTestEnemy = function (enemy) {
@@ -129,7 +147,7 @@ ArcticMadness.entity.Player.prototype.m_handleInput = function (controls) {
     !this.keyboard.pressed(controls.down)
   ) {
     this.flippedX = false;
-    this.animation.gotoAndPlay("idle");
+    //this.animation.gotoAndPlay("idle");
   }
 };
 
