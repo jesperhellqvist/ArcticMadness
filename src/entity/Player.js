@@ -11,6 +11,7 @@ ArcticMadness.entity.Player = function (x, y, penguin, color, controls, gamepad)
   this.gamepad = gamepad; // Player gamepad
   this.enemy = null; // Reference to the enemy object
   this.color = color; // Player color
+  this.gun = null; // Reference to the gun object
 
   //this.topSpeed = 3; // Player top speed
 

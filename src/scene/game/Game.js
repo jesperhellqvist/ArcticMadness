@@ -14,6 +14,8 @@
  * Game scene.
  */
 ArcticMadness.scene.Game = function () {
+
+  this.map = null;
   //--------------------------------------------------------------------------
   // Super call
   //--------------------------------------------------------------------------
@@ -64,23 +66,23 @@ ArcticMadness.scene.Game.prototype.init = function () {
     this.gamepads.get(0)
   );
 
-  var player2 = new ArcticMadness.entity.Player(
-    700,
-    100,
-    "64_penguin_nogun",{
-      r:"0",
-      g:"0",
-      b:"250",
-    },
-    {
-      left: "A",
-      right: "D",
-      up: "W",
-      down: "S",
-      shoot: "SPACE",
-    },
-    this.gamepads.get(1)
-  );
+  // var player2 = new ArcticMadness.entity.Player(
+  //   700,
+  //   100,
+  //   "64_penguin_nogun",{
+  //     r:"0",
+  //     g:"0",
+  //     b:"250",
+  //   },
+  //   {
+  //     left: "A",
+  //     right: "D",
+  //     up: "W",
+  //     down: "S",
+  //     shoot: "SPACE",
+  //   },
+  //   this.gamepads.get(1)
+  // );
 
 
 
@@ -95,7 +97,7 @@ ArcticMadness.scene.Game.prototype.init = function () {
 
 
 
-  var map = new ArcticMadness.map.Map(this.stage.map, player, enemy, this, this.gamepads.get(0));
+  this.map = new ArcticMadness.map.Map(this.stage.map, player, enemy, this, this.gamepads.get(0));
   // var timer = this.timers.create({
   //   duration: 1000,
   //   onTick: function () {
@@ -107,7 +109,7 @@ ArcticMadness.scene.Game.prototype.init = function () {
 
 
   this.stage.addChild(player);
-  this.stage.addChild(player2);
+  //this.stage.addChild(player2);
   this.stage.addChild(enemy);
 };
 
@@ -121,6 +123,8 @@ ArcticMadness.scene.Game.prototype.init = function () {
  */
 ArcticMadness.scene.Game.prototype.update = function (step) {
   rune.scene.Scene.prototype.update.call(this, step);
+
+  this.map.update(step);
 };
 
 /**
