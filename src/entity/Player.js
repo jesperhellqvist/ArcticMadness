@@ -55,8 +55,7 @@ ArcticMadness.entity.Player.prototype.init = function () {
     new rune.color.Color24(this.color.r, this.color.g, this.color.b)
   );
 
-  this.animation.create("drown", [20, 21], 8, true);
-  this.animation.create("repair", [25, 26, 27, 28], 8, true);
+  //Moving animations
   this.animation.create("idle", [0, 1, 2, 3], 8, true);
   this.animation.create("walk", [5, 6, 7, 8], 10, true);
   this.animation.create("down", [10, 11, 12, 13, 14], 10, true);
@@ -64,7 +63,18 @@ ArcticMadness.entity.Player.prototype.init = function () {
   //Looking animations, standing still, different directions
   this.animation.create("lookup", [15], 10, true);
   this.animation.create("lookdown", [10], 10, true);
-  this.animation.create("lookside", [5], 10, true);
+  this.animation.create("lookside", [5,9], 10, true); //test for idle when looking sideways
+   //Action animations
+
+  this.animation.create("repair", [20, 21, 22, 23], 8, true);
+  //Water animations
+  this.animation.create("falling",[25,26,27,28,29], 10, true);
+  this.animation.create("drown", [30,31], 8, true);
+  this.animation.create("death", [31,32,33,34,35,36,37,38,39,40,41,40,41,42], 8, true);
+  //Attacked animation, injured
+  this.animation.create("dragy", [45,46], 4, true);
+  this.animation.create("dragx", [47,48], 4, true);
+  
   this.m_createGun(this.enemy);
   this.m_setPhysics();
 };

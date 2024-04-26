@@ -19,7 +19,7 @@ ArcticMadness.entity.Enemy = function (x, y, player, map, game) {
   /**
    * Calls the constructor method of the super class.
    */
-  rune.display.Sprite.call(this, this.x, this.y, 64, 64, "enemiestest");
+  rune.display.Sprite.call(this, this.x, this.y, 64, 64, "64_enemy_lepardseal");
 };
 
 //------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ ArcticMadness.entity.Enemy.prototype.constructor = ArcticMadness.entity.Enemy;
 
 ArcticMadness.entity.Enemy.prototype.init = function () {
   rune.display.Sprite.prototype.init.call(this);
-  this.animation.create("walk", [1, 2], 2, true);
+  this.animation.create("walk", [0, 1, 2, 3], 5, true);
 };
 
 // This is the update method, which is called every frame.
@@ -69,11 +69,11 @@ ArcticMadness.entity.Enemy.prototype.m_followPlayer = function () {
 
   if (this.x < this.playerPositionX) {
     this.x += 2;
-    // this.flippedX = true;
+    this.flippedX = false;
     this.animation.gotoAndPlay("walk");
   } else if (this.x > this.playerPositionX) {
     this.x -= 2;
-    this.flippedX = false;
+    this.flippedX = true;
   }
   if (this.y < this.playerPositionY) {
     this.y += 2;
@@ -89,7 +89,7 @@ ArcticMadness.entity.Enemy.prototype.m_checkPlayerCollision = function () {
     this.player.isAlive = false;
     this.player.gun.alpha = 0;
     this.m_getNearestWater(this.player.x, this.player.y);
-   
+
   }
 };
 
@@ -102,7 +102,7 @@ ArcticMadness.entity.Enemy.prototype.m_getNearestWater = function (x, y) {
   var bottomLeft = this.application.screen.height / 2;
   var bottomRight = this.application.screen.height;
 
- console.log(topLeft, topRight, bottomLeft, bottomRight);
+  console.log(topLeft, topRight, bottomLeft, bottomRight);
 
   if (x < topLeft && y < bottomLeft) {
     this.player.x -= 1;
@@ -128,7 +128,7 @@ ArcticMadness.entity.Enemy.prototype.m_getNearestWater = function (x, y) {
     this.x += 1;
     this.y += 4;
   }
-   
-    
-  
+
+
+
 };
