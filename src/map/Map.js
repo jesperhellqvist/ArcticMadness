@@ -30,7 +30,11 @@ ArcticMadness.map.Map.prototype.init = function () {
 
 ArcticMadness.map.Map.prototype.update = function (step) {
   this.m_checkPlayerInWater();
-  if (!this.player.isInWater && this.player.isAlive) {
+  if (
+    !this.player.isInWater &&
+    this.player.isAlive &&
+    !this.player.isAttacked
+  ) {
     this.m_handleInputGamepad();
   }
 };
@@ -71,21 +75,24 @@ ArcticMadness.map.Map.prototype.m_handleInputGamepad = function () {
 // This method checks if the player is in water.
 
 ArcticMadness.map.Map.prototype.m_checkPlayerInWater = function () {
-  if (this.m_isPlayerInWater()) {
+  if (this.m_isPlayerInWater() && this.player.isAlive) {
     var playerTile = this.tileLayer.getTileOf(
       this.player.centerX,
       this.player.centerY + 18
     );
+
     this.player.x = playerTile.x;
     this.player.y = playerTile.y;
     this.player.health -= 1;
     this.player.isInWater = true;
     this.player.gun.alpha = 0;
-
     this.player.animation.gotoAndPlay("drown");
-  } else {
-    this.player.isInWater = false;
-  }
+    if (this.player.health <= 0) {
+      this.player.isInWater = true;
+      this.player.isAlive = false;
+      this.player.animation.gotoAndPlay("death");
+    }
+  } 
 };
 
 // This method creates a timer for a tile.
@@ -149,7 +156,12 @@ ArcticMadness.map.Map.prototype.m_isPlayerInWater = function () {
   );
 
   // If the tile value is 1, the player is standing on water
-  if (tileValue === 1) {
+  if (
+    tileValue === 1 ||
+    tileValue === 8 ||
+    tileValue === 9 ||
+    tileValue === 17
+  ) {
     return true;
   } else {
     return false;

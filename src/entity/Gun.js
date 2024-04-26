@@ -41,7 +41,7 @@ ArcticMadness.entity.Gun.prototype.init = function () {
 
 ArcticMadness.entity.Gun.prototype.update = function (step) {
   rune.display.Sprite.prototype.update.call(this, step);
-  if (!this.player.isInWater && this.player.isAlive) {
+  if (!this.player.isInWater && this.player.isAlive && !this.player.isAttacked) {
     this.m_handleInputStickRight();
     this.m_handleButton7();
   }
@@ -69,7 +69,7 @@ ArcticMadness.entity.Gun.prototype.m_handleInputStickRight = function () {
   }
 
   //Right
-  if ((angle < 45 && angle > 0) || (angle > 315 && angle < 360)) {
+  if ((angle < 45 && angle > 0 ) || (angle > 315 && angle < 360)) { // NOTERA 0 = idle
     this.flippedX = false;
     this.player.flippedX = false;
     this.x = this.player.x + 26;

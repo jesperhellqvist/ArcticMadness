@@ -22,6 +22,7 @@ ArcticMadness.entity.Player = function (
   this.isInWater = false; // Player is in water
   this.isRepairing = false; // Player is repairing ice
   this.isAlive = true; // Player is alive
+  this.isAttacked = false; // Player is attacked
 
   //this.topSpeed = 3; // Player top speed
 
@@ -70,7 +71,7 @@ ArcticMadness.entity.Player.prototype.init = function () {
   //Water animations
   this.animation.create("falling",[25,26,27,28,29], 10, true);
   this.animation.create("drown", [30,31], 8, true);
-  this.animation.create("death", [31,32,33,34,35,36,37,38,39,40,41,40,41,42], 8, true);
+  this.animation.create("death", [31,32,33,34,35,36,37,38,39,40,41,40,41,42,43], 8, false);
   //Attacked animation, injured
   this.animation.create("dragy", [45,46], 4, true);
   this.animation.create("dragx", [47,48], 4, true);
@@ -82,10 +83,10 @@ ArcticMadness.entity.Player.prototype.init = function () {
 ArcticMadness.entity.Player.prototype.update = function (step) {
   rune.display.Sprite.prototype.update.call(this, step);
 
-  this.m_checkPlayerHealth();
+  //this.m_checkPlayerHealth();
 
-  if (!this.isInWater && this.isAlive) {
-    this.m_handleInput(this.controls);
+  if (!this.isInWater && this.isAlive && !this.isAttacked) {
+    //this.m_handleInput(this.controls);
     this.m_handleInputGamepad();
     this.m_setGunPosition();
     this.m_handleHitBox();
@@ -251,8 +252,9 @@ ArcticMadness.entity.Player.prototype.m_handleHitBox = function () {
   this.debugColor = "#FF0000";
 };
 
-ArcticMadness.entity.Player.prototype.m_checkPlayerHealth = function () {
-  if (this.health <= 0) {
-    this.isAlive = false;
-  }
-};
+// ArcticMadness.entity.Player.prototype.m_checkPlayerHealth = function () {
+//   if (this.health <= 0) {
+//     this.isAlive = false;
+//     this.animation.gotoAndPlay("death");
+//   }
+// };

@@ -111,6 +111,7 @@ ArcticMadness.scene.Game.prototype.init = function () {
   this.stage.addChild(player);
   //this.stage.addChild(player2);
   this.stage.addChild(enemy);
+ 
 };
 
 /**
