@@ -92,7 +92,7 @@ ArcticMadness.scene.Game.prototype.init = function () {
   
   //this.stage.addChild(players);
 
-  var enemy = new ArcticMadness.entity.Enemy(200, 200, player);
+  var enemy = new ArcticMadness.entity.Enemy(200, 200, player, this.stage.map, this);
   player.hitTestEnemy(enemy);
 
 

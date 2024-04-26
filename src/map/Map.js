@@ -4,8 +4,7 @@
 
 ArcticMadness.map.Map = function (map, player, enemy, game, gamepad) {
   this.map = map;
-  this.tiles = this.map.back.m_data; // Array of tile values
-  this.tile = this.map.back.m_tmpTile; // Temporary tile object
+  this.tiles = this.map.back.data; // Array of tile values
   this.tileLayer = this.map.back; // Reference to the tile layer
   this.player = player; // Reference to the player object
   this.enemy = enemy; // Reference to the enemy object
@@ -18,19 +17,151 @@ ArcticMadness.map.Map = function (map, player, enemy, game, gamepad) {
 };
 
 //------------------------------------------------------------------------------
+// Public prototype methods
+//------------------------------------------------------------------------------
+
+// This is the init method, which is called when the object is created.
 
 ArcticMadness.map.Map.prototype.init = function () {
-  this.changeRandomTile();
+  this.m_changeRandomTile();
 };
+
+// This is the update method, which is called every frame from the Game.
 
 ArcticMadness.map.Map.prototype.update = function (step) {
   this.m_checkPlayerInWater();
-  if (!this.player.isInWater) {
+  if (!this.player.isInWater && this.player.isAlive) {
     this.m_handleInputGamepad();
   }
 };
 
-ArcticMadness.map.Map.prototype.changeRandomTile = function () {
+//--------------------------------------------------------------------------
+// Private methods
+//--------------------------------------------------------------------------
+
+// This method handles the gamepad input to repair ice.
+
+ArcticMadness.map.Map.prototype.m_handleInputGamepad = function () {
+  if (this.gamepad.pressed(2)) {
+    this.player.animation.gotoAndPlay("repair");
+    if (!this.repairTimer) {
+      this.player.gun.alpha = 0; // Hide the gun
+      this.repairTimer = this.game.timers.create(
+        {
+          duration: 2000,
+          onComplete: function () {
+            this.m_repairIce();
+            this.repairTimer = null;
+          },
+          scope: this,
+        },
+        true
+      );
+    }
+  } else {
+    if (this.repairTimer) {
+      this.repairTimer.stop();
+      this.repairTimer = null;
+    }
+    this.player.animation.gotoAndPlay("idle");
+    this.player.gun.alpha = 1; // Show the gun
+  }
+};
+
+// This method checks if the player is in water.
+
+ArcticMadness.map.Map.prototype.m_checkPlayerInWater = function () {
+  if (this.m_isPlayerInWater()) {
+    var playerTile = this.tileLayer.getTileOf(
+      this.player.centerX,
+      this.player.centerY + 18
+    );
+    this.player.x = playerTile.x;
+    this.player.y = playerTile.y;
+    this.player.health -= 1;
+    this.player.isInWater = true;
+    this.player.gun.alpha = 0;
+
+    this.player.animation.gotoAndPlay("drown");
+  } else {
+    this.player.isInWater = false;
+  }
+};
+
+// This method creates a timer for a tile.
+
+ArcticMadness.map.Map.prototype.m_createTimer = function (
+  time,
+  callback,
+  tileIndex
+) {
+  var timer = this.game.timers.create(
+    {
+      duration: time,
+      onTick: callback,
+      scope: this,
+    },
+    true
+  );
+
+  this.tileTimers[tileIndex] = timer;
+};
+
+/**
+ * This method breaks the ice at a specific tile index.
+ * @param {number} index The index of the tile to break.
+ *
+ * @returns {undefined}
+ */
+
+ArcticMadness.map.Map.prototype.m_breakIce = function (index) {
+  this.tileLayer.setTileValueAt(index, 15);
+  this.m_createTimer(
+    5000,
+    function () {
+      this.m_removeIce(index);
+    },
+    index
+  );
+};
+
+/**
+ * This method removes the ice at a specific tile index.
+ * @param {number} index The index of the tile to remove.
+ * @returns {undefined}
+ */
+
+ArcticMadness.map.Map.prototype.m_removeIce = function (index) {
+  this.tileLayer.setTileValueAt(index, 1);
+  this.m_changeRandomTile();
+};
+
+/**
+ * This method checks if the player is standing on a water tile.
+ * @returns {boolean} Returns true if the player is standing on water.
+ */
+
+ArcticMadness.map.Map.prototype.m_isPlayerInWater = function () {
+  // Check if the player is standing on a water tile
+  var tileValue = this.tileLayer.getTileValueOf(
+    this.player.centerX,
+    this.player.centerY + 18
+  );
+
+  // If the tile value is 1, the player is standing on water
+  if (tileValue === 1) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+/**
+ * This method changes a random ice tile to a crack tile.
+ * @returns {undefined}
+ */
+
+ArcticMadness.map.Map.prototype.m_changeRandomTile = function () {
   var iceTiles = [];
 
   // Find all tiles with value 2
@@ -55,7 +186,12 @@ ArcticMadness.map.Map.prototype.changeRandomTile = function () {
   }
 };
 
-ArcticMadness.map.Map.prototype.repairIce = function () {
+/**
+ * This method repairs the ice at the player's position.
+ * @returns {undefined}
+ */
+
+ArcticMadness.map.Map.prototype.m_repairIce = function () {
   var playerTileIndex = this.tileLayer.getTileIndexOf(
     this.player.centerX,
     this.player.centerY
@@ -67,120 +203,14 @@ ArcticMadness.map.Map.prototype.repairIce = function () {
   );
 
   if (playerTile === 20 || playerTile === 21) {
-   //this.player.animation.gotoAndPlay("repair");
     this.tileLayer.setTileValueAt(playerTileIndex, 2);
     var timer = this.tileTimers[playerTileIndex];
     if (timer) {
       // If the tile has a timer, stop it
       timer.stop();
       delete this.tileTimers[playerTileIndex];
-      this.changeRandomTile();
+      this.m_changeRandomTile();
     }
   }
- // this.player.animation.gotoAndPlay("idle");
   this.repairTimer = null;
-};
-
-//--------------------------------------------------------------------------
-// Private methods
-//--------------------------------------------------------------------------
-
-ArcticMadness.map.Map.prototype.m_handleInputGamepad = function () {
-  if (this.gamepad.pressed(2)) {
-    this.player.animation.gotoAndPlay("repair");
-    if (!this.repairTimer) {
-      console.log("Repairing ice");
-     
-      this.player.gun.alpha = 0; // Hide the gun
-      this.repairTimer = this.game.timers.create(
-        {
-          duration: 2000,
-          onComplete: function () {
-            this.repairIce();
-            this.repairTimer = null;
-          },
-          scope: this,
-        },
-        true
-      );
-    }
-  } else {
-
-    if (this.repairTimer) {
-      this.repairTimer.stop();
-      this.repairTimer = null;
-    }
-    this.player.animation.gotoAndPlay("idle");
-    this.player.gun.alpha = 1; // Show the gun
-  }
-};
-
-ArcticMadness.map.Map.prototype.m_checkPlayerInWater = function () {
-  if (this.m_isPlayerInWater()) {
-    var playerTile = this.tileLayer.getTileOf(
-      this.player.centerX,
-      this.player.centerY + 18
-    );
-    this.player.x = playerTile.x;
-    this.player.y = playerTile.y;
-    this.player.health -= 1;
-    this.player.isInWater = true;
-    this.player.gun.alpha = 0;
-
-    this.player.animation.gotoAndPlay("drown");
-   
-  
-  } else {
-    this.player.isInWater = false;
-  }
-};
-
-ArcticMadness.map.Map.prototype.m_createTimer = function (
-  time,
-  callback,
-  tileIndex
-) {
-  var timer = this.game.timers.create(
-    {
-      duration: time,
-      onTick: callback,
-      scope: this,
-    },
-    true
-  );
-
-  if (time > 60) {
-    this.tileTimers[tileIndex] = timer;
-  }
-};
-
-ArcticMadness.map.Map.prototype.m_breakIce = function (index) {
-  this.tileLayer.setTileValueAt(index, 15);
-  this.m_createTimer(
-    5000,
-    function () {
-      this.m_removeIce(index);
-    },
-    index
-  );
-};
-
-ArcticMadness.map.Map.prototype.m_removeIce = function (index) {
-  this.tileLayer.setTileValueAt(index, 1);
-  this.changeRandomTile();
-};
-
-ArcticMadness.map.Map.prototype.m_isPlayerInWater = function () {
-  // Check if the player is standing on a water tile
-  var tileValue = this.tileLayer.getTileValueOf(
-    this.player.centerX,
-    this.player.centerY + 18
-  );
-
-  // If the tile value is 1, the player is standing on water
-  if (tileValue === 1) {
-    return true;
-  } else {
-    return false;
-  }
 };
