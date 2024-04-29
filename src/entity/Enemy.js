@@ -74,7 +74,7 @@ ArcticMadness.entity.Enemy.prototype.m_followPlayer = function () {
   this.playerPositionY = this.player.y;
 
   var centerX = this.application.screen.width / 2;
-  var centerY = this.application.screen.height / 2;
+  var centerY = this.application.screen.width / 2;
 
   if (this.player.isInWater) {
     if (this.x < centerX) {

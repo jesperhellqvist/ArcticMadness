@@ -2,12 +2,14 @@
 // Constructor scope
 //--------------------------------
 
-ArcticMadness.entity.Bullet = function (x, y, color, angle, enemy) {
+ArcticMadness.entity.Bullet = function (x, y, color, angle, enemies) {
   this.x = x;
   this.y = y;
   this.color = color;
   this.angle = angle;
-  this.enemy = enemy;
+  this.enemies = enemies;
+
+  console.log(this.enemies);
 
   //--------------------------------------------------------------------------
   // Super call
@@ -48,7 +50,7 @@ ArcticMadness.entity.Bullet.prototype.update = function (step) {
   rune.display.Sprite.prototype.update.call(this, step);
 
   this.m_shoot(this.angle);
-  this.m_handleHitBox(this.enemy);
+  //this.m_handleHitBox(this.enemies);
 };
 
 ArcticMadness.entity.Bullet.prototype.dispose = function () {
@@ -80,23 +82,23 @@ ArcticMadness.entity.Bullet.prototype.m_setPhysics = function () {
 
 // Function to handle the hitbox of the bullet and check if it hits the enemy
 
-ArcticMadness.entity.Bullet.prototype.m_handleHitBox = function () {
-  this.debug = true;
-  this.debugColor = "#FF0000";
+// ArcticMadness.entity.Bullet.prototype.m_handleHitBox = function () {
+//   this.debug = true;
+//   this.debugColor = "#FF0000";
 
-  if (this.hitTestObject(this.enemy)) {  // If the bullet hits the enemy, the enemy and the bullet are disposed
-    this.animation.gotoAndPlay("hit");
-    console.log("hit");
-    this.parent.removeChild(this.enemy, true);
-    this.parent.removeChild(this, true);
-  }
+//   if (this.hitTestObject(this.enemies)) {  // If the bullet hits the enemy, the enemy and the bullet are disposed
+//     this.animation.gotoAndPlay("hit");
+//     console.log("hit");
+//     this.parent.removeChild(this.enemies, true);
+//     this.parent.removeChild(this, true);
+//   }
 
-  if ( // If the bullet is out of the screen, it is disposed
-    this.x >= this.application.screen.width ||
-    this.y >= this.application.screen.height ||
-    this.x <= 0 ||
-    this.y <= 0
-  ) {
-    this.parent.removeChild(this, true);
-  }
-};
+//   if ( // If the bullet is out of the screen, it is disposed
+//     this.x >= this.application.screen.width ||
+//     this.y >= this.application.screen.height ||
+//     this.x <= 0 ||
+//     this.y <= 0
+//   ) {
+//     this.parent.removeChild(this, true);
+//   }
+// };

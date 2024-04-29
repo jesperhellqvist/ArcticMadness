@@ -12,6 +12,7 @@ npx google-closure-compiler \
 --js "./../../src/entity/Bullet.js" \
 --js "./../../src/entity/Gun.js" \
 --js "./../../src/entity/Enemy.js" \
+--js "./../../src/entity/Enemies.js" \
 --js "./../../src/entity/Player.js" \
 --js "./../../src/entity/Players.js" \
 --js "./../../src/map/Map.js" \

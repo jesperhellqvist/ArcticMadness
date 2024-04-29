@@ -2,15 +2,17 @@
 // Constructor scope
 //--------------------------------
 
-ArcticMadness.entity.Gun = function (x, y, color, gamepad, enemy, player) {
+ArcticMadness.entity.Gun = function (x, y, color, gamepad, enemies, player) {
   this.x = x;
   this.y = y;
   this.color = color;
   this.gamepad = gamepad;
   this.angle = 0;
-  this.enemy = enemy;
+  this.enemies = enemies;
   this.player = player;
-  console.log(this.enemy);
+  this.bullet = null;
+  console.log(this.enemies);
+ 
 
   //--------------------------------------------------------------------------
   // Super call
@@ -116,12 +118,12 @@ ArcticMadness.entity.Gun.prototype.m_handleButton7 = function () {
 
 // This method handles the shoot. It creates a bullet and adds it to the stage.
 ArcticMadness.entity.Gun.prototype.m_handleShoot = function (angle) {
-  var bullet = new ArcticMadness.entity.Bullet(
+ this.bullet = new ArcticMadness.entity.Bullet(
     this.x,
     this.y,
     this.color,
     angle,
-    this.enemy
+    this.enemies
   );
-  this.stage.addChild(bullet);
+  this.stage.addChild(this.bullet);
 };

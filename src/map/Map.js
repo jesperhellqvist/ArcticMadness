@@ -2,12 +2,11 @@
 // Constructor scope
 //--------------------------------
 
-ArcticMadness.map.Map = function (map, player, enemy, game, gamepad) {
+ArcticMadness.map.Map = function (map, player, game, gamepad) {
   this.map = map;
   this.tiles = this.map.back.data; // Array of tile values
   this.tileLayer = this.map.back; // Reference to the tile layer
   this.player = player; // Reference to the player object
-  this.enemy = enemy; // Reference to the enemy object
   this.game = game; // Reference to the game object
   this.gamepad = gamepad; // Reference to the gamepad object
   this.tileTimers = {};
