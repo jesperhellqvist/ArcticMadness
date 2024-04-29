@@ -102,9 +102,11 @@ ArcticMadness.entity.Enemy.prototype.m_followPlayer = function () {
     } else if (this.x > this.playerPositionX) {
       this.x -= 2;
       this.flippedX = true;
+      this.animation.gotoAndPlay("walk");
     }
     if (this.y < this.playerPositionY) {
       this.y += 2;
+      
     } else if (this.y > this.playerPositionY) {
       this.y -= 2;
     }

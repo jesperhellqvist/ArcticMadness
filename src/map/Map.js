@@ -66,7 +66,7 @@ ArcticMadness.map.Map.prototype.m_handleInputGamepad = function () {
       this.repairTimer.stop();
       this.repairTimer = null;
     }
-    this.player.animation.gotoAndPlay("idle");
+   // this.player.animation.gotoAndPlay("idle");
     this.player.gun.alpha = 1; // Show the gun
   }
 };

@@ -77,13 +77,11 @@ ArcticMadness.entity.Gun.prototype.m_handleInputStickRight = function () {
     this.x = this.player.x + 26;
     this.y = this.player.y + 20;
     this.player.animation.gotoAndPlay("lookside");
-    this.animation.gotoAndPlay("gun");
   }
 
   //Down
   if (angle > 45 && angle < 135) {
     this.player.animation.gotoAndPlay("lookdown");
-    this.animation.gotoAndPlay("gun");
   }
   //Left
   if (angle > 135 && angle < 225) {
@@ -91,17 +89,18 @@ ArcticMadness.entity.Gun.prototype.m_handleInputStickRight = function () {
     this.x = this.player.x + 10;
     this.y = this.player.y + 20;
     this.player.animation.gotoAndPlay("lookside");
-    this.animation.gotoAndPlay("gun");
+   if (this.gamepad.stickLeftLeft) {
+      console.log("left")
+  
+   }
+
   }
   //Up
   if (angle > 225 && angle < 315) {
     this.x = this.player.x + 16;
     this.y = this.player.y + 10;
     this.player.animation.gotoAndPlay("lookup");
-    this.animation.gotoAndPlay("gun");
-    if (this.gamepad.stickLeftUp) {
-      this.player.animation.gotoAndPlay("up");
-    }
+   
   }
 
   this.angle = angle;
