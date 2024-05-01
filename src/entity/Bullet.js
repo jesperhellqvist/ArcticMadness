@@ -9,7 +9,7 @@ ArcticMadness.entity.Bullet = function (x, y, color, angle, enemies) {
   this.angle = angle;
   this.enemies = enemies;
 
-  console.log(this.enemies);
+  //console.log(this.enemies); // Just nu null
 
   //--------------------------------------------------------------------------
   // Super call

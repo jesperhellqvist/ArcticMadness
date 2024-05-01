@@ -23,7 +23,7 @@ ArcticMadness.entity.Player = function (
   this.isRepairing = false; // Player is repairing ice
   this.isAlive = true; // Player is alive
   this.isAttacked = false; // Player is attacked
-  console.log(this.enemies);
+  //console.log(this.enemies); // Just nu null
 
   //this.topSpeed = 3; // Player top speed
 

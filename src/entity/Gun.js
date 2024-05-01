@@ -11,7 +11,7 @@ ArcticMadness.entity.Gun = function (x, y, color, gamepad, enemies, player) {
   this.enemies = enemies;
   this.player = player;
   this.bullet = null;
-  console.log(this.enemies);
+ //console.log(this.enemies); // Just nu null
  
 
   //--------------------------------------------------------------------------
