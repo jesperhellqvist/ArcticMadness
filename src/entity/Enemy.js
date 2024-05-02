@@ -40,6 +40,7 @@ ArcticMadness.entity.Enemy.prototype.init = function () {
   rune.display.Sprite.prototype.init.call(this);
   this.animation.create("walk", [0, 1, 2, 3], 5, true);
   this.animation.create("water", [4], 1, true);
+  this.m_setHitbox();
 };
 
 // This is the update method, which is called every frame.
@@ -69,7 +70,7 @@ ArcticMadness.entity.Enemy.prototype.m_followPlayer = function () {
   this.playerPositionX = this.player.x;
   this.playerPositionY = this.player.y;
 
-  var centerX = this.application.screen.width / 2; 
+  var centerX = this.application.screen.width / 2;
   var centerY = this.application.screen.width / 2;
 
   if (this.player.isInWater) {
@@ -88,7 +89,6 @@ ArcticMadness.entity.Enemy.prototype.m_followPlayer = function () {
     if (this.y > centerY) {
       this.y -= 2;
     }
-    
   }
 
   if (!this.player.isInWater) {
@@ -103,11 +103,10 @@ ArcticMadness.entity.Enemy.prototype.m_followPlayer = function () {
     }
     if (this.y < this.playerPositionY) {
       this.y += 2;
-      
     } else if (this.y > this.playerPositionY) {
       this.y -= 2;
     }
-    if(this.y == this.playerPositionY) {
+    if (this.y == this.playerPositionY) {
       this.flippedX = false;
     }
   }
@@ -160,4 +159,9 @@ ArcticMadness.entity.Enemy.prototype.m_getNearestWater = function (x, y) {
     this.x += 1;
     this.y += 4;
   }
+};
+
+ArcticMadness.entity.Enemy.prototype.m_setHitbox = function () {
+  this.hitbox.set(0, 16, 64, 28);
+  this.hitbox.debug = true;
 };

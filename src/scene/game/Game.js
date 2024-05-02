@@ -17,6 +17,8 @@ ArcticMadness.scene.Game = function () {
   this.map = null;
   this.player = null;
   this.enemies = null;
+  this.players = [];
+  this.gamepadsConected = [];
   //--------------------------------------------------------------------------
   // Super call
   //--------------------------------------------------------------------------
@@ -46,11 +48,12 @@ ArcticMadness.scene.Game.prototype.constructor = ArcticMadness.scene.Game;
  */
 ArcticMadness.scene.Game.prototype.init = function () {
   rune.scene.Scene.prototype.init.call(this);
-
-
-
   this.stage.map.load("map");
 
+  
+
+if (this.gamepads.get(0) != null) {
+  console.log(this.gamepads.get(0));
   this.player = new ArcticMadness.entity.Player(
     700,
     100,
@@ -67,19 +70,90 @@ ArcticMadness.scene.Game.prototype.init = function () {
       down: "S",
       shoot: "SPACE",
     },
-    this.gamepads.get(0)
+    this.gamepads.get(0),
+    0
   );
+  this.players.push(this.player);
+  this.gamepadsConected.push(this.gamepads.get(0));
+} if (this.gamepads.get(1) != null) {
+  console.log(this.gamepads.get(1));
+  this.player = new ArcticMadness.entity.Player(
+    700,
+    100,
+    "64_penguin_nogun",
+    {
+      r: "0",
+      g: "250",
+      b: "0",
+    },
+    {
+      left: "LEFT",
+      right: "RIGHT",
+      up: "UP",
+      down: "DOWN",
+      shoot: "ENTER",
+    },
+    this.gamepads.get(1),
+    1
+  );
+  this.players.push(this.player);
+  this.gamepadsConected.push(this.gamepads.get(1));
+}
+//  if (this.gamepads.get(2) != null) {
+//   console.log(this.gamepads.get(2));
+//   this.player = new ArcticMadness.entity.Player(
+//     700,
+//     100,
+//     "64_penguin_nogun",
+//     {
+//       r: "0",
+//       g: "0",
+//       b: "250",
+//     },
+//     {
+//       left: "J",
+//       right: "L",
+//       up: "I",
+//       down: "K",
+//       shoot: "O",
+//     },
+//     this.gamepads.get(2)
+//   );
+//   this.players.push(this.player);
+// } if (this.gamepads.get(3) != null) {
+//   console.log(this.gamepads.get(3));
+//   this.player = new ArcticMadness.entity.Player(
+//     700,
+//     100,
+//     "64_penguin_nogun",
+//     {
+//       r: "250",
+//       g: "250",
+//       b: "0",
+//     },
+//     {
+//       left: "F",
+//       right: "H",
+//       up: "T",
+//       down: "G",
+//       shoot: "Y",
+//     },
+//     this.gamepads.get(3)
+//   );
+//   this.players.push(this.player);
+// }
 
   this.enemies = new ArcticMadness.entity.Enemies(this, this.player);
 
   this.map = new ArcticMadness.map.Map(
     this.stage.map,
-    this.player,
+    this.players,
     this,
-    this.gamepads.get(0)
+    this.gamepadsConected
   );
 
-  this.stage.addChild(this.player);
+  this.m_addPlayersToStage();
+  //this.stage.addChild(this.player);
 };
 
 /**
@@ -98,14 +172,13 @@ ArcticMadness.scene.Game.prototype.update = function (step) {
 };
 
 ArcticMadness.scene.Game.prototype.gameOver = function () {
-  
   var text = new rune.text.BitmapField("Game Over");
   text.center = this.application.screen.center;
   text.autoSize = true;
   text.scaleX = 4;
   text.scaleY = 4;
   this.stage.addChild(text);
-}
+};
 
 /**
  * This method is automatically called once just before the scene ends. Use
@@ -137,5 +210,11 @@ ArcticMadness.scene.Game.prototype.m_checkBulletHitEnemy = function (bullet) {
       bullet.dispose();
       this.enemies.enemies[i].dispose();
     }
+  }
+};
+
+ArcticMadness.scene.Game.prototype.m_addPlayersToStage = function () {
+  for (var i = 0; i < this.players.length; i++) {
+    this.stage.addChild(this.players[i]);
   }
 };

@@ -150,3 +150,5 @@ ArcticMadness.entity.Enemies.prototype.m_disposeEnemies = function () {
 
   this.enemies = [];
 };
+
+

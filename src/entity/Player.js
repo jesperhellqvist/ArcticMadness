@@ -8,7 +8,8 @@ ArcticMadness.entity.Player = function (
   penguin,
   color,
   controls,
-  gamepad
+  gamepad,
+  id
 ) {
   this.health = 100; // Player health
   this.controls = controls; // Player controls on keyboard
@@ -24,6 +25,7 @@ ArcticMadness.entity.Player = function (
   this.isAlive = true; // Player is alive
   this.isAttacked = false; // Player is attacked
   this.diagonalMovement = false;
+  this.id = id; // Player id
   //console.log(this.enemies); // Just nu null
 
   //this.topSpeed = 3; // Player top speed
