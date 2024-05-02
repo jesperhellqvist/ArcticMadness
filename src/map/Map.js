@@ -58,7 +58,7 @@ ArcticMadness.map.Map.prototype.m_setCrackTimer = function () {
     },
     true
   );
-}
+};
 
 // This method handles the gamepad input to repair ice.
 
@@ -84,7 +84,7 @@ ArcticMadness.map.Map.prototype.m_handleInputGamepad = function () {
       this.repairTimer.stop();
       this.repairTimer = null;
     }
-   // this.player.animation.gotoAndPlay("idle");
+    // this.player.animation.gotoAndPlay("idle");
     this.player.gun.alpha = 1; // Show the gun
   }
 };
@@ -109,9 +109,9 @@ ArcticMadness.map.Map.prototype.m_checkPlayerInWater = function () {
       this.player.isAlive = false;
       this.player.animation.gotoAndPlay("death");
       var gameOverText = new rune.text.BitmapField("GAME OVER");
- console.log("GAME OVER");
-    
-  } 
+      console.log("GAME OVER");
+    }
+  }
 };
 
 // This method creates a timer for a tile.
