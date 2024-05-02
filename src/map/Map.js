@@ -11,6 +11,7 @@ ArcticMadness.map.Map = function (map, player, game, gamepad) {
   this.gamepad = gamepad; // Reference to the gamepad object
   this.tileTimers = {};
   this.repairTimer = null;
+  this.newCrackTimer = null;
 
   ArcticMadness.map.Map.prototype.init.call(this);
 };
@@ -23,6 +24,7 @@ ArcticMadness.map.Map = function (map, player, game, gamepad) {
 
 ArcticMadness.map.Map.prototype.init = function () {
   this.m_changeRandomTile();
+  this.m_setCrackTimer();
 };
 
 // This is the update method, which is called every frame from the Game.
@@ -42,6 +44,22 @@ ArcticMadness.map.Map.prototype.update = function (step) {
 // Private methods
 //--------------------------------------------------------------------------
 
+// This method sets a timer to change a random ice tile to a crack tile.
+
+ArcticMadness.map.Map.prototype.m_setCrackTimer = function () {
+  this.newCrackTimer = this.game.timers.create(
+    {
+      duration: 2000,
+      onTick: function () {
+        this.m_changeRandomTile();
+        this.m_setCrackTimer();
+      },
+      scope: this,
+    },
+    true
+  );
+}
+
 // This method handles the gamepad input to repair ice.
 
 ArcticMadness.map.Map.prototype.m_handleInputGamepad = function () {
@@ -51,7 +69,7 @@ ArcticMadness.map.Map.prototype.m_handleInputGamepad = function () {
       this.player.gun.alpha = 0; // Hide the gun
       this.repairTimer = this.game.timers.create(
         {
-          duration: 2000,
+          duration: 1500,
           onComplete: function () {
             this.m_repairIce();
             this.repairTimer = null;
@@ -90,7 +108,9 @@ ArcticMadness.map.Map.prototype.m_checkPlayerInWater = function () {
       this.player.isInWater = true;
       this.player.isAlive = false;
       this.player.animation.gotoAndPlay("death");
-    }
+      var gameOverText = new rune.text.BitmapField("GAME OVER");
+ console.log("GAME OVER");
+    
   } 
 };
 
@@ -220,7 +240,7 @@ ArcticMadness.map.Map.prototype.m_repairIce = function () {
       // If the tile has a timer, stop it
       timer.stop();
       delete this.tileTimers[playerTileIndex];
-      this.m_changeRandomTile();
+      //this.m_changeRandomTile();
     }
   }
   this.repairTimer = null;

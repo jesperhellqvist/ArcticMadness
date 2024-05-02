@@ -10,10 +10,6 @@ ArcticMadness.entity.Enemy = function (x, y, player, map, game) {
   this.playerPositionY = this.player.y;
   this.map = map; // Reference to the map object.
   this.game = game; // Reference to the game object.
-  console.log(
-    this.application.screen.width / 4,
-    this.application.screen.height / 4
-  );
 
   //--------------------------------------------------------------------------
   // Super call
@@ -73,7 +69,7 @@ ArcticMadness.entity.Enemy.prototype.m_followPlayer = function () {
   this.playerPositionX = this.player.x;
   this.playerPositionY = this.player.y;
 
-  var centerX = this.application.screen.width / 2;
+  var centerX = this.application.screen.width / 2; 
   var centerY = this.application.screen.width / 2;
 
   if (this.player.isInWater) {
@@ -92,6 +88,7 @@ ArcticMadness.entity.Enemy.prototype.m_followPlayer = function () {
     if (this.y > centerY) {
       this.y -= 2;
     }
+    
   }
 
   if (!this.player.isInWater) {
@@ -109,6 +106,9 @@ ArcticMadness.entity.Enemy.prototype.m_followPlayer = function () {
       
     } else if (this.y > this.playerPositionY) {
       this.y -= 2;
+    }
+    if(this.y == this.playerPositionY) {
+      this.flippedX = false;
     }
   }
 };

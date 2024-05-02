@@ -70,14 +70,12 @@ ArcticMadness.scene.Game.prototype.init = function () {
 
   this.enemies = new ArcticMadness.entity.Enemies(this, this.player);
 
-  
   this.map = new ArcticMadness.map.Map(
     this.stage.map,
     this.player,
     this,
     this.gamepads.get(0)
   );
- 
 
   this.stage.addChild(this.player);
 };
@@ -114,15 +112,17 @@ ArcticMadness.scene.Game.prototype.dispose = function () {
 //------------------------------------------------------------------------------
 
 ArcticMadness.scene.Game.prototype.m_checkBullet = function () {
-  if (this.player.gun.bullet != null) {
-    this.m_checkBulletHitEnemy();
+  for (var i = 0; i < this.player.gun.bullets.length; i++) {
+    if (this.player.gun.bullets[i] != null) {
+      this.m_checkBulletHitEnemy(this.player.gun.bullets[i]);
+    }
   }
 };
 
-ArcticMadness.scene.Game.prototype.m_checkBulletHitEnemy = function () {
+ArcticMadness.scene.Game.prototype.m_checkBulletHitEnemy = function (bullet) {
   for (var i = 0; i < this.enemies.enemies.length; i++) {
-    if (this.player.gun.bullet.hitTestObject(this.enemies.enemies[i])) {
-      this.player.gun.bullet.dispose();
+    if (bullet.hitTestObject(this.enemies.enemies[i])) {
+      bullet.dispose();
       this.enemies.enemies[i].dispose();
     }
   }

@@ -11,6 +11,7 @@ ArcticMadness.entity.Gun = function (x, y, color, gamepad, enemies, player) {
   this.enemies = enemies;
   this.player = player;
   this.bullet = null;
+  this.bullets = [];
  //console.log(this.enemies); // Just nu null
  
 
@@ -124,5 +125,6 @@ ArcticMadness.entity.Gun.prototype.m_handleShoot = function (angle) {
     angle,
     this.enemies
   );
+  this.bullets.push(this.bullet);
   this.stage.addChild(this.bullet);
 };

@@ -23,6 +23,7 @@ ArcticMadness.entity.Player = function (
   this.isRepairing = false; // Player is repairing ice
   this.isAlive = true; // Player is alive
   this.isAttacked = false; // Player is attacked
+  this.diagonalMovement = false;
   //console.log(this.enemies); // Just nu null
 
   //this.topSpeed = 3; // Player top speed
@@ -165,13 +166,23 @@ ArcticMadness.entity.Player.prototype.m_handleInput = function (controls) {
 };
 
 ArcticMadness.entity.Player.prototype.m_handleInputGamepad = function () {
+  
+
+  if (this.gamepad.stickLeftLeft && this.gamepad.stickLeftUp || this.gamepad.stickLeftLeft && this.gamepad.stickLeftDown || this.gamepad.stickLeftRight && this.gamepad.stickLeftUp || this.gamepad.stickLeftRight && this.gamepad.stickLeftDown) {
+    this.diagonalMovement = true;
+  }
+
+  var speed = this.diagonalMovement ? 3 / Math.sqrt(2) : 3; // Normalisera hastigheten för diagonala rörelser
+  var velocityChange = this.diagonalMovement ? 0.15 / Math.sqrt(2) : 0.15; // Normalisera velocityn för diagonala rörelser
+
   if (this.gamepad.stickLeftLeft) {
     if (this.x <= 0) {
       this.x = 0;
     } else {
-      this.x -= 3;
-      this.velocity.x -= 0.15;
+      this.x -= speed;
+      this.velocity.x -= velocityChange;
       this.flippedX = true;
+      this.diagonalMovement = false;
       this.animation.gotoAndPlay("walk");
       if(this.gamepad.stickRightRight){
         this.flippedX = false;
@@ -183,9 +194,10 @@ ArcticMadness.entity.Player.prototype.m_handleInputGamepad = function () {
     if (this.x >= 1250) {
       this.x = 1250;
     } else {
-      this.x += 3;
-      this.velocity.x += 0.15;
+      this.x += speed;
+      this.velocity.x += velocityChange;
       this.flippedX = false;
+      this.diagonalMovement = false;
       this.animation.gotoAndPlay("walk");
     }
   }
@@ -194,9 +206,10 @@ ArcticMadness.entity.Player.prototype.m_handleInputGamepad = function () {
     if (this.y <= 0) {
       this.y = 0;
     } else {
-      this.y -= 3;
-      this.velocity.y -= 0.15;
+      this.y -= speed;
+      this.velocity.y -= velocityChange;
       this.flippedX = false;
+      this.diagonalMovement = false;
       this.animation.gotoAndPlay("up");
     }
   }
@@ -205,9 +218,10 @@ ArcticMadness.entity.Player.prototype.m_handleInputGamepad = function () {
     if (this.y >= 700) {
       this.y = 700;
     } else {
-      this.y += 3;
-      this.velocity.y += 0.15;
+      this.y += speed;
+      this.velocity.y += velocityChange;
       this.flippedX = false;
+      this.diagonalMovement = false;
       this.animation.gotoAndPlay("down");
     }
   }
@@ -253,9 +267,9 @@ ArcticMadness.entity.Player.prototype.m_setPhysics = function () {
 ArcticMadness.entity.Player.prototype.m_handleHitBox = function () {
   // if (this.hitTestObject(this.enemy)) {
   // }
-
-  this.debug = true;
-  this.debugColor = "#FF0000";
+this.hitbox.set(16, 8, 32, 46);
+   this.hitbox.debug = false;
+   
 };
 
 // ArcticMadness.entity.Player.prototype.m_checkPlayerHealth = function () {
