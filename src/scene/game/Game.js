@@ -151,9 +151,12 @@ ArcticMadness.scene.Game.prototype.dispose = function () {
 //------------------------------------------------------------------------------
 
 ArcticMadness.scene.Game.prototype.m_checkBullet = function () {
-  for (var i = 0; i < this.player.gun.bullets.length; i++) {
-    if (this.player.gun.bullets[i] != null) {
-      this.m_checkBulletHitEnemy(this.player.gun.bullets[i]);
+  for (var i = 0; i < this.players.length; i++) {
+    var player = this.players[i];
+    for (var j = 0; j < player.gun.bullets.length; j++) {
+      if (player.gun.bullets[j] != null) {
+        this.m_checkBulletHitEnemy(player.gun.bullets[j]);
+      }
     }
   }
 };
