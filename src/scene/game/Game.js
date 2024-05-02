@@ -47,6 +47,8 @@ ArcticMadness.scene.Game.prototype.constructor = ArcticMadness.scene.Game;
 ArcticMadness.scene.Game.prototype.init = function () {
   rune.scene.Scene.prototype.init.call(this);
 
+
+
   this.stage.map.load("map");
 
   this.player = new ArcticMadness.entity.Player(
@@ -94,6 +96,16 @@ ArcticMadness.scene.Game.prototype.update = function (step) {
   this.map.update(step);
   this.enemies.update(step);
 };
+
+ArcticMadness.scene.Game.prototype.gameOver = function () {
+  
+  var text = new rune.text.BitmapField("Game Over");
+  text.center = this.application.screen.center;
+  text.autoSize = true;
+  text.scaleX = 4;
+  text.scaleY = 4;
+  this.stage.addChild(text);
+}
 
 /**
  * This method is automatically called once just before the scene ends. Use

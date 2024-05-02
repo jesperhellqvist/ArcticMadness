@@ -108,8 +108,7 @@ ArcticMadness.map.Map.prototype.m_checkPlayerInWater = function () {
       this.player.isInWater = true;
       this.player.isAlive = false;
       this.player.animation.gotoAndPlay("death");
-      var gameOverText = new rune.text.BitmapField("GAME OVER");
-      console.log("GAME OVER");
+      this.game.gameOver();
     }
   }
 };
