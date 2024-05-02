@@ -50,100 +50,54 @@ ArcticMadness.scene.Game.prototype.init = function () {
   rune.scene.Scene.prototype.init.call(this);
   this.stage.map.load("map");
 
-  
+  if (this.gamepads.get(0) != null) {
+    this.player = new ArcticMadness.entity.Player(
+      700,
+      100,
+      "64_penguin_nogun",
+      {
+        r: "250",
+        g: "0",
+        b: "0",
+      },
+      {
+        left: "A",
+        right: "D",
+        up: "W",
+        down: "S",
+        shoot: "SPACE",
+      },
+      this.gamepads.get(0),
+      0
+    );
+    this.players.push(this.player);
+    this.gamepadsConected.push(this.gamepads.get(0));
+  }
+  if (this.gamepads.get(1) != null) {
+    this.player = new ArcticMadness.entity.Player(
+      700,
+      100,
+      "64_penguin_nogun",
+      {
+        r: "0",
+        g: "250",
+        b: "0",
+      },
+      {
+        left: "LEFT",
+        right: "RIGHT",
+        up: "UP",
+        down: "DOWN",
+        shoot: "ENTER",
+      },
+      this.gamepads.get(1),
+      1
+    );
+    this.players.push(this.player);
+    this.gamepadsConected.push(this.gamepads.get(1));
+  }
 
-if (this.gamepads.get(0) != null) {
-  console.log(this.gamepads.get(0));
-  this.player = new ArcticMadness.entity.Player(
-    700,
-    100,
-    "64_penguin_nogun",
-    {
-      r: "250",
-      g: "0",
-      b: "0",
-    },
-    {
-      left: "A",
-      right: "D",
-      up: "W",
-      down: "S",
-      shoot: "SPACE",
-    },
-    this.gamepads.get(0),
-    0
-  );
-  this.players.push(this.player);
-  this.gamepadsConected.push(this.gamepads.get(0));
-} if (this.gamepads.get(1) != null) {
-  console.log(this.gamepads.get(1));
-  this.player = new ArcticMadness.entity.Player(
-    700,
-    100,
-    "64_penguin_nogun",
-    {
-      r: "0",
-      g: "250",
-      b: "0",
-    },
-    {
-      left: "LEFT",
-      right: "RIGHT",
-      up: "UP",
-      down: "DOWN",
-      shoot: "ENTER",
-    },
-    this.gamepads.get(1),
-    1
-  );
-  this.players.push(this.player);
-  this.gamepadsConected.push(this.gamepads.get(1));
-}
-//  if (this.gamepads.get(2) != null) {
-//   console.log(this.gamepads.get(2));
-//   this.player = new ArcticMadness.entity.Player(
-//     700,
-//     100,
-//     "64_penguin_nogun",
-//     {
-//       r: "0",
-//       g: "0",
-//       b: "250",
-//     },
-//     {
-//       left: "J",
-//       right: "L",
-//       up: "I",
-//       down: "K",
-//       shoot: "O",
-//     },
-//     this.gamepads.get(2)
-//   );
-//   this.players.push(this.player);
-// } if (this.gamepads.get(3) != null) {
-//   console.log(this.gamepads.get(3));
-//   this.player = new ArcticMadness.entity.Player(
-//     700,
-//     100,
-//     "64_penguin_nogun",
-//     {
-//       r: "250",
-//       g: "250",
-//       b: "0",
-//     },
-//     {
-//       left: "F",
-//       right: "H",
-//       up: "T",
-//       down: "G",
-//       shoot: "Y",
-//     },
-//     this.gamepads.get(3)
-//   );
-//   this.players.push(this.player);
-// }
-
-  this.enemies = new ArcticMadness.entity.Enemies(this, this.player);
+  this.enemies = new ArcticMadness.entity.Enemies(this, this.players);
 
   this.map = new ArcticMadness.map.Map(
     this.stage.map,
