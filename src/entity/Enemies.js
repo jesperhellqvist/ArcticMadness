@@ -2,11 +2,12 @@
 // Constructor scope
 //--------------------------------
 
-ArcticMadness.entity.Enemies = function (game, player) {
+ArcticMadness.entity.Enemies = function (game, players) {
   this.game = game;
   this.enemies = [];
   this.newEnemyTimer = null;
-  this.player = player;
+  this.players = players; // Array of player objects
+  
 
   //--------------------------------------------------------------------------
   // Super call
@@ -115,7 +116,7 @@ ArcticMadness.entity.Enemies.prototype.m_createEnemy = function () {
   var enemy = new ArcticMadness.entity.Enemy(
     randomX,
     randomY,
-    this.game.player,
+    this.players,
     this.game.map,
     this.game
   );
@@ -130,7 +131,16 @@ ArcticMadness.entity.Enemies.prototype.m_createEnemy = function () {
  */
 
 ArcticMadness.entity.Enemies.prototype.m_checkIfPlayerAlive = function () {
-  if (!this.player.isAlive && this.newEnemyTimer != null) {
+  var allPlayersInWater = true;
+  for (var i = 0; i < this.players.length; i++) {
+    if (this.players[i].isAlive) {
+      allPlayersInWater = false;
+      break;
+    }
+  }
+
+  if (allPlayersInWater && this.newEnemyTimer != null) {
+    console.log("Game over");
     this.newEnemyTimer.stop();
     this.newEnemyTimer = null;
   }

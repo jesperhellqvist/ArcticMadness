@@ -2,12 +2,12 @@
 // Constructor scope
 //--------------------------------
 
-ArcticMadness.entity.Enemy = function (x, y, player, map, game) {
+ArcticMadness.entity.Enemy = function (x, y, players, map, game) {
   this.x = x;
   this.y = y;
-  this.player = player; // Reference to the player object.
-  this.playerPositionX = this.player.x;
-  this.playerPositionY = this.player.y;
+  this.players = players; // Reference to the player object.
+  // this.playerPositionX = this.player.x;
+  // this.playerPositionY = this.player.y;
   this.map = map; // Reference to the map object.
   this.game = game; // Reference to the game object.
 
@@ -47,9 +47,13 @@ ArcticMadness.entity.Enemy.prototype.init = function () {
 
 ArcticMadness.entity.Enemy.prototype.update = function (step) {
   rune.display.Sprite.prototype.update.call(this, step);
+
   this.m_followPlayer();
-  if (this.player.isAlive && !this.player.isInWater) {
-    this.m_checkPlayerCollision();
+  for (var i = 0; i < this.players.length; i++) {
+    var player = this.players[i];
+    if (player.isAlive && !player.isInWater) {
+      this.m_checkPlayerCollision(player);
+    }
   }
 };
 
@@ -67,95 +71,143 @@ ArcticMadness.entity.Enemy.prototype.dispose = function () {
 // This method makes the enemy follow the player.
 
 ArcticMadness.entity.Enemy.prototype.m_followPlayer = function () {
-  this.playerPositionX = this.player.x;
-  this.playerPositionY = this.player.y;
-
   var centerX = this.application.screen.width / 2;
   var centerY = this.application.screen.width / 2;
+  var closestPlayer = this.m_getClosestPlayer();
 
-  if (this.player.isInWater) {
-    if (this.x < centerX) {
-      this.x += 2;
-      this.flippedX = false;
-      this.animation.gotoAndPlay("walk");
+  if (closestPlayer) {
+    if (closestPlayer.isInWater) {
+      if (this.x < centerX) {
+        this.x += 2;
+        this.flippedX = false;
+        this.animation.gotoAndPlay("walk");
+      }
+      if (this.x > centerX) {
+        this.x -= 2;
+        this.flippedX = true;
+      }
+      if (this.y < centerY) {
+        this.y += 2;
+      }
+      if (this.y > centerY) {
+        this.y -= 2;
+      }
     }
-    if (this.x > centerX) {
-      this.x -= 2;
-      this.flippedX = true;
-    }
-    if (this.y < centerY) {
-      this.y += 2;
-    }
-    if (this.y > centerY) {
-      this.y -= 2;
+
+    if (!closestPlayer.isInWater) {
+      if (this.x < closestPlayer.x) {
+        this.x += 2;
+        this.flippedX = false;
+        this.animation.gotoAndPlay("walk");
+      } else if (this.x > closestPlayer.x) {
+        this.x -= 2;
+        this.flippedX = true;
+        this.animation.gotoAndPlay("walk");
+      }
+      if (this.y < closestPlayer.y) {
+        this.y += 2;
+      } else if (this.y > closestPlayer.y) {
+        this.y -= 2;
+      }
+      if (this.y == closestPlayer.y) {
+        this.flippedX = false;
+      }
     }
   }
+  // var closestPlayer = this.m_getClosestPlayer();
+  // if (closestPlayer) {
+  //   var dx = closestPlayer.x - this.x;
+  //   var dy = closestPlayer.y - this.y;
+  //   var distance = Math.sqrt(dx * dx + dy * dy);
 
-  if (!this.player.isInWater) {
-    if (this.x < this.playerPositionX) {
-      this.x += 2;
-      this.flippedX = false;
-      this.animation.gotoAndPlay("walk");
-    } else if (this.x > this.playerPositionX) {
-      this.x -= 2;
-      this.flippedX = true;
-      this.animation.gotoAndPlay("walk");
-    }
-    if (this.y < this.playerPositionY) {
-      this.y += 2;
-    } else if (this.y > this.playerPositionY) {
-      this.y -= 2;
-    }
-    if (this.y == this.playerPositionY) {
-      this.flippedX = false;
-    }
-  }
+  //   if (distance > 0) {
+  //     var speed = 1; // Adjust this value to change the enemy's speed
+  //     this.x += (dx / distance) * speed;
+  //     this.y += (dy / distance) * speed;
+  //   }
+  // }
+  // this.playerPositionX = this.player.x;
+  // this.playerPositionY = this.player.y;
+
+  // if (this.player.isInWater) {
+  //   if (this.x < centerX) {
+  //     this.x += 2;
+  //     this.flippedX = false;
+  //     this.animation.gotoAndPlay("walk");
+  //   }
+  //   if (this.x > centerX) {
+  //     this.x -= 2;
+  //     this.flippedX = true;
+  //   }
+  //   if (this.y < centerY) {
+  //     this.y += 2;
+  //   }
+  //   if (this.y > centerY) {
+  //     this.y -= 2;
+  //   }
+  // }
+
+  // if (!this.player.isInWater) {
+  //   if (this.x < this.playerPositionX) {
+  //     this.x += 2;
+  //     this.flippedX = false;
+  //     this.animation.gotoAndPlay("walk");
+  //   } else if (this.x > this.playerPositionX) {
+  //     this.x -= 2;
+  //     this.flippedX = true;
+  //     this.animation.gotoAndPlay("walk");
+  //   }
+  //   if (this.y < this.playerPositionY) {
+  //     this.y += 2;
+  //   } else if (this.y > this.playerPositionY) {
+  //     this.y -= 2;
+  //   }
+  //   if (this.y == this.playerPositionY) {
+  //     this.flippedX = false;
+  //   }
+  // }
 };
 
 // This method checks for collision with the player.
 
-ArcticMadness.entity.Enemy.prototype.m_checkPlayerCollision = function () {
-  if (this.hitTestObject(this.player)) {
-    this.player.isAttacked = true;
-    this.player.health -= 1;
-    this.player.gun.alpha = 0;
+ArcticMadness.entity.Enemy.prototype.m_checkPlayerCollision = function (player) {
+  if (this.hitTestObject(player)) {
+    player.isAttacked = true;
+    player.health -= 1;
+    player.gun.alpha = 0;
     this.animation.gotoAndPlay("water");
-    this.player.animation.gotoAndPlay("dragy");
-    this.m_getNearestWater(this.player.x, this.player.y);
+    player.animation.gotoAndPlay("dragy");
+    this.m_getNearestWater(player.x, player.y, player);
   }
 };
 
 // This method gets the nearest water tile.
 
-ArcticMadness.entity.Enemy.prototype.m_getNearestWater = function (x, y) {
+ArcticMadness.entity.Enemy.prototype.m_getNearestWater = function (x, y, player) {
   var topLeft = this.application.screen.width / 2;
-  var topRight = this.application.screen.width;
   var bottomLeft = this.application.screen.height / 2;
-  var bottomRight = this.application.screen.height;
-
-  console.log(topLeft, topRight, bottomLeft, bottomRight);
 
   if (x < topLeft && y < bottomLeft) {
-    this.player.x -= 1;
-    this.player.y -= 4;
+    player.x -= 1;
+    player.y -= 4;
     this.x -= 1;
     this.y -= 4;
   }
   if (x < topLeft && y > bottomLeft) {
-    this.player.x -= 1;
-    this.player.y += 4;
+    player.x -= 1;
+    player.y += 4;
     this.x -= 1;
     this.y += 4;
   }
   if (x > topLeft && y < bottomLeft) {
-    this.player.x += 1;
-    this.player.y -= 4;
+    player.x += 1;
+    player.y -= 4;
     this.x += 1;
     this.y -= 4;
   }
   if (x > topLeft && y > bottomLeft) {
-    this.player.x += 1;
-    this.player.y += 4;
+    player.x += 1;
+    player.y += 4;
     this.x += 1;
     this.y += 4;
   }
@@ -164,4 +216,23 @@ ArcticMadness.entity.Enemy.prototype.m_getNearestWater = function (x, y) {
 ArcticMadness.entity.Enemy.prototype.m_setHitbox = function () {
   this.hitbox.set(0, 16, 64, 28);
   this.hitbox.debug = true;
+};
+
+ArcticMadness.entity.Enemy.prototype.m_getClosestPlayer = function () {
+  var closestPlayer = null;
+  var closestDistance = Infinity;
+
+  for (var i = 0; i < this.players.length; i++) {
+    var player = this.players[i];
+    var dx = player.x - this.x;
+    var dy = player.y - this.y;
+    var distance = Math.sqrt(dx * dx + dy * dy);
+
+    if (distance < closestDistance) {
+      closestDistance = distance;
+      closestPlayer = player;
+    }
+  }
+
+  return closestPlayer;
 };
