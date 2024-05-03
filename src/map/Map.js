@@ -146,7 +146,7 @@ ArcticMadness.map.Map.prototype.m_createTimer = function (
  */
 
 ArcticMadness.map.Map.prototype.m_breakIce = function (index) {
-  this.tileLayer.setTileValueAt(index, 15);
+  this.tileLayer.setTileValueAt(index, 25);
   this.m_createTimer(
     5000,
     function () {
@@ -164,7 +164,7 @@ ArcticMadness.map.Map.prototype.m_breakIce = function (index) {
 
 ArcticMadness.map.Map.prototype.m_removeIce = function (index) {
   this.tileLayer.setTileValueAt(index, 1);
-  this.m_changeRandomTile();
+  // this.m_changeRandomTile();
 };
 
 /**
@@ -182,9 +182,22 @@ ArcticMadness.map.Map.prototype.m_isPlayerInWater = function (player) {
   // If the tile value is 1, the player is standing on water
   if (
     tileValue === 1 ||
+    tileValue === 2 ||
     tileValue === 8 ||
     tileValue === 9 ||
-    tileValue === 17
+    tileValue === 10 ||
+    tileValue === 11 ||
+    tileValue === 12 ||
+    tileValue === 13 ||
+    tileValue === 14 ||
+    tileValue === 15 ||
+    tileValue === 16 ||
+    tileValue === 17 ||
+    tileValue === 18 ||
+    tileValue === 21 ||
+    tileValue === 22 ||
+    tileValue === 23 ||
+    tileValue === 24
   ) {
     player.isInWater = true;
     return player;
@@ -202,9 +215,9 @@ ArcticMadness.map.Map.prototype.m_isPlayerInWater = function (player) {
 ArcticMadness.map.Map.prototype.m_changeRandomTile = function () {
   var iceTiles = [];
 
-  // Find all tiles with value 2
+  // Find all tiles with with ice
   for (var i = 0; i < this.tiles.length; i++) {
-    if (this.tiles[i] === 2 || this.tiles[i] === 4) {
+    if (this.tiles[i] === 3 || this.tiles[i] === 4 || this.tiles[i] === 5 || this.tiles[i] === 6 || this.tiles[i] === 7 || this.tiles[i] === 8 || this.tiles[i] === 19 || this.tiles[i] === 20) {
       iceTiles.push(i);
     }
   }
@@ -213,7 +226,7 @@ ArcticMadness.map.Map.prototype.m_changeRandomTile = function () {
     // Randomly select one of the ice tiles
     var randomIndex = iceTiles[Math.floor(Math.random() * iceTiles.length)];
 
-    this.tileLayer.setTileValueAt(randomIndex, 14); // Change tile value to 14 (crack)
+    this.tileLayer.setTileValueAt(randomIndex, 19); // Change tile value to 19 (crack)
     this.m_createTimer(
       5000,
       function () {
