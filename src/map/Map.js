@@ -63,7 +63,6 @@ ArcticMadness.map.Map.prototype.m_setCrackTimer = function () {
   );
 };
 
-
 // This method checks if the player is in water.
 
 ArcticMadness.map.Map.prototype.m_checkPlayerInWater = function (player) {
@@ -241,40 +240,54 @@ ArcticMadness.map.Map.prototype.m_crackRandomTile = function () {
 
 ArcticMadness.map.Map.prototype.m_handleInputGamepad = function (player) {
   var gamepad = player.gamepad;
+
   var playerTileIndex = this.tileLayer.getTileIndexOf(
     player.centerX,
     player.centerY
   );
-var timer = this.tileTimers[playerTileIndex];
 
-  if (gamepad.pressed(0) && timer) {
-    player.animation.gotoAndPlay("repair");
+  var timer = this.tileTimers[playerTileIndex];
+
+  if (gamepad.pressed(0) && timer && player.isRepairing === false) {
     timer.pause();
-    console.log("pause");
-    
+
+    player.isRepairing = true;
+    player.velocity.x = 0;
+    player.velocity.y = 0;
+    player.animation.gotoAndPlay("repair");
+
     if (!this.repairTimer[player.id]) {
       player.gun.alpha = 0; // Hide the gun
+
       this.repairTimer[player.id] = this.game.timers.create(
         {
           duration: 1500,
           onComplete: function () {
             this.m_repairIce(player, playerTileIndex);
-            this.repairTimer[player.id] = null;
+
             timer.stop();
-            player.animation.gotoAndPlay("idle");
             delete this.tileTimers[playerTileIndex];
+            this.repairTimer[player.id] = null;
+
+            player.isRepairing = false;
+            player.gun.alpha = 1; // Show the gun
+
+            player.animation.gotoAndPlay("idle");
           },
           scope: this,
         },
         true
       );
     }
-  } else if (this.repairTimer[player.id]) {
+  } else if (this.repairTimer[player.id] && gamepad.justReleased(0)) {
     timer.resume();
-    console.log("resume");
-    player.animation.gotoAndPlay("idle");
+
     this.repairTimer[player.id].stop();
     this.repairTimer[player.id] = null;
+
+    player.isRepairing = false;
+    player.gun.alpha = 1; // Show the gun
+    player.animation.gotoAndPlay("idle");
   }
 };
 
@@ -283,17 +296,22 @@ var timer = this.tileTimers[playerTileIndex];
  * @returns {undefined}
  */
 
-ArcticMadness.map.Map.prototype.m_repairIce = function (player, playerTileIndex) {
- 
-
+ArcticMadness.map.Map.prototype.m_repairIce = function (
+  player,
+  playerTileIndex
+) {
   var playerTile = this.tileLayer.getTileValueOf(
     player.centerX,
     player.centerY
   );
 
-
-  if (playerTile === 3 || playerTile === 4 || playerTile === 5 || playerTile === 6 || playerTile === 7) {
+  if (
+    playerTile === 3 ||
+    playerTile === 4 ||
+    playerTile === 5 ||
+    playerTile === 6 ||
+    playerTile === 7
+  ) {
     this.tileLayer.setTileValueAt(playerTileIndex, 2);
-
   }
 };

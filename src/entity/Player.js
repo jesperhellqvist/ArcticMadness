@@ -89,7 +89,7 @@ ArcticMadness.entity.Player.prototype.update = function (step) {
 
   //this.m_checkPlayerHealth();
 
-  if (!this.isInWater && this.isAlive && !this.isAttacked) {
+  if (!this.isInWater && this.isAlive && !this.isAttacked && !this.isRepairing) {
     //this.m_handleInput(this.controls);
     this.m_handleInputGamepad();
     this.m_setGunPosition();

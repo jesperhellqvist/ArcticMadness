@@ -91,7 +91,7 @@ ArcticMadness.entity.Gun.prototype.m_handleInputStickRight = function () {
     this.y = this.player.y + 20;
     this.player.animation.gotoAndPlay("lookside");
    if (this.gamepad.stickLeftLeft) {
-      console.log("left")
+    this.player.animation.gotoAndPlay("lookside");
   
    }
 
