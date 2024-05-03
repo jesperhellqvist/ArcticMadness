@@ -73,12 +73,12 @@ ArcticMadness.map.Map.prototype.m_checkPlayerInWater = function (player) {
       player.centerY + 18
     );
 
-    player.x = playerTile.x;
-    player.y = playerTile.y;
+    if(!player.falling){
+    this.game.tweenWater(player, playerTile);
+    }
     player.health -= 1;
-    player.isInWater = true;
     player.gun.alpha = 0;
-    player.animation.gotoAndPlay("drown");
+   
     if (player.health <= 0) {
       player.isInWater = true;
       player.isAlive = false;
@@ -245,13 +245,13 @@ ArcticMadness.map.Map.prototype.m_handleInputGamepad = function (player) {
     player.centerX,
     player.centerY
   );
-var timer = this.tileTimers[playerTileIndex];
+  var timer = this.tileTimers[playerTileIndex];
 
   if (gamepad.pressed(0) && timer) {
     player.animation.gotoAndPlay("repair");
     timer.pause();
     console.log("pause");
-    
+
     if (!this.repairTimer[player.id]) {
       player.gun.alpha = 0; // Hide the gun
       this.repairTimer[player.id] = this.game.timers.create(
@@ -284,7 +284,7 @@ var timer = this.tileTimers[playerTileIndex];
  */
 
 ArcticMadness.map.Map.prototype.m_repairIce = function (player, playerTileIndex) {
- 
+
 
   var playerTile = this.tileLayer.getTileValueOf(
     player.centerX,

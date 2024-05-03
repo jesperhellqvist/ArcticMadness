@@ -107,6 +107,7 @@ ArcticMadness.scene.Game.prototype.init = function () {
   );
 
   this.m_addPlayersToStage();
+
   //this.stage.addChild(this.player);
 };
 
@@ -132,6 +133,31 @@ ArcticMadness.scene.Game.prototype.gameOver = function () {
   text.scaleX = 4;
   text.scaleY = 4;
   this.stage.addChild(text);
+};
+
+ArcticMadness.scene.Game.prototype.tweenWater = function (player, playerTile) {
+  player.falling = true;
+  this.tweens.create({
+    target: player,
+    scope: this,
+    duration: 500,
+    onUpdate: function (player) {
+        player.animation.gotoAndPlay("falling");
+    },
+    onDispose: function (player) {
+      player.isInWater = true;
+      player.velocity.x = 0;
+      player.velocity.y = 0;
+      if (player.isInWater && player.falling) {
+        player.animation.gotoAndPlay("drown");
+        }
+    },
+    args: {
+      x: playerTile.x, 
+      y: playerTile.y,
+    },
+  });
+  
 };
 
 /**
