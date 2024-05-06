@@ -127,4 +127,7 @@ ArcticMadness.entity.Gun.prototype.m_handleShoot = function (angle) {
   );
   this.bullets.push(this.bullet);
   this.stage.addChild(this.bullet);
+  this.shootSound = this.application.sounds.sound.get("shoot", unique = false);
+  this.shootSound.play();
+  this.shootSound.loop = false;
 };

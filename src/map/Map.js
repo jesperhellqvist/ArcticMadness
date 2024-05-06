@@ -75,6 +75,8 @@ ArcticMadness.map.Map.prototype.m_checkPlayerInWater = function (player) {
 
     if (!player.falling) {
       this.game.tweenWater(player, playerTile);
+    if (!player.falling) {
+      this.game.tweenWater(player, playerTile);
     }
     player.health -= 1;
     player.gun.alpha = 0;
@@ -115,7 +117,7 @@ ArcticMadness.map.Map.prototype.m_createTimer = function (
  */
 
 ArcticMadness.map.Map.prototype.m_breakIce = function (index) {
-  this.tileLayer.setTileValueAt(index, 4);
+  this.tileLayer.setTileValueAt(index, 4); // Denna raden är de som är knasig, hoppar över "tiles".
   this.m_createTimer(
     2000,
     function () {
@@ -225,7 +227,9 @@ ArcticMadness.map.Map.prototype.m_crackRandomTile = function () {
   if (iceTiles.length > 0) {
     // Randomly select one of the ice tiles
     var randomIndex = iceTiles[Math.floor(Math.random() * iceTiles.length)];
-
+    this.crackSound = this.map.application.sounds.sound.get("cracking");
+    this.crackSound.play();
+    this.crackSound.loop = false;
     this.tileLayer.setTileValueAt(randomIndex, 3); // Change tile value to 19 (crack)
     this.m_createTimer(
       2000,
@@ -383,6 +387,9 @@ ArcticMadness.map.Map.prototype.m_repairIce = function (
     tileValue === 7
   ) {
     this.tileLayer.setTileValueAt(playerTileIndex, 2);
+    this.completedSound = this.map.application.sounds.sound.get("repaircomplete");
+    this.completedSound.play();
+    this.completedSound.loop = false;
   }
 // animationBlock.dispose();  fixa så att animationBlock försvinner med dispose
   this.game.stage.removeChild(animationBlock, true);
