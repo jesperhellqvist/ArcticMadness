@@ -304,6 +304,7 @@ ArcticMadness.map.Map.prototype.m_checkPlayerInWater = function (player) {
         this
       );
       this.game.stage.addChildAt(this.animationBlock, 0);
+      player.animationBlock = this.animationBlock;
       //console.log(animationBlock.animation);
 
       // this.repairTimer[player.id] = this.game.timers.create(
@@ -342,9 +343,9 @@ ArcticMadness.map.Map.prototype.m_checkPlayerInWater = function (player) {
         player.animation.gotoAndPlay("idle");
       }
 
-      if (this.animationBlock !== null) {
-        this.game.stage.removeChild(this.animationBlock, true);
-        this.animationBlock = null;
+      if (player.animationBlock !== null) {
+        this.game.stage.removeChild(player.animationBlock, true);
+        player.animationBlock = null;
         console.log("removed");
       }
     }
@@ -392,6 +393,6 @@ ArcticMadness.map.Map.prototype.m_checkPlayerInWater = function (player) {
       this.completedSound.loop = false;
     }
     // animationBlock.dispose();  fixa så att animationBlock försvinner med dispose
-    this.game.stage.removeChild(animationBlock, true);
+    this.game.stage.removeChild(player.animationBlock, true);
     player.isRepairing = false;
   };

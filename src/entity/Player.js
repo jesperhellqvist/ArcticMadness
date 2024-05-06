@@ -27,6 +27,7 @@ ArcticMadness.entity.Player = function (
   this.diagonalMovement = false;
   this.falling = false;
   this.id = id; // Player id
+  this.animationBlock = null;
   //console.log(this.enemies); // Just nu null
 
   //this.topSpeed = 3; // Player top speed
