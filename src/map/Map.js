@@ -72,25 +72,20 @@ ArcticMadness.map.Map.prototype.m_checkPlayerInWater = function (player) {
       player.centerX,
       player.centerY + 18
     );
-
+    console.log(player.health);
     if (!player.falling) {
       this.game.tweenWater(player, playerTile);
       if (!player.falling) {
         this.game.tweenWater(player, playerTile);
       }
-      player.health -= 1;
+   
       player.gun.alpha = 0;
 
-      if (player.health <= 0) {
-        player.isInWater = true;
-        player.isAlive = false;
-        player.animation.gotoAndPlay("death");
-        this.game.gameOver();
-      }
+   
     }
-  }
-};
-// This method creates a timer for a tile.
+  };
+}
+  // This method creates a timer for a tile.
 
 ArcticMadness.map.Map.prototype.m_createTimer = function (
   time,
@@ -244,6 +239,13 @@ ArcticMadness.map.Map.prototype.m_isPlayerInWater = function (player) {
       player.animation.gotoAndPlay("death");
       this.game.gameOver();
     }
+      player.health -= 1;
+      if (player.health <= 0) {
+        player.isInWater = true;
+        player.isAlive = false;
+        player.animation.gotoAndPlay("death");
+        this.game.gameOver();
+      }
     return player;
   }
 
