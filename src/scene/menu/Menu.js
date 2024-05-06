@@ -39,11 +39,14 @@ ArcticMadness.scene.Menu.prototype.constructor = ArcticMadness.scene.Menu;
 ArcticMadness.scene.Menu.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
     var t = new rune.text.BitmapField("Press Space");
-        t.autoSize = true;
-        t.center = this.application.screen.center;
-        
+    t.autoSize = true;
+    t.center = this.application.screen.center;
     this.stage.addChild(t);
-    console.log("Menu init");
+
+    var options = new rune.ui.VTMenu("options");
+    options.x = 500;
+    options.y = 500;
+    this.stage.addChild(options);
 }
 
 /**
