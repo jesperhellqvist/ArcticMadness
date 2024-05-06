@@ -72,21 +72,16 @@ ArcticMadness.map.Map.prototype.m_checkPlayerInWater = function (player) {
       player.centerX,
       player.centerY + 18
     );
-
+    console.log(player.health);
     if (!player.falling) {
       this.game.tweenWater(player, playerTile);
       if (!player.falling) {
         this.game.tweenWater(player, playerTile);
       }
-      player.health -= 1;
+   
       player.gun.alpha = 0;
 
-      if (player.health <= 0) {
-        player.isInWater = true;
-        player.isAlive = false;
-        player.animation.gotoAndPlay("death");
-        this.game.gameOver();
-      }
+   
     }
   };
 }
@@ -201,6 +196,13 @@ ArcticMadness.map.Map.prototype.m_checkPlayerInWater = function (player) {
       // tileValue === 24
     ) {
       player.isInWater = true;
+      player.health -= 1;
+      if (player.health <= 0) {
+        player.isInWater = true;
+        player.isAlive = false;
+        player.animation.gotoAndPlay("death");
+        this.game.gameOver();
+      }
       return player;
     }
 
