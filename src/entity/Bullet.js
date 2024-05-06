@@ -40,9 +40,8 @@ ArcticMadness.entity.Bullet.prototype.init = function () {
     new rune.color.Color24(133,144,255),
     new rune.color.Color24(this.color.r,this.color.g,this.color.b)
   );
-  this.animation.create("idle", [0], 8, true);
-  this.animation.gotoAndPlay("idle");
-  this.animation.create("hit", [2], 10, true);
+  this.animation.create("idle", [0,1], 3, true);
+  // this.animation.create("hit", [2], 10, true);
   this.m_setPhysics();
 };
 

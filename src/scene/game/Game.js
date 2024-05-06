@@ -143,6 +143,9 @@ ArcticMadness.scene.Game.prototype.tweenWater = function (player, playerTile) {
     duration: 500,
     onUpdate: function (player) {
         player.animation.gotoAndPlay("falling");
+        this.drownSoundEffect = this.application.sounds.sound.get("Splash");
+        this.drownSoundEffect.play();
+        this.drownSoundEffect.loop = false;
     },
     onDispose: function (player) {
       player.isInWater = true;
@@ -151,6 +154,7 @@ ArcticMadness.scene.Game.prototype.tweenWater = function (player, playerTile) {
       if (player.isInWater && player.falling) {
         player.animation.gotoAndPlay("drown");
         }
+      
     },
     args: {
       x: playerTile.x, 
@@ -191,6 +195,7 @@ ArcticMadness.scene.Game.prototype.m_checkBulletHitEnemy = function (bullet) {
   for (var i = 0; i < this.enemies.enemies.length; i++) {
     if (bullet.hitTestObject(this.enemies.enemies[i])) {
       bullet.dispose();
+    
       this.enemies.enemies[i].dispose();
     }
   }

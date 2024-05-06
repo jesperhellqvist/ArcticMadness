@@ -72,12 +72,12 @@ ArcticMadness.map.Map.prototype.m_checkPlayerInWater = function (player) {
       player.centerY + 18
     );
 
-    if(!player.falling){
-    this.game.tweenWater(player, playerTile);
+    if (!player.falling) {
+      this.game.tweenWater(player, playerTile);
     }
     player.health -= 1;
     player.gun.alpha = 0;
-   
+
     if (player.health <= 0) {
       player.isInWater = true;
       player.isAlive = false;
@@ -114,7 +114,7 @@ ArcticMadness.map.Map.prototype.m_createTimer = function (
  */
 
 ArcticMadness.map.Map.prototype.m_breakIce = function (index) {
-  this.tileLayer.setTileValueAt(index, 4);
+  this.tileLayer.setTileValueAt(index, 4); // Denna raden är de som är knasig, hoppar över "tiles".
   this.m_createTimer(
     2000,
     function () {
@@ -224,7 +224,9 @@ ArcticMadness.map.Map.prototype.m_crackRandomTile = function () {
   if (iceTiles.length > 0) {
     // Randomly select one of the ice tiles
     var randomIndex = iceTiles[Math.floor(Math.random() * iceTiles.length)];
-
+    this.crackSound = this.map.application.sounds.sound.get("cracking");
+    this.crackSound.play();
+    this.crackSound.loop = false;
     this.tileLayer.setTileValueAt(randomIndex, 3); // Change tile value to 19 (crack)
     this.m_createTimer(
       2000,
@@ -257,7 +259,7 @@ ArcticMadness.map.Map.prototype.m_handleInputGamepad = function (player) {
     player.animation.gotoAndPlay("repair");
     timer.pause();
     console.log("pause");
-    
+
     if (!this.repairTimer[player.id]) {
       player.gun.alpha = 0; // Hide the gun
 
@@ -299,7 +301,7 @@ ArcticMadness.map.Map.prototype.m_handleInputGamepad = function (player) {
  */
 
 ArcticMadness.map.Map.prototype.m_repairIce = function (player, playerTileIndex) {
- 
+
 
   var playerTile = this.tileLayer.getTileValueOf(
     player.centerX,
@@ -314,5 +316,8 @@ ArcticMadness.map.Map.prototype.m_repairIce = function (player, playerTileIndex)
     playerTile === 7
   ) {
     this.tileLayer.setTileValueAt(playerTileIndex, 2);
+    this.completedSound = this.map.application.sounds.sound.get("repaircomplete");
+    this.completedSound.play();
+    this.completedSound.loop = false;
   }
 };
