@@ -237,6 +237,13 @@ ArcticMadness.map.Map.prototype.m_isPlayerInWater = function (player) {
     // tileValue === 24
   ) {
     player.isInWater = true;
+    player.health -= 1;
+    if (player.health <= 0) {
+      player.isInWater = true;
+      player.isAlive = false;
+      player.animation.gotoAndPlay("death");
+      this.game.gameOver();
+    }
     return player;
   }
 

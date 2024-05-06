@@ -182,6 +182,7 @@ ArcticMadness.entity.Enemy.prototype.m_checkPlayerCollision = function (player) 
     player.health -= 1;
     player.gun.alpha = 0;
     this.animation.gotoAndPlay("attack");
+    player.animation.gotoAndPlay("dragy");
     this.m_getNearestWater(player.x, player.y, player);
   }
 };
