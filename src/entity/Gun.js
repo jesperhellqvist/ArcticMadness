@@ -44,7 +44,7 @@ ArcticMadness.entity.Gun.prototype.init = function () {
 
 ArcticMadness.entity.Gun.prototype.update = function (step) {
   rune.display.Sprite.prototype.update.call(this, step);
-  if (!this.player.isInWater && this.player.isAlive && !this.player.isAttacked) {
+  if (!this.player.isInWater && this.player.isAlive && !this.player.isAttacked && !this.player.isRepairing) {
     this.m_handleInputStickRight();
     this.m_handleButton7();
   }

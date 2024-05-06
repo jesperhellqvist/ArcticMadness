@@ -12,6 +12,7 @@ ArcticMadness.map.Map = function (map, players, game, gamepads) {
   this.tileTimers = {};
   this.repairTimer = {};
   this.newCrackTimer = null;
+  this.animationBlock = null;
 
   ArcticMadness.map.Map.prototype.init.call(this);
 };
@@ -72,12 +73,12 @@ ArcticMadness.map.Map.prototype.m_checkPlayerInWater = function (player) {
       player.centerY + 18
     );
 
-    if(!player.falling){
-    this.game.tweenWater(player, playerTile);
+    if (!player.falling) {
+      this.game.tweenWater(player, playerTile);
     }
     player.health -= 1;
     player.gun.alpha = 0;
-   
+
     if (player.health <= 0) {
       player.isInWater = true;
       player.isAlive = false;
@@ -241,55 +242,107 @@ ArcticMadness.map.Map.prototype.m_crackRandomTile = function () {
 ArcticMadness.map.Map.prototype.m_handleInputGamepad = function (player) {
   var gamepad = player.gamepad;
 
-  var playerTileIndex = this.tileLayer.getTileIndexOf(
+  var playerTile = this.tileLayer.getTileOf(
     player.centerX,
     player.centerY
   );
 
-  var timer = this.tileTimers[playerTileIndex];
+  var playerTileIndex = playerTile.index;
+
+  var tileValue = this.tileLayer.getTileValueAt(playerTileIndex);
+
+
+   var timer = this.tileTimers[playerTileIndex];
 
   if (gamepad.pressed(0) && timer && player.isRepairing === false) {
     timer.pause();
-
+    console.log("paused");
+    console.log(tileValue);
     player.isRepairing = true;
     player.velocity.x = 0;
     player.velocity.y = 0;
     player.animation.gotoAndPlay("repair");
-    timer.pause();
-    console.log("pause");
-    
-    if (!this.repairTimer[player.id]) {
+    //timer.pause();
+
+    // if (!this.repairTimer[player.id]) {
       player.gun.alpha = 0; // Hide the gun
+      this.animationBlock = new rune.tilemap.Block(this.map, tileValue);
+      this.animationBlock.debug = true;
+      this.animationBlock.debugColor = "#ff0000";
+      this.animationBlock.x = playerTile.x;
+      this.animationBlock.y = playerTile.y;
 
-      this.repairTimer[player.id] = this.game.timers.create(
-        {
-          duration: 1500,
-          onComplete: function () {
-            this.m_repairIce(player, playerTileIndex);
+      var animationFrames = [];
 
-            timer.stop();
-            delete this.tileTimers[playerTileIndex];
-            this.repairTimer[player.id] = null;
+      for(var i = tileValue - 1; i >= 1; i--) {
+        animationFrames.push(i);
+      }
+      console.log(animationFrames);
 
-            player.isRepairing = false;
-            player.gun.alpha = 1; // Show the gun
+      var lastFrame = animationFrames.length - 1;
 
-            player.animation.gotoAndPlay("idle");
-          },
-          scope: this,
-        },
-        true
+      this.animationBlock.animation.create(
+        "crackToIce",
+        animationFrames,
+        2,
+        false
       );
+
+      
+      this.animationBlock.animation.current.scripts.add(
+        lastFrame,
+        function () {
+          this.m_repairIce(player, tileValue, playerTileIndex, this.animationBlock, timer);
+          if (this.animationBlock && this.animationBlock.animation && this.animationBlock.animation.current) {
+            this.animationBlock.animation.current.scripts.remove(lastFrame);
+          }
+        },
+        this
+      );
+      this.game.stage.addChildAt(this.animationBlock, 0);
+      //console.log(animationBlock.animation);
+
+      // this.repairTimer[player.id] = this.game.timers.create(
+      //   {
+      //     duration: 1500,
+      //     onComplete: function () {
+      //       this.m_repairIce(player, playerTileIndex);
+
+      //       timer.stop();
+      //       delete this.tileTimers[playerTileIndex];
+      //       this.repairTimer[player.id] = null;
+
+      //       player.isRepairing = false;
+      //       player.gun.alpha = 1; // Show the gun
+
+      //       player.animation.gotoAndPlay("idle");
+      //     },
+      //     scope: this,
+      //   },
+      //   true
+      // );
+   // }
+  } else if (gamepad.justReleased(0)) {
+    // this.repairTimer[player.id] &&
+
+    if (timer) {
+      timer.resume();
+      console.log("resumed");
     }
-  } else if (this.repairTimer[player.id] && gamepad.justReleased(0)) {
-    timer.resume();
 
-    this.repairTimer[player.id].stop();
-    this.repairTimer[player.id] = null;
+    if (player.isRepairing) {
+      // this.repairTimer[player.id].stop();
+      // this.repairTimer[player.id] = null;
+      player.isRepairing = false;
+      player.gun.alpha = 1; // Show the gun
+      player.animation.gotoAndPlay("idle");
+    }
 
-    player.isRepairing = false;
-    player.gun.alpha = 1; // Show the gun
-    player.animation.gotoAndPlay("idle");
+    if(this.animationBlock !== null) {
+      this.game.stage.removeChild(this.animationBlock, true);
+      this.animationBlock = null;
+      console.log("removed");
+    }
   }
 };
 
@@ -298,21 +351,40 @@ ArcticMadness.map.Map.prototype.m_handleInputGamepad = function (player) {
  * @returns {undefined}
  */
 
-ArcticMadness.map.Map.prototype.m_repairIce = function (player, playerTileIndex) {
- 
+ArcticMadness.map.Map.prototype.m_repairIce = function (
+  player,
+  tileValue,
+  playerTileIndex,
+  animationBlock,
+  timer
+) {
 
-  var playerTile = this.tileLayer.getTileValueOf(
-    player.centerX,
-    player.centerY
-  );
+  if (!player.isRepairing) {
+    return;
+  }
+  console.log("repairing");
+  timer.stop();
+  console.log("stopped");
+  delete this.tileTimers[playerTileIndex];
+  console.log(tileValue);
+ 
+  
+
+  // var playerTile = this.tileLayer.getTileValueOf(
+  //   player.centerX,
+  //   player.centerY
+  // );
 
   if (
-    playerTile === 3 ||
-    playerTile === 4 ||
-    playerTile === 5 ||
-    playerTile === 6 ||
-    playerTile === 7
+    tileValue === 3 ||
+    tileValue === 4 ||
+    tileValue === 5 ||
+    tileValue === 6 ||
+    tileValue === 7
   ) {
     this.tileLayer.setTileValueAt(playerTileIndex, 2);
   }
+// animationBlock.dispose();  fixa så att animationBlock försvinner med dispose
+  this.game.stage.removeChild(animationBlock, true);
+   player.isRepairing = false;
 };
