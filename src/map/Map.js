@@ -25,7 +25,7 @@ ArcticMadness.map.Map = function (map, players, game, gamepads) {
 
 ArcticMadness.map.Map.prototype.init = function () {
   this.m_crackRandomTile();
-  this.m_setCrackTimer();
+  //this.m_setCrackTimer();
 };
 
 // This is the update method, which is called every frame from the Game.
@@ -148,6 +148,7 @@ ArcticMadness.map.Map.prototype.m_breakIce3 = function (index) {
 };
 ArcticMadness.map.Map.prototype.m_breakIce4 = function (index) {
   this.tileLayer.setTileValueAt(index, 7);
+  this.m_createCracksAround(index);
   this.m_createTimer(
     2000,
     function () {
@@ -165,6 +166,42 @@ ArcticMadness.map.Map.prototype.m_breakIce4 = function (index) {
 
 ArcticMadness.map.Map.prototype.m_removeIce = function (index) {
   this.tileLayer.setTileValueAt(index, 1);
+};
+
+ArcticMadness.map.Map.prototype.m_createCracksAround = function (index) {
+  console.log(index);
+  var coreTile = this.tileLayer.getTileAt(index);
+  console.log(coreTile);
+
+  var offsets = [
+    { x: 0, y: -32 }, // Above
+    { x: 0, y: 96 }, // Below
+    { x: -32, y: 0 }, // Left
+    { x: 96, y: 0 }, // Right
+    { x: -32, y: -32 }, // Above left
+    { x: 96, y: -32 }, // Above right
+    { x: -32, y: 96 }, // Below left
+    { x: 96, y: 96 } // Below right
+  ];
+
+  offsets.forEach(function(offset) {
+    var tileIndex = this.tileLayer.getTileIndexOfPoint({
+      x: coreTile.x + offset.x,
+      y: coreTile.y + offset.y,
+    });
+    var tileValue = this.tileLayer.getTileValueAt(tileIndex);
+
+    if (tileValue === 2) {
+      this.tileLayer.setTileValueAt(tileIndex, 3);
+      this.m_createTimer(
+        2000,
+        function() {
+          this.m_breakIce(tileIndex);
+        },
+        tileIndex
+      );
+    }
+  }, this);
 };
 
 /**
