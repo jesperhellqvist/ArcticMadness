@@ -25,7 +25,7 @@ ArcticMadness.map.Map = function (map, players, game, gamepads) {
 
 ArcticMadness.map.Map.prototype.init = function () {
   this.m_crackRandomTile();
-  //this.m_setCrackTimer();
+  this.m_setCrackTimer();
 };
 
 // This is the update method, which is called every frame from the Game.
@@ -184,7 +184,14 @@ ArcticMadness.map.Map.prototype.m_createCracksAround = function (index) {
     { x: 96, y: 96 } // Below right
   ];
 
-  offsets.forEach(function(offset) {
+  // Shuffle the offsets array
+  offsets.sort(function() {
+    return 0.5 - Math.random();
+  });
+
+  // Take the first three elements
+  for (var i = 0; i < 3; i++) {
+    var offset = offsets[i];
     var tileIndex = this.tileLayer.getTileIndexOfPoint({
       x: coreTile.x + offset.x,
       y: coreTile.y + offset.y,
@@ -195,13 +202,15 @@ ArcticMadness.map.Map.prototype.m_createCracksAround = function (index) {
       this.tileLayer.setTileValueAt(tileIndex, 3);
       this.m_createTimer(
         2000,
-        function() {
-          this.m_breakIce(tileIndex);
-        },
+        (function(index) {
+          return function() {
+            this.m_breakIce(index);
+          };
+        })(tileIndex),
         tileIndex
       );
     }
-  }, this);
+  }
 };
 
 /**
@@ -242,7 +251,7 @@ ArcticMadness.map.Map.prototype.m_isPlayerInWater = function (player) {
       player.isInWater = true;
       player.isAlive = false;
       player.animation.gotoAndPlay("death");
-      this.game.gameOver();
+      //this.game.gameOver();
     }
     return player;
   }
