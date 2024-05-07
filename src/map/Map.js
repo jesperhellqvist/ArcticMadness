@@ -73,11 +73,13 @@ ArcticMadness.map.Map.prototype.m_checkPlayerInWater = function (player) {
       player.centerY + 18
     );
     console.log(player.health);
+    console.log(player.health);
     if (!player.falling) {
       this.game.tweenWater(player, playerTile);
       if (!player.falling) {
         this.game.tweenWater(player, playerTile);
       }
+   
    
       player.gun.alpha = 0;
 
@@ -211,34 +213,27 @@ ArcticMadness.map.Map.prototype.m_isPlayerInWater = function (player) {
     player.centerY + 18
   );
 
-  // If the tile value is 1, the player is standing on water
-  if (
-    tileValue === 1
-    // tileValue === 2 ||
-    // tileValue === 8 ||
-    // tileValue === 9 ||
-    // tileValue === 10 ||
-    // tileValue === 11 ||
-    // tileValue === 12 ||
-    // tileValue === 13 ||
-    // tileValue === 14 ||
-    // tileValue === 15 ||
-    // tileValue === 16 ||
-    // tileValue === 17 ||
-    // tileValue === 18 ||
-    // tileValue === 21 ||
-    // tileValue === 22 ||
-    // tileValue === 23 ||
-    // tileValue === 24
-  ) {
-    player.isInWater = true;
-    player.health -= 1;
-    if (player.health <= 0) {
+    // If the tile value is 1, the player is standing on water
+    if (
+      tileValue === 1
+      // tileValue === 2 ||
+      // tileValue === 8 ||
+      // tileValue === 9 ||
+      // tileValue === 10 ||
+      // tileValue === 11 ||
+      // tileValue === 12 ||
+      // tileValue === 13 ||
+      // tileValue === 14 ||
+      // tileValue === 15 ||
+      // tileValue === 16 ||
+      // tileValue === 17 ||
+      // tileValue === 18 ||
+      // tileValue === 21 ||
+      // tileValue === 22 ||
+      // tileValue === 23 ||
+      // tileValue === 24
+    ) {
       player.isInWater = true;
-      player.isAlive = false;
-      player.animation.gotoAndPlay("death");
-      this.game.gameOver();
-    }
       player.health -= 1;
       if (player.health <= 0) {
         player.isInWater = true;
@@ -246,8 +241,8 @@ ArcticMadness.map.Map.prototype.m_isPlayerInWater = function (player) {
         player.animation.gotoAndPlay("death");
         this.game.gameOver();
       }
-    return player;
-  }
+      return player;
+    }
 
   player.isInWater = false;
   return null;
