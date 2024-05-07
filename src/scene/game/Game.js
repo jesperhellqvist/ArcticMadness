@@ -96,6 +96,29 @@ ArcticMadness.scene.Game.prototype.init = function () {
     this.players.push(this.player);
     this.gamepadsConected.push(this.gamepads.get(1));
   }
+  // if (this.gamepads.get(2) != null) {
+  //   this.player = new ArcticMadness.entity.Player(
+  //     700,
+  //     100,
+  //     "64_penguin_nogun",
+  //     {
+  //       r: "0",
+  //       g: "0",
+  //       b: "250",
+  //     },
+  //     {
+  //       left: "J",
+  //       right: "L",
+  //       up: "I",
+  //       down: "K",
+  //       shoot: "O",
+  //     },
+  //     this.gamepads.get(2),
+  //     2
+  //   );
+  //   this.players.push(this.player);
+  //   this.gamepadsConected.push(this.gamepads.get(2));
+  // }
 
   this.enemies = new ArcticMadness.entity.Enemies(this, this.players);
 
@@ -162,6 +185,14 @@ ArcticMadness.scene.Game.prototype.tweenWater = function (player, playerTile) {
     },
   });
   
+};
+
+ArcticMadness.scene.Game.prototype.revivePlayer = function(player) {
+  if (player.isInWater && player.isAlive) {
+    player.isInWater = false;
+    player.health = 100; // Or whatever the max health is
+    player.animation.gotoAndPlay("idle"); // Or whatever the default animation is
+  }
 };
 
 /**
