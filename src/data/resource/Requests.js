@@ -46,14 +46,17 @@ ArcticMadness.data.Requests.prototype.m_construct = function() {
     this.add("64_enemy_lepardseal", "./../asset/64_enemy_lepardseal.png");
 	this.add("64_penguin_nogun", "./../asset/64_penguin_nogun.png");
 	this.add("Splash", "./../asset/Splash.mp3");
+	this.add("controller", "./../asset/controller.png");
 	this.add("cracking", "./../asset/cracking.mp3");
 	this.add("fish", "./../asset/fish.png");
 	this.add("gun_directions2", "./../asset/gun_directions2.png");
 	this.add("help", "./../asset/help.wav");
+	this.add("highscore_bg", "./../asset/highscore_bg.png");
 	this.add("map", "./../asset/map.json");
 	this.add("map_testcracks", "./../asset/map_testcracks.png");
 	this.add("map_texture", "./../asset/map_texture.png");
 	this.add("map_texture_64x64", "./../asset/map_texture_64x64.png");
+	this.add("menu_bg", "./../asset/menu_bg.png");
 	this.add("repaircomplete", "./../asset/repaircomplete.wav");
 	this.add("shoot", "./../asset/shoot.wav");
 };
