@@ -11,7 +11,7 @@ ArcticMadness.entity.Player = function (
   gamepad,
   id
 ) {
-  this.health = 100; // Player health
+  this.health = 250; // Player health
   this.controls = controls; // Player controls on keyboard
   this.x = x; // Player x position
   this.y = y; // Player y position
@@ -28,6 +28,9 @@ ArcticMadness.entity.Player = function (
   this.falling = false;
   this.id = id; // Player id
   this.animationBlock = null;
+  this.inWaterTile = null; // Index of the tile the player is in
+  this.isRevivable = false; // Player is revivable
+  this.revivingTileSet = false; 
   //console.log(this.enemies); // Just nu null
 
   //this.topSpeed = 3; // Player top speed
@@ -75,7 +78,7 @@ ArcticMadness.entity.Player.prototype.init = function () {
 
   this.animation.create("repair", [20, 21, 22, 23], 8, true);
   //Water animations
-  this.animation.create("falling", [25, 26, 27, 28, 29], 10, false);
+  this.animation.create("falling", [25, 26, 27, 28, 29], 10, true);
   this.animation.create("drown", [30, 31], 8, true);
   this.animation.create("death", [31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 40, 41, 42, 43], 8, false);
   //Attacked animation, injured

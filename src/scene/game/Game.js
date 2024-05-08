@@ -96,29 +96,29 @@ ArcticMadness.scene.Game.prototype.init = function () {
     this.players.push(this.player);
     this.gamepadsConected.push(this.gamepads.get(1));
   }
-  // if (this.gamepads.get(2) != null) {
-  //   this.player = new ArcticMadness.entity.Player(
-  //     700,
-  //     100,
-  //     "64_penguin_nogun",
-  //     {
-  //       r: "0",
-  //       g: "0",
-  //       b: "250",
-  //     },
-  //     {
-  //       left: "J",
-  //       right: "L",
-  //       up: "I",
-  //       down: "K",
-  //       shoot: "O",
-  //     },
-  //     this.gamepads.get(2),
-  //     2
-  //   );
-  //   this.players.push(this.player);
-  //   this.gamepadsConected.push(this.gamepads.get(2));
-  // }
+  if (this.gamepads.get(2) != null) {
+    this.player = new ArcticMadness.entity.Player(
+      700,
+      100,
+      "64_penguin_nogun",
+      {
+        r: "0",
+        g: "0",
+        b: "250",
+      },
+      {
+        left: "J",
+        right: "L",
+        up: "I",
+        down: "K",
+        shoot: "O",
+      },
+      this.gamepads.get(2),
+      2
+    );
+    this.players.push(this.player);
+    this.gamepadsConected.push(this.gamepads.get(2));
+  }
 
   this.enemies = new ArcticMadness.entity.Enemies(this, this.players);
 
@@ -165,10 +165,10 @@ ArcticMadness.scene.Game.prototype.tweenWater = function (player, playerTile) {
     scope: this,
     duration: 500,
     onUpdate: function (player) {
-        player.animation.gotoAndPlay("falling");
-        this.drownSoundEffect = this.application.sounds.sound.get("Splash");
-        this.drownSoundEffect.play();
-        this.drownSoundEffect.loop = false;
+      player.animation.gotoAndPlay("falling");
+      this.drownSoundEffect = this.application.sounds.sound.get("Splash");
+      this.drownSoundEffect.play();
+      this.drownSoundEffect.loop = false;
     },
     onDispose: function (player) {
       player.isInWater = true;
@@ -176,22 +176,40 @@ ArcticMadness.scene.Game.prototype.tweenWater = function (player, playerTile) {
       player.velocity.y = 0;
       if (player.isInWater && player.falling) {
         player.animation.gotoAndPlay("drown");
-        }
-      
+      }
     },
     args: {
-      x: playerTile.x, 
+      x: playerTile.x,
       y: playerTile.y,
     },
   });
-  
 };
 
-ArcticMadness.scene.Game.prototype.revivePlayer = function(player) {
+ArcticMadness.scene.Game.prototype.resetPlayer = function (player) {
+var nearestIceTileIndex = this.map.getNearestIceTileIndex(player);
+
+  var nearestIceTile = this.map.tileLayer.getTileAt(nearestIceTileIndex);
+  
+
+  player.isInWater = false;
+  player.isRevivable = false;
+  player.isAlive = true;
+  player.isAttacked = false;
+  player.falling = false;
+  player.inWaterTile = null;
+  player.revivingTileSet = false;
+  player.health = 250; // Or whatever the max health is
+  player.x = nearestIceTile.x;
+  player.y = nearestIceTile.y;
+  player.animation.gotoAndPlay("idle");
+};
+
+ArcticMadness.scene.Game.prototype.revivePlayer = function (player) {
+  
+  
   if (player.isInWater && player.isAlive) {
-    player.isInWater = false;
-    player.health = 100; // Or whatever the max health is
-    player.animation.gotoAndPlay("idle"); // Or whatever the default animation is
+    this.map.removeReviveTile(player);
+    this.resetPlayer(player);
   }
 };
 
@@ -226,7 +244,7 @@ ArcticMadness.scene.Game.prototype.m_checkBulletHitEnemy = function (bullet) {
   for (var i = 0; i < this.enemies.enemies.length; i++) {
     if (bullet.hitTestObject(this.enemies.enemies[i])) {
       bullet.dispose();
-    
+
       this.enemies.enemies[i].dispose();
     }
   }
