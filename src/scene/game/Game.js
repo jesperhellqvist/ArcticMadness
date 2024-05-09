@@ -128,7 +128,8 @@ ArcticMadness.scene.Game.prototype.init = function () {
     this.stage.map,
     this.players,
     this,
-    this.gamepadsConected
+    this.gamepadsConected,
+    this.enemies
   );
 
   this.m_addPlayersToStage();
