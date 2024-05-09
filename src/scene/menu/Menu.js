@@ -85,23 +85,23 @@ ArcticMadness.scene.Menu.prototype.m_initBackground = function () {
 
 // Method to initialize the controller graphic
 ArcticMadness.scene.Menu.prototype.m_initController = function () {
-    this.controllerGraphic = new rune.display.Graphic(
-        0,
-        0,
-        400,
-        400, "controller"
-    );
-    this.controllerGraphic.center = this.application.screen.center;
-    this.text = new rune.text.BitmapField("JKLMNOPQRSTUVXYZ0123456789");
-    this.text.autoSize = true;
-    this.text.x = 200;
-    this.text.y = 200;
-    // this.text.x = this.controllerGraphic.x + 100;
-    // this.text.y = this.controllerGraphic.y + 50;
-    this.text.scaleX = 2;
-    this.text.scaleY = 2;
-    this.stage.addChild(this.text);
-    this.stage.addChild(this.controllerGraphic);
+    // this.controllerGraphic = new rune.display.Graphic(
+    //     0,
+    //     0,
+    //     400,
+    //     400, "controller"
+    // );
+    // this.controllerGraphic.center = this.application.screen.center;
+    // this.text = new rune.text.BitmapField("JKLMNOPQRSTUVXYZ0123456789");
+    // this.text.autoSize = true;
+    // this.text.x = 200;
+    // this.text.y = 200;
+    // // this.text.x = this.controllerGraphic.x + 100;
+    // // this.text.y = this.controllerGraphic.y + 50;
+    // this.text.scaleX = 2;
+    // this.text.scaleY = 2;
+    // this.stage.addChild(this.text);
+    // this.stage.addChild(this.controllerGraphic);
 }
 
 //Method to initialize the menu
@@ -111,20 +111,23 @@ ArcticMadness.scene.Menu.prototype.m_initMenu = function () {
     this.menu.add("Multiplayer");
     this.menu.add("Highscore");
     this.menu.add("How to play");
-    this.menu.x = 100;
-    this.menu.y = 300;
+    this.menu.x = 200;
+    this.menu.y = 230;
+    this.menu.scaleX = 3;
+    this.menu.scaleY = 3;
     this.menu.onSelect(this.selectOption, this);
     this.stage.addChild(this.menu);
 }
 
 ArcticMadness.scene.Menu.prototype.m_highscoreList = function () {
-    this.highscoreBg = new rune.display.Graphic(0, 0, 300, 400, "highscore_bg");
-    this.highscoreBg.x = 900;
-    this.highscoreBg.y = 200;
-    this.stage.addChild(this.highscoreBg);
-    this.highscoreText = new rune.text.BitmapField("Highscore");
-    this.highscoreText.x = 1020;
-    this.highscoreText.y = 250;
+    this.playerHighscore = "1.mathias 1337";
+    this.highscoreText = new rune.text.BitmapField(this.playerHighscore, "thefont");
+    this.highscoreText.autoSize = true;
+    this.highscoreText.scaleX = 2;
+    this.highscoreText.scaleY = 2;
+    this.highscoreText.x = 780;
+    this.highscoreText.y = 300;
+    
     this.stage.addChild(this.highscoreText);
 }
 
