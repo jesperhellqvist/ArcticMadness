@@ -153,7 +153,7 @@ ArcticMadness.scene.Game.prototype.update = function (step) {
 };
 
 ArcticMadness.scene.Game.prototype.gameOver = function () {
-  var text = new rune.text.BitmapField("Game Over");
+  var text = new rune.text.BitmapField("game over","thefont");
   text.center = this.application.screen.center;
   text.autoSize = true;
   text.scaleX = 4;
@@ -264,7 +264,7 @@ ArcticMadness.scene.Game.prototype.m_addPlayersToStage = function () {
 ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
   console.log("Wave: " + this.currentWave);
   this.waveTimer = this.timers.create({
-    duration: 80000,
+    duration: 1000,
     scope: this,
     onComplete: function () {
       this.currentWave++;
@@ -277,14 +277,15 @@ ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
 }
 
 ArcticMadness.scene.Game.prototype.m_showWaveText = function (wave) {
-  var text = new rune.text.BitmapField("Wave " + wave + " completed!");
-  text.center = this.application.screen.center;
-  text.autoSize = true;
+  var text = new rune.text.BitmapField("wave " + wave + " completed!", "thefont");
+  text.autoSize = true; 
   text.scaleX = 4;
   text.scaleY = 4;
+  text.center = this.application.screen.center;
+ 
   this.stage.addChild(text);
   this.timers.create({
-    duration: 3000,
+    duration: 80000,
     scope: this,
     onComplete: function () {
       this.stage.removeChild(text, true);
@@ -295,7 +296,7 @@ ArcticMadness.scene.Game.prototype.m_showWaveText = function (wave) {
 
 ArcticMadness.scene.Game.prototype.m_countDown = function () {
   var createText = function (textString) {
-    var text = new rune.text.BitmapField(textString);
+    var text = new rune.text.BitmapField(textString, "thefont");
     text.center = this.application.screen.center;
     text.autoSize = true;
     text.scaleX = 4;
