@@ -2,7 +2,7 @@
 // Constructor scope
 //--------------------------------
 
-ArcticMadness.map.Map = function (map, players, game, gamepads) {
+ArcticMadness.map.Map = function (map, players, game, gamepads, enemies) {
   this.map = map;
   this.tiles = this.map.back.data; // Array of tile values
   this.tileLayer = this.map.back; // Reference to the tile layer
@@ -13,6 +13,7 @@ ArcticMadness.map.Map = function (map, players, game, gamepads) {
   this.repairTimer = {};
   this.newCrackTimer = null;
   this.animationBlock = null;
+  this.enemies = enemies; // Reference to the enemies object
 
   ArcticMadness.map.Map.prototype.init.call(this);
 };
@@ -154,7 +155,7 @@ ArcticMadness.map.Map.prototype.getNearestIceTileIndex = function (player) {
       }
     }
   }
-  
+
   return nearestTileIndex;
 };
 
@@ -165,29 +166,28 @@ ArcticMadness.map.Map.prototype.getNearestIceTileIndex = function (player) {
 ArcticMadness.map.Map.prototype.resetMap = function () {
   // this.map.clear();
 
- var tileValues = [
-  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
- 1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,
- 1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,
- 1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,
- 1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,
- 1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,
- 1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,
- 1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,
- 1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,
- 1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,
- 1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,
- 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
- 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-];
-for (var i = 0; i < tileValues.length; i++) {
-  this.tileLayer.setTileValueAt(i, tileValues[i]);
-}
+  var tileValues = [
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2,
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+    2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
+    1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2,
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+    2, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
+    1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+  ];
+  for (var i = 0; i < tileValues.length; i++) {
+    this.tileLayer.setTileValueAt(i, tileValues[i]);
+  }
 
-this.m_stopTileTimers();
-this.m_reviveAllPlayers();
-this.m_disposeEnemies();
-
+  this.m_stopTileTimers();
+  this.m_reviveAllPlayers();
+  this.m_disposeEnemies();
+  this.m_stopNewCrackTimer();
+  this.m_stopNewEnemyTimer();
 };
 
 //--------------------------------------------------------------------------
@@ -199,17 +199,29 @@ ArcticMadness.map.Map.prototype.m_stopTileTimers = function () {
     var timer = this.tileTimers[key];
     timer.stop();
   }
-}
+};
 
 ArcticMadness.map.Map.prototype.m_reviveAllPlayers = function () {
   for (var i = 0; i < this.players.length; i++) {
     var player = this.players[i];
     this.game.revivePlayer(player);
   }
-}
+};
 
 ArcticMadness.map.Map.prototype.m_disposeEnemies = function () {
   this.game.enemies.disposeEnemies();
+};
+
+ArcticMadness.map.Map.prototype.m_stopNewCrackTimer = function () {
+  if (this.newCrackTimer) {
+    this.newCrackTimer.stop();
+  }
+};
+
+ArcticMadness.map.Map.prototype.m_stopNewEnemyTimer = function () {
+  if (this.game.enemies.newEnemyTimer) {
+    this.game.enemies.newEnemyTimer.stop();
+  }
 }
 
 /**
