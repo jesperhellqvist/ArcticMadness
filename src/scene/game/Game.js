@@ -264,13 +264,82 @@ ArcticMadness.scene.Game.prototype.m_addPlayersToStage = function () {
 ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
   console.log("Wave: " + this.currentWave);
   this.waveTimer = this.timers.create({
-    duration: 30000,
+    duration: 80000,
     scope: this,
     onComplete: function () {
       this.currentWave++;
       this.map.resetMap();
-      this.m_startWaveTimer();
+      this.m_showWaveText(this.currentWave);
+      
     },
   });
   this.waveTimer.start();
 }
+
+ArcticMadness.scene.Game.prototype.m_showWaveText = function (wave) {
+  var text = new rune.text.BitmapField("Wave " + wave + " completed!");
+  text.center = this.application.screen.center;
+  text.autoSize = true;
+  text.scaleX = 4;
+  text.scaleY = 4;
+  this.stage.addChild(text);
+  this.timers.create({
+    duration: 3000,
+    scope: this,
+    onComplete: function () {
+      this.stage.removeChild(text, true);
+      this.m_countDown();
+    },
+  }).start();
+};
+
+ArcticMadness.scene.Game.prototype.m_countDown = function () {
+  var createText = function (textString) {
+    var text = new rune.text.BitmapField(textString);
+    text.center = this.application.screen.center;
+    text.autoSize = true;
+    text.scaleX = 4;
+    text.scaleY = 4;
+    return text;
+  }.bind(this);
+
+  var text = createText("3");
+  this.stage.addChild(text);
+
+  this.timers.create({
+    duration: 1000,
+    scope: this,
+    onComplete: function () {
+      this.stage.removeChild(text, true);
+      text = createText("2");
+      this.stage.addChild(text);
+
+      this.timers.create({
+        duration: 1000,
+        scope: this,
+        onComplete: function () {
+          this.stage.removeChild(text, true);
+          text = createText("1");
+          this.stage.addChild(text);
+
+          this.timers.create({
+            duration: 1000,
+            scope: this,
+            onComplete: function () {
+              this.stage.removeChild(text, true);
+              this.m_startWaveTimer();
+              this.m_startNextWave();
+            },
+          }).start();
+        },
+      }).start();
+    },
+  }).start();
+};
+
+
+ArcticMadness.scene.Game.prototype.m_startNextWave = function () {
+  this.enemies.m_startNewEnemyTimer();
+  this.map.m_crackRandomTile();
+  this.map.m_setCrackTimer();
+};

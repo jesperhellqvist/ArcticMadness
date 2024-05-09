@@ -60,6 +60,28 @@ ArcticMadness.map.Map.prototype.update = function (step) {
   }
 };
 
+ArcticMadness.map.Map.prototype.getRandomWaterTile = function () {
+  var waterTiles = [];
+
+  for (var i = 0; i < this.tiles.length; i++) {
+    if (this.tiles[i] === 1) {
+      waterTiles.push(i);
+    }
+  }
+
+  if (waterTiles.length > 0) {
+    var randomIndex = waterTiles[Math.floor(Math.random() * waterTiles.length)];
+    return this.tileLayer.getTileAt(randomIndex);
+  }
+
+  return null;
+}
+
+//------------------------------------------------------------------------------
+// Private methods
+//------------------------------------------------------------------------------
+
+
 ArcticMadness.map.Map.prototype.m_reviveNearestPlayer = function (
   revivingPlayer
 ) {
