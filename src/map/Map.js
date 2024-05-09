@@ -57,10 +57,11 @@ ArcticMadness.map.Map.prototype.update = function (step) {
       this.m_reviveNearestPlayer(alivePlayer);
     }
   }
-
 };
 
-ArcticMadness.map.Map.prototype.m_reviveNearestPlayer = function (revivingPlayer) {
+ArcticMadness.map.Map.prototype.m_reviveNearestPlayer = function (
+  revivingPlayer
+) {
   var nearestPlayer = null;
   var nearestDistance = Infinity;
 
@@ -80,10 +81,12 @@ ArcticMadness.map.Map.prototype.m_reviveNearestPlayer = function (revivingPlayer
   }
 };
 
-ArcticMadness.map.Map.prototype.m_getDistanceBetween = function (entity1, entity2) {
+ArcticMadness.map.Map.prototype.m_getDistanceBetween = function (
+  entity1,
+  entity2
+) {
   var x2, y2;
 
-  
   // If the second entity is a tile, use its position
   if (entity2 instanceof rune.tilemap.Tile) {
     x2 = entity2.x;
@@ -151,15 +154,63 @@ ArcticMadness.map.Map.prototype.getNearestIceTileIndex = function (player) {
       }
     }
   }
-  console.log(nearestTileIndex);
+  
   return nearestTileIndex;
 };
 
+//------------------------------------------------------------------------------
+// Control Waves
+//------------------------------------------------------------------------------
 
+ArcticMadness.map.Map.prototype.resetMap = function () {
+  // this.map.clear();
+
+ var tileValues = [
+  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+ 1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,
+ 1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,
+ 1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,
+ 1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,
+ 1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,
+ 1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,
+ 1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,
+ 1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,
+ 1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,
+ 1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,
+ 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+ 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+];
+for (var i = 0; i < tileValues.length; i++) {
+  this.tileLayer.setTileValueAt(i, tileValues[i]);
+}
+
+this.m_stopTileTimers();
+this.m_reviveAllPlayers();
+this.m_disposeEnemies();
+
+};
 
 //--------------------------------------------------------------------------
 // Private methods
 //--------------------------------------------------------------------------
+
+ArcticMadness.map.Map.prototype.m_stopTileTimers = function () {
+  for (var key in this.tileTimers) {
+    var timer = this.tileTimers[key];
+    timer.stop();
+  }
+}
+
+ArcticMadness.map.Map.prototype.m_reviveAllPlayers = function () {
+  for (var i = 0; i < this.players.length; i++) {
+    var player = this.players[i];
+    this.game.revivePlayer(player);
+  }
+}
+
+ArcticMadness.map.Map.prototype.m_disposeEnemies = function () {
+  this.game.enemies.disposeEnemies();
+}
 
 /**
  * This method checks if the player is standing on a water tile.
@@ -197,7 +248,7 @@ ArcticMadness.map.Map.prototype.m_updatePlayerState = function (player) {
     player.inWaterTile = playerTileIndex;
     player.isRevivable = true;
     if (player.revivingTileSet === false) {
-    this.m_setReviveTile(player);
+      this.m_setReviveTile(player);
     }
 
     if (player.health <= 0) {
@@ -254,14 +305,12 @@ ArcticMadness.map.Map.prototype.m_setReviveTile = function (player) {
   }
 };
 
-
 ArcticMadness.map.Map.prototype.m_killPlayer = function (player) {
   player.isAlive = false;
   player.isRevivable = false;
   player.animation.gotoAndPlay("death");
   //this.game.gameOver();
 };
-
 
 // This method sets a timer to change a random ice tile to a crack tile.
 
@@ -422,7 +471,7 @@ ArcticMadness.map.Map.prototype.m_crackRandomTile = function () {
     // Randomly select one of the ice tiles
     var randomIndex = iceTiles[Math.floor(Math.random() * iceTiles.length)];
     this.crackSound = this.map.application.sounds.sound.get("cracking");
-   // this.crackSound.play();
+    // this.crackSound.play();
     this.crackSound.loop = false;
     this.tileLayer.setTileValueAt(randomIndex, 3); // Change tile value to 19 (crack)
     this.m_createTimer(

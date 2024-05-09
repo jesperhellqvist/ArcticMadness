@@ -19,6 +19,8 @@ ArcticMadness.scene.Game = function () {
   this.enemies = null;
   this.players = [];
   this.gamepadsConected = [];
+  this.currentWave = 0;
+  this.waveTimer = null;
   //--------------------------------------------------------------------------
   // Super call
   //--------------------------------------------------------------------------
@@ -96,29 +98,29 @@ ArcticMadness.scene.Game.prototype.init = function () {
     this.players.push(this.player);
     this.gamepadsConected.push(this.gamepads.get(1));
   }
-  if (this.gamepads.get(2) != null) {
-    this.player = new ArcticMadness.entity.Player(
-      700,
-      100,
-      "64_penguin_nogun",
-      {
-        r: "0",
-        g: "0",
-        b: "250",
-      },
-      {
-        left: "J",
-        right: "L",
-        up: "I",
-        down: "K",
-        shoot: "O",
-      },
-      this.gamepads.get(2),
-      2
-    );
-    this.players.push(this.player);
-    this.gamepadsConected.push(this.gamepads.get(2));
-  }
+  // if (this.gamepads.get(2) != null) {
+  //   this.player = new ArcticMadness.entity.Player(
+  //     700,
+  //     100,
+  //     "64_penguin_nogun",
+  //     {
+  //       r: "0",
+  //       g: "0",
+  //       b: "250",
+  //     },
+  //     {
+  //       left: "J",
+  //       right: "L",
+  //       up: "I",
+  //       down: "K",
+  //       shoot: "O",
+  //     },
+  //     this.gamepads.get(2),
+  //     2
+  //   );
+  //   this.players.push(this.player);
+  //   this.gamepadsConected.push(this.gamepads.get(2));
+  // }
 
   this.enemies = new ArcticMadness.entity.Enemies(this, this.players);
 
@@ -130,7 +132,7 @@ ArcticMadness.scene.Game.prototype.init = function () {
   );
 
   this.m_addPlayersToStage();
-
+  this.m_startWaveTimer();
   //this.stage.addChild(this.player);
 };
 
@@ -207,10 +209,10 @@ var nearestIceTileIndex = this.map.getNearestIceTileIndex(player);
 ArcticMadness.scene.Game.prototype.revivePlayer = function (player) {
   
   
-  if (player.isInWater && player.isAlive) {
+  
     this.map.removeReviveTile(player);
     this.resetPlayer(player);
-  }
+  
 };
 
 /**
@@ -245,7 +247,8 @@ ArcticMadness.scene.Game.prototype.m_checkBulletHitEnemy = function (bullet) {
     if (bullet.hitTestObject(this.enemies.enemies[i])) {
       bullet.dispose();
 
-      this.enemies.enemies[i].dispose();
+     this.stage.removeChild(this.enemies.enemies[i], true);
+      this.enemies.enemies.splice(i, 1);
     }
   }
 };
@@ -255,3 +258,18 @@ ArcticMadness.scene.Game.prototype.m_addPlayersToStage = function () {
     this.stage.addChild(this.players[i]);
   }
 };
+
+
+ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
+  console.log("Wave: " + this.currentWave);
+  this.waveTimer = this.timers.create({
+    duration: 30000,
+    scope: this,
+    onComplete: function () {
+      this.currentWave++;
+      this.map.resetMap();
+      this.m_startWaveTimer();
+    },
+  });
+  this.waveTimer.start();
+}

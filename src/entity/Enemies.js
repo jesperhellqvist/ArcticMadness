@@ -66,7 +66,24 @@ ArcticMadness.entity.Enemies.prototype.update = function (step) {
 
 ArcticMadness.entity.Enemies.prototype.dispose = function () {
   rune.display.DisplayGroup.prototype.dispose.call(this);
-  this.m_disposeEnemies();
+  this.disposeEnemies();
+};
+
+/**
+ * Disposes the enemies.
+ *
+ * @returns {undefined}
+ */
+
+ArcticMadness.entity.Enemies.prototype.disposeEnemies = function () {
+  console.log(this.enemies);
+  for (var i = 0; i < this.enemies.length; i++) {
+    
+    this.game.stage.removeChild(this.enemies[i], true);
+    
+  }
+
+  this.enemies = [];
 };
 
 //------------------------------------------------------------------------------
@@ -146,19 +163,6 @@ ArcticMadness.entity.Enemies.prototype.m_checkIfPlayerAlive = function () {
   }
 };
 
-/**
- * Disposes the enemies.
- *
- * @returns {undefined}
- */
 
-ArcticMadness.entity.Enemies.prototype.m_disposeEnemies = function () {
-  for (var i = 0; i < this.enemies.length; i++) {
-    this.enemies[i].dispose();
-    this.removeMember(this.enemies[i], true);
-  }
-
-  this.enemies = [];
-};
 
 
