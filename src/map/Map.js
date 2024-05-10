@@ -587,6 +587,11 @@ ArcticMadness.map.Map.prototype.m_updatePlayerState = function (player) {
       this.m_setReviveTile(player);
     }
 
+    if (player.health == 125) {
+      this.helpSound = this.map.application.sounds.sound.get("help");
+      this.helpSound.play();
+      this.helpSound.loop = false;
+    }
     if (player.health <= 0) {
       this.m_killPlayer(player);
       this.removeReviveTile(player);
@@ -827,6 +832,9 @@ ArcticMadness.map.Map.prototype.m_reviveNearestPlayer = function (
 
   if (nearestPlayer) {
     this.game.revivePlayer(nearestPlayer);
+    this.revivedSound = this.map.application.sounds.sound.get("saved");
+    this.revivedSound.play();
+    this.revivedSound.loop = false;
   }
 };
 

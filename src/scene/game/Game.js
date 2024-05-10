@@ -153,7 +153,7 @@ ArcticMadness.scene.Game.prototype.update = function (step) {
 };
 
 ArcticMadness.scene.Game.prototype.gameOver = function () {
-  var text = new rune.text.BitmapField("game over","thefont");
+  var text = new rune.text.BitmapField("game over", "thefont");
   text.center = this.application.screen.center;
   text.autoSize = true;
   text.scaleX = 4;
@@ -190,9 +190,9 @@ ArcticMadness.scene.Game.prototype.tweenWater = function (player, playerTile) {
 
 ArcticMadness.scene.Game.prototype.resetPlayer = function (player) {
 
-var nearestIceTileIndex = this.map.getNearestIceTileIndex(player);
-var nearestIceTile = this.map.tileLayer.getTileAt(nearestIceTileIndex);
-  
+  var nearestIceTileIndex = this.map.getNearestIceTileIndex(player);
+  var nearestIceTile = this.map.tileLayer.getTileAt(nearestIceTileIndex);
+
 
   player.isInWater = false;
   player.isRevivable = false;
@@ -208,8 +208,8 @@ var nearestIceTile = this.map.tileLayer.getTileAt(nearestIceTileIndex);
 };
 
 ArcticMadness.scene.Game.prototype.revivePlayer = function (player) {
-    this.map.removeReviveTile(player);
-    this.resetPlayer(player);
+  this.map.removeReviveTile(player);
+  this.resetPlayer(player);
 };
 
 /**
@@ -243,8 +243,8 @@ ArcticMadness.scene.Game.prototype.m_checkBulletHitEnemy = function (bullet) {
   for (var i = 0; i < this.enemies.enemies.length; i++) {
     if (bullet.hitTestObject(this.enemies.enemies[i])) {
       bullet.dispose();
-
-     this.stage.removeChild(this.enemies.enemies[i], true);
+      // this.enemies.enemies[i].animation.gotoAndPlay("death");//trying to make animation when enemy is hit
+      this.stage.removeChild(this.enemies.enemies[i], true);
       this.enemies.enemies.splice(i, 1);
     }
   }
@@ -265,8 +265,11 @@ ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
     onComplete: function () {
       this.currentWave++;
       this.map.resetMap();
+      this.waveCompleteSoundEffect = this.application.sounds.sound.get("wavecomplete");
+      this.waveCompleteSoundEffect.play();
+      this.waveCompleteSoundEffect.loop = false;
       this.m_showWaveText(this.currentWave);
-      
+
     },
   });
   this.waveTimer.start();
@@ -274,11 +277,11 @@ ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
 
 ArcticMadness.scene.Game.prototype.m_showWaveText = function (wave) {
   var text = new rune.text.BitmapField("wave " + wave + " completed!", "thefont");
-  text.autoSize = true; 
+  text.autoSize = true;
   text.scaleX = 4;
   text.scaleY = 4;
   text.center = this.application.screen.center;
- 
+
   this.stage.addChild(text);
   this.timers.create({
     duration: 3000,

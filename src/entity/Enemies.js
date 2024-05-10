@@ -59,7 +59,7 @@ ArcticMadness.entity.Enemies.prototype.update = function (step) {
     for (var i = 0; i < this.enemies.length; i++) {
       var enemy = this.enemies[i];
       if (this.game.map.checkIfEnemyInWater(enemy)) {
-        enemy.animation.gotoAndPlay("attack");
+        enemy.animation.gotoAndPlay("water");
       } else {
         enemy.animation.gotoAndPlay("walk");
       }

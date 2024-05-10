@@ -39,10 +39,10 @@ ArcticMadness.entity.Enemy.prototype.constructor = ArcticMadness.entity.Enemy;
 
 ArcticMadness.entity.Enemy.prototype.init = function () {
   rune.display.Sprite.prototype.init.call(this);
+  this.animation.create("water", [6,7], 6, true);
   this.animation.create("walk", [0, 1, 2, 3], 5, true);
   this.animation.create("attack", [4], 1, true);
-  this.animation.create("up", [5, 6], 1, true);
-  this.animation.create("water", [7], 1, true);
+  this.animation.create("death", [8,9,10,11,12,13], 5, false);
   this.m_setHitbox();
 };
 
