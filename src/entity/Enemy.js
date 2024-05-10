@@ -10,6 +10,7 @@ ArcticMadness.entity.Enemy = function (x, y, players, map, game) {
   // this.playerPositionY = this.player.y;
   this.map = map; // Reference to the map object.
   this.game = game; // Reference to the game object.
+  this.isInWater = false;
 
   //--------------------------------------------------------------------------
   // Super call

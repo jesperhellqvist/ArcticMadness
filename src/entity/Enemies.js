@@ -7,7 +7,6 @@ ArcticMadness.entity.Enemies = function (game, players) {
   this.enemies = [];
   this.newEnemyTimer = null;
   this.players = players; // Array of player objects
-  
 
   //--------------------------------------------------------------------------
   // Super call
@@ -56,6 +55,16 @@ ArcticMadness.entity.Enemies.prototype.init = function () {
 ArcticMadness.entity.Enemies.prototype.update = function (step) {
   rune.display.DisplayGroup.prototype.update.call(this, step);
   this.m_checkIfPlayerAlive();
+  if (this.enemies.length > 0) {
+    for (var i = 0; i < this.enemies.length; i++) {
+      var enemy = this.enemies[i];
+      if (this.game.map.checkIfEnemyInWater(enemy)) {
+        enemy.animation.gotoAndPlay("attack");
+      } else {
+        enemy.animation.gotoAndPlay("walk");
+      }
+    }
+  }
 };
 
 /**
@@ -78,9 +87,7 @@ ArcticMadness.entity.Enemies.prototype.dispose = function () {
 ArcticMadness.entity.Enemies.prototype.disposeEnemies = function () {
   console.log(this.enemies);
   for (var i = 0; i < this.enemies.length; i++) {
-    
     this.game.stage.removeChild(this.enemies[i], true);
-    
   }
 
   this.enemies = [];
@@ -113,7 +120,6 @@ ArcticMadness.entity.Enemies.prototype.m_createEnemy = function () {
   var randomX = randomWaterTile.x;
   var randomY = randomWaterTile.y;
 
- 
   var enemy = new ArcticMadness.entity.Enemy(
     randomX,
     randomY,
@@ -146,7 +152,3 @@ ArcticMadness.entity.Enemies.prototype.m_checkIfPlayerAlive = function () {
     this.newEnemyTimer = null;
   }
 };
-
-
-
-

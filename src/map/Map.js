@@ -75,7 +75,21 @@ ArcticMadness.map.Map.prototype.getRandomWaterTile = function () {
   var waterTiles = [];
 
   for (var i = 0; i < this.tiles.length; i++) {
-    if (this.tiles[i] === 9 || this.tiles[i] === 10 || this.tiles[i] === 11 || this.tiles[i] === 12 || this.tiles[i] === 13 || this.tiles[i] === 14 || this.tiles[i] === 15 || this.tiles[i] === 16 || this.tiles[i] === 18 || this.tiles[i] === 21 || this.tiles[i] === 22 || this.tiles[i] === 23 || this.tiles[i] === 24 ) {
+    if (
+      this.tiles[i] === 9 ||
+      this.tiles[i] === 10 ||
+      this.tiles[i] === 11 ||
+      this.tiles[i] === 12 ||
+      this.tiles[i] === 13 ||
+      this.tiles[i] === 14 ||
+      this.tiles[i] === 15 ||
+      this.tiles[i] === 16 ||
+      this.tiles[i] === 18 ||
+      this.tiles[i] === 21 ||
+      this.tiles[i] === 22 ||
+      this.tiles[i] === 23 ||
+      this.tiles[i] === 24
+    ) {
       waterTiles.push(i);
     }
   }
@@ -92,7 +106,7 @@ ArcticMadness.map.Map.prototype.getRandomWaterTile = function () {
  * This method removes the revive tile from the map.
  * @param {object} player The player object.
  * @returns {undefined}
-  */
+ */
 
 ArcticMadness.map.Map.prototype.removeReviveTile = function (player) {
   if (player.inWaterTile != null) {
@@ -126,7 +140,7 @@ ArcticMadness.map.Map.prototype.removeReviveTile = function (player) {
  * This method returns the index of the nearest ice tile.
  * @param {object} player The player object.
  * @returns {number} The index of the nearest ice tile.
-  */
+ */
 
 ArcticMadness.map.Map.prototype.getNearestIceTileIndex = function (player) {
   var nearestTileIndex = null;
@@ -136,7 +150,16 @@ ArcticMadness.map.Map.prototype.getNearestIceTileIndex = function (player) {
   for (var i = 0; i < this.tileLayer.data.length; i++) {
     var tileIndex = this.tileLayer.data[i];
     // If the tile value is 2 (ice tile)
-    if (tileIndex === 1 || tileIndex === 2 || tileIndex === 3 || tileIndex === 4 || tileIndex === 5 || tileIndex === 6 || tileIndex === 7 || tileIndex === 8 ) {
+    if (
+      tileIndex === 1 ||
+      tileIndex === 2 ||
+      tileIndex === 3 ||
+      tileIndex === 4 ||
+      tileIndex === 5 ||
+      tileIndex === 6 ||
+      tileIndex === 7 ||
+      tileIndex === 8
+    ) {
       var tile = this.tileLayer.getTileAt(i);
       var distance = this.m_getDistanceBetween(player, tile);
       // If this tile is closer than the current nearest tile
@@ -179,7 +202,16 @@ ArcticMadness.map.Map.prototype.crackRandomTile = function () {
 
   // Find all tiles with with ice
   for (var i = 0; i < this.tiles.length; i++) {
-    if (this.tiles[i] === 1 || this.tiles[i] === 2 || this.tiles[i] === 3 || this.tiles[i] === 4 || this.tiles[i] === 5 || this.tiles[i] === 6 || this.tiles[i] === 7 || this.tiles[i] === 8) {
+    if (
+      this.tiles[i] === 1 ||
+      this.tiles[i] === 2 ||
+      this.tiles[i] === 3 ||
+      this.tiles[i] === 4 ||
+      this.tiles[i] === 5 ||
+      this.tiles[i] === 6 ||
+      this.tiles[i] === 7 ||
+      this.tiles[i] === 8
+    ) {
       iceTiles.push(i);
     }
   }
@@ -204,25 +236,24 @@ ArcticMadness.map.Map.prototype.crackRandomTile = function () {
 /**
  * This method resets the map to its original state. Then it revives all players, disposes all enemies, and stops the new crack and enemy timers.
  * @returns {undefined}
-  */
+ */
 
 ArcticMadness.map.Map.prototype.resetMap = function () {
   // this.map.clear();
 
   var tileValues = [
-    19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,23,
-    19,4,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,6,19,
-    19,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,7,19,
-    22,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,7,19,
-    19,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,7,23,
-    19,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,7,19,
-    24,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,7,19,
-    19,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,7,21,
-    19,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,7,19,
-    19,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,8,19,
-    17,16,12,12,13,10,14,14,13,12,12,10,15,14,12,12,11,10,9,18,
-    19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,
-    19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19
+    19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
+    23, 19, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 19, 19, 3, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 19, 22, 3, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 19, 19, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 7, 23, 19, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    7, 19, 24, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 19, 19, 3,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 21, 19, 3, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 19, 19, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 8, 19, 17, 16, 12, 12, 13, 10, 14, 14, 13, 12, 12, 10, 15,
+    14, 12, 12, 11, 10, 9, 18, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
+    19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
+    19, 19, 19, 19, 19, 19, 19, 19, 19,
   ];
   for (var i = 0; i < tileValues.length; i++) {
     this.tileLayer.setTileValueAt(i, tileValues[i]);
@@ -236,6 +267,36 @@ ArcticMadness.map.Map.prototype.resetMap = function () {
 };
 
 //------------------------------------------------------------------------------
+// Public methods related to the enemies
+//------------------------------------------------------------------------------
+
+ArcticMadness.map.Map.prototype.checkIfEnemyInWater = function (enemy) {
+  var tileValue = this.tileLayer.getTileValueOf(enemy.centerX, enemy.centerY);
+  if (
+    tileValue === 9 ||
+    tileValue === 10 ||
+    tileValue === 11 ||
+    tileValue === 12 ||
+    tileValue === 13 ||
+    tileValue === 14 ||
+    tileValue === 15 ||
+    tileValue === 16 ||
+    tileValue === 17 ||
+    tileValue === 18 ||
+    tileValue === 19 ||
+    tileValue === 20 ||
+    tileValue === 21 ||
+    tileValue === 22 ||
+    tileValue === 23 ||
+    tileValue === 24
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+//------------------------------------------------------------------------------
 // Private methods related to the tilemap
 //------------------------------------------------------------------------------
 
@@ -243,7 +304,7 @@ ArcticMadness.map.Map.prototype.resetMap = function () {
  * This method stops all tile timers.
  * @returns {undefined}
  * @private
-  */
+ */
 
 ArcticMadness.map.Map.prototype.m_stopTileTimers = function () {
   for (var key in this.tileTimers) {
@@ -256,7 +317,7 @@ ArcticMadness.map.Map.prototype.m_stopTileTimers = function () {
  * This method stops the new crack timer.
  * @returns {undefined}
  * @private
-  */
+ */
 
 ArcticMadness.map.Map.prototype.m_stopNewCrackTimer = function () {
   if (this.newCrackTimer) {
@@ -272,7 +333,7 @@ ArcticMadness.map.Map.prototype.m_stopNewCrackTimer = function () {
  */
 
 ArcticMadness.map.Map.prototype.m_breakIce = function (index) {
-  this.tileLayer.setTileValueAt(index, 34); 
+  this.tileLayer.setTileValueAt(index, 34);
   this.m_createTimer(
     2000,
     function () {
@@ -383,7 +444,16 @@ ArcticMadness.map.Map.prototype.m_createCracksAround = function (index) {
     });
     var tileValue = this.tileLayer.getTileValueAt(tileIndex);
 
-    if (tileValue === 1 || tileValue === 2 || tileValue === 3 || tileValue === 4 || tileValue === 5 || tileValue === 6 || tileValue === 7 || tileValue === 8) {
+    if (
+      tileValue === 1 ||
+      tileValue === 2 ||
+      tileValue === 3 ||
+      tileValue === 4 ||
+      tileValue === 5 ||
+      tileValue === 6 ||
+      tileValue === 7 ||
+      tileValue === 8
+    ) {
       this.tileLayer.setTileValueAt(tileIndex, 33);
       this.m_createTimer(
         2000,
@@ -424,7 +494,7 @@ ArcticMadness.map.Map.prototype.m_createAnimationBlock = function (
   for (var i = tileValue - 1; i >= 31; i--) {
     animationFrames.push(i);
   }
-  console.log(animationFrames)
+  console.log(animationFrames);
   //Osäker på om den här fungerar -fråga jesper
   var lastFrame = animationFrames.length - 1;
   this.animationBlock.animation.create("crackToIce", animationFrames, 2, false);
@@ -465,7 +535,24 @@ ArcticMadness.map.Map.prototype.m_isPlayerInWater = function (player) {
     player.centerY + 18
   );
 
-  if (tileValue === 9 || tileValue === 10 || tileValue === 11 || tileValue === 12 || tileValue === 13 || tileValue === 14 || tileValue === 15 || tileValue === 16 ||tileValue === 17 ||  tileValue === 18 || tileValue === 19 || tileValue === 20 ||   tileValue === 21 || tileValue === 22 || tileValue === 23 || tileValue === 24) {
+  if (
+    tileValue === 9 ||
+    tileValue === 10 ||
+    tileValue === 11 ||
+    tileValue === 12 ||
+    tileValue === 13 ||
+    tileValue === 14 ||
+    tileValue === 15 ||
+    tileValue === 16 ||
+    tileValue === 17 ||
+    tileValue === 18 ||
+    tileValue === 19 ||
+    tileValue === 20 ||
+    tileValue === 21 ||
+    tileValue === 22 ||
+    tileValue === 23 ||
+    tileValue === 24
+  ) {
     return true;
   }
 
@@ -559,7 +646,16 @@ ArcticMadness.map.Map.prototype.m_setReviveTile = function (player) {
       });
       if (tileIndex >= 0) {
         var tileValue = this.tileLayer.getTileValueAt(tileIndex);
-        if (tileValue === 1 || tileValue === 2 || tileValue === 3 || tileValue === 4 || tileValue === 5 || tileValue === 6 || tileValue === 7 || tileValue === 8) {
+        if (
+          tileValue === 1 ||
+          tileValue === 2 ||
+          tileValue === 3 ||
+          tileValue === 4 ||
+          tileValue === 5 ||
+          tileValue === 6 ||
+          tileValue === 7 ||
+          tileValue === 8
+        ) {
           this.tileLayer.setTileValueAt(tileIndex, 38);
           return;
         }
@@ -573,7 +669,7 @@ ArcticMadness.map.Map.prototype.m_setReviveTile = function (player) {
  * @param {object} player The player object.
  * @returns {undefined}
  * @private
-  */
+ */
 
 ArcticMadness.map.Map.prototype.m_killPlayer = function (player) {
   player.isAlive = false;
@@ -636,7 +732,6 @@ ArcticMadness.map.Map.prototype.m_startRepair = function (
     timer
   );
 };
-
 
 /**
  * This method stops the repair process and resumes the timer when the player releases the repair button.
