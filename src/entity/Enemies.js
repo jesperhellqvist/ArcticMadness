@@ -43,7 +43,7 @@ ArcticMadness.entity.Enemies.prototype.constructor =
 
 ArcticMadness.entity.Enemies.prototype.init = function () {
   rune.display.DisplayGroup.prototype.init.call(this);
-  this.m_startNewEnemyTimer();
+  this.startNewEnemyTimer();
 };
 
 /**
@@ -88,7 +88,7 @@ ArcticMadness.entity.Enemies.prototype.disposeEnemies = function () {
 
 //------------------------------------------------------------------------------
 
-ArcticMadness.entity.Enemies.prototype.m_startNewEnemyTimer = function () {
+ArcticMadness.entity.Enemies.prototype.startNewEnemyTimer = function () {
   this.newEnemyTimer = this.game.timers.create(
     {
       duration: 1000,

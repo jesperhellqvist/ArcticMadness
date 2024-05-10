@@ -189,9 +189,9 @@ ArcticMadness.scene.Game.prototype.tweenWater = function (player, playerTile) {
 };
 
 ArcticMadness.scene.Game.prototype.resetPlayer = function (player) {
-var nearestIceTileIndex = this.map.getNearestIceTileIndex(player);
 
-  var nearestIceTile = this.map.tileLayer.getTileAt(nearestIceTileIndex);
+var nearestIceTileIndex = this.map.getNearestIceTileIndex(player);
+var nearestIceTile = this.map.tileLayer.getTileAt(nearestIceTileIndex);
   
 
   player.isInWater = false;
@@ -208,12 +208,8 @@ var nearestIceTileIndex = this.map.getNearestIceTileIndex(player);
 };
 
 ArcticMadness.scene.Game.prototype.revivePlayer = function (player) {
-  
-  
-  
     this.map.removeReviveTile(player);
     this.resetPlayer(player);
-  
 };
 
 /**
@@ -340,7 +336,7 @@ ArcticMadness.scene.Game.prototype.m_countDown = function () {
 
 
 ArcticMadness.scene.Game.prototype.m_startNextWave = function () {
-  this.enemies.m_startNewEnemyTimer();
-  this.map.m_crackRandomTile();
-  this.map.m_setCrackTimer();
+  this.enemies.startNewEnemyTimer();
+  this.map.crackRandomTile();
+  this.map.setCrackTimer();
 };
