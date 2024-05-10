@@ -25,8 +25,8 @@ ArcticMadness.map.Map = function (map, players, game, gamepads, enemies) {
 // This is the init method, which is called when the object is created.
 
 ArcticMadness.map.Map.prototype.init = function () {
-  this.m_crackRandomTile();
-  this.m_setCrackTimer();
+  this.crackRandomTile();
+  this.setCrackTimer();
 };
 
 // This is the update method, which is called every frame from the Game.
@@ -60,6 +60,17 @@ ArcticMadness.map.Map.prototype.update = function (step) {
   }
 };
 
+//------------------------------------------------------------------
+// Public Tilemap methods
+//------------------------------------------------------------------
+
+/**
+ * This method returns a random water tile.
+ * @returns {object} A random water tile.
+ * @returns {null} Returns null if no water tiles are found.
+ *
+ */
+
 ArcticMadness.map.Map.prototype.getRandomWaterTile = function () {
   var waterTiles = [];
 
@@ -75,61 +86,13 @@ ArcticMadness.map.Map.prototype.getRandomWaterTile = function () {
   }
 
   return null;
-}
-
-//------------------------------------------------------------------------------
-// Private methods
-//------------------------------------------------------------------------------
-
-
-ArcticMadness.map.Map.prototype.m_reviveNearestPlayer = function (
-  revivingPlayer
-) {
-  var nearestPlayer = null;
-  var nearestDistance = Infinity;
-
-  for (var i = 0; i < this.game.players.length; i++) {
-    var player = this.game.players[i];
-    if (player.isRevivable) {
-      var distance = this.m_getDistanceBetween(revivingPlayer, player);
-      if (distance < nearestDistance) {
-        nearestDistance = distance;
-        nearestPlayer = player;
-      }
-    }
-  }
-
-  if (nearestPlayer) {
-    this.game.revivePlayer(nearestPlayer);
-  }
 };
 
-ArcticMadness.map.Map.prototype.m_getDistanceBetween = function (
-  entity1,
-  entity2
-) {
-  var x2, y2;
-
-  // If the second entity is a tile, use its position
-  if (entity2 instanceof rune.tilemap.Tile) {
-    x2 = entity2.x;
-    y2 = entity2.y;
-  } else {
-    // Otherwise, assume it's a player and use the player's position
-    x2 = entity2.x;
-    y2 = entity2.y;
-  }
-
-  var dx = entity1.x - x2;
-  var dy = entity1.y - y2;
-  return Math.sqrt(dx * dx + dy * dy);
-};
-
-// ArcticMadness.map.Map.prototype.m_getDistanceBetween = function (player1, player2) {
-//   var dx = player1.x - player2.x;
-//   var dy = player1.y - player2.y;
-//   return Math.sqrt(dx * dx + dy * dy);
-// };
+/**
+ * This method removes the revive tile from the map.
+ * @param {object} player The player object.
+ * @returns {undefined}
+  */
 
 ArcticMadness.map.Map.prototype.removeReviveTile = function (player) {
   if (player.inWaterTile != null) {
@@ -159,6 +122,12 @@ ArcticMadness.map.Map.prototype.removeReviveTile = function (player) {
   }
 };
 
+/**
+ * This method returns the index of the nearest ice tile.
+ * @param {object} player The player object.
+ * @returns {number} The index of the nearest ice tile.
+  */
+
 ArcticMadness.map.Map.prototype.getNearestIceTileIndex = function (player) {
   var nearestTileIndex = null;
   var nearestDistance = Infinity;
@@ -181,9 +150,62 @@ ArcticMadness.map.Map.prototype.getNearestIceTileIndex = function (player) {
   return nearestTileIndex;
 };
 
-//------------------------------------------------------------------------------
-// Control Waves
-//------------------------------------------------------------------------------
+/**
+ * This method sets a timer that creates a new crack in the ice every 2 seconds.
+ * @returns {undefined}
+ */
+
+ArcticMadness.map.Map.prototype.setCrackTimer = function () {
+  this.newCrackTimer = this.game.timers.create(
+    {
+      duration: 2000,
+      onTick: function () {
+        this.crackRandomTile();
+        this.setCrackTimer();
+      },
+      scope: this,
+    },
+    true
+  );
+};
+
+/**
+ * This method changes a random ice tile to a crack tile.
+ * @returns {undefined}
+ */
+
+ArcticMadness.map.Map.prototype.crackRandomTile = function () {
+  var iceTiles = [];
+
+  // Find all tiles with with ice
+  for (var i = 0; i < this.tiles.length; i++) {
+    // if (this.tiles[i] === 3 || this.tiles[i] === 4 || this.tiles[i] === 5 || this.tiles[i] === 6 || this.tiles[i] === 7 || this.tiles[i] === 8 || this.tiles[i] === 19 || this.tiles[i] === 20) {
+    if (this.tiles[i] === 2) {
+      iceTiles.push(i);
+    }
+  }
+
+  if (iceTiles.length > 0) {
+    // Randomly select one of the ice tiles
+    var randomIndex = iceTiles[Math.floor(Math.random() * iceTiles.length)];
+    this.crackSound = this.map.application.sounds.sound.get("cracking");
+    // this.crackSound.play();
+    this.crackSound.loop = false;
+    this.tileLayer.setTileValueAt(randomIndex, 3); // Change tile value to 19 (crack)
+    this.m_createTimer(
+      2000,
+      function () {
+        this.m_breakIce(randomIndex);
+      },
+      randomIndex
+    ); // Create a timer for this tile
+  }
+};
+
+/**
+ * This method resets the map to its original state. Then it revives all players, disposes all enemies, and stops the new crack and enemy timers.
+ * @returns {undefined}
+  */
 
 ArcticMadness.map.Map.prototype.resetMap = function () {
   // this.map.clear();
@@ -212,9 +234,15 @@ ArcticMadness.map.Map.prototype.resetMap = function () {
   this.m_stopNewEnemyTimer();
 };
 
-//--------------------------------------------------------------------------
-// Private methods
-//--------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+// Private methods related to the tilemap
+//------------------------------------------------------------------------------
+
+/**
+ * This method stops all tile timers.
+ * @returns {undefined}
+ * @private
+  */
 
 ArcticMadness.map.Map.prototype.m_stopTileTimers = function () {
   for (var key in this.tileTimers) {
@@ -223,16 +251,11 @@ ArcticMadness.map.Map.prototype.m_stopTileTimers = function () {
   }
 };
 
-ArcticMadness.map.Map.prototype.m_reviveAllPlayers = function () {
-  for (var i = 0; i < this.players.length; i++) {
-    var player = this.players[i];
-    this.game.revivePlayer(player);
-  }
-};
-
-ArcticMadness.map.Map.prototype.m_disposeEnemies = function () {
-  this.game.enemies.disposeEnemies();
-};
+/**
+ * This method stops the new crack timer.
+ * @returns {undefined}
+ * @private
+  */
 
 ArcticMadness.map.Map.prototype.m_stopNewCrackTimer = function () {
   if (this.newCrackTimer) {
@@ -240,154 +263,11 @@ ArcticMadness.map.Map.prototype.m_stopNewCrackTimer = function () {
   }
 };
 
-ArcticMadness.map.Map.prototype.m_stopNewEnemyTimer = function () {
-  if (this.game.enemies.newEnemyTimer) {
-    this.game.enemies.newEnemyTimer.stop();
-  }
-}
-
-/**
- * This method checks if the player is standing on a water tile.
- * @returns {boolean} Returns true if the player is standing on water.
- */
-
-ArcticMadness.map.Map.prototype.m_isPlayerInWater = function (player) {
-  var tileValue = this.tileLayer.getTileValueOf(
-    player.centerX,
-    player.centerY + 18
-  );
-
-  if (tileValue === 1) {
-    return true;
-  }
-
-  return false;
-};
-
-ArcticMadness.map.Map.prototype.m_updatePlayerState = function (player) {
-  if (player != null && player.isAlive) {
-    player.isInWater = true;
-    player.velocity.x = 0;
-    player.velocity.y = 0;
-    player.health -= 1;
-    var playerTile = this.tileLayer.getTileOf(
-      player.centerX,
-      player.centerY + 18
-    );
-
-    var playerTileIndex = this.tileLayer.getTileIndexOf(
-      player.centerX,
-      player.centerY + 18
-    );
-    player.inWaterTile = playerTileIndex;
-    player.isRevivable = true;
-    if (player.revivingTileSet === false) {
-      this.m_setReviveTile(player);
-    }
-
-    if (player.health <= 0) {
-      this.m_killPlayer(player);
-      this.removeReviveTile(player);
-    }
-
-    if (!player.falling) {
-      this.game.tweenWater(player, playerTile);
-      player.gun.alpha = 0;
-    }
-  }
-};
-
-ArcticMadness.map.Map.prototype.m_isPlayerOnReviveTile = function (player) {
-  var tileValue = this.tileLayer.getTileValueOf(
-    player.centerX,
-    player.centerY + 18
-  );
-
-  if (tileValue === 17) {
-    return true;
-  }
-  return false;
-};
-
-ArcticMadness.map.Map.prototype.m_setReviveTile = function (player) {
-  player.revivingTileSet = true;
-  var offsets = [
-    { x: 0, y: -32 }, // Above
-    { x: 0, y: 96 }, // Below
-    { x: -32, y: 0 }, // Left
-    { x: 96, y: 0 }, // Right
-  ];
-
-  if (player.isRevivable && player.inWaterTile != null) {
-    var playerWaterTile = this.tileLayer.getTileAt(player.inWaterTile);
-
-    for (var i = 0; i < offsets.length; i++) {
-      var offset = offsets[i];
-      var tileIndex = this.tileLayer.getTileIndexOfPoint({
-        x: playerWaterTile.x + offset.x,
-        y: playerWaterTile.y + offset.y,
-      });
-      console.log(tileIndex);
-      if (tileIndex >= 0) {
-        var tileValue = this.tileLayer.getTileValueAt(tileIndex);
-        if (tileValue === 2) {
-          this.tileLayer.setTileValueAt(tileIndex, 17);
-          return;
-        }
-      }
-    }
-  }
-};
-
-ArcticMadness.map.Map.prototype.m_killPlayer = function (player) {
-  player.isAlive = false;
-  player.isRevivable = false;
-  player.animation.gotoAndPlay("death");
-  //this.game.gameOver();
-};
-
-// This method sets a timer to change a random ice tile to a crack tile.
-
-ArcticMadness.map.Map.prototype.m_setCrackTimer = function () {
-  this.newCrackTimer = this.game.timers.create(
-    {
-      duration: 2000,
-      onTick: function () {
-        this.m_crackRandomTile();
-        this.m_setCrackTimer();
-      },
-      scope: this,
-    },
-    true
-  );
-};
-
-// This method checks if the player is in water.
-
-// This method creates a timer for a tile.
-
-ArcticMadness.map.Map.prototype.m_createTimer = function (
-  time,
-  callback,
-  tileIndex
-) {
-  var timer = this.game.timers.create(
-    {
-      duration: time,
-      onTick: callback,
-      scope: this,
-    },
-    true
-  );
-
-  this.tileTimers[tileIndex] = timer;
-};
-
 /**
  * This method breaks the ice at a specific tile index.
  * @param {number} index The index of the tile to break.
- *
  * @returns {undefined}
+ * @private
  */
 
 ArcticMadness.map.Map.prototype.m_breakIce = function (index) {
@@ -400,6 +280,14 @@ ArcticMadness.map.Map.prototype.m_breakIce = function (index) {
     index
   );
 };
+
+/**
+ * This method breaks the ice at a specific tile index.
+ * @param {number} index The index of the tile to break.
+ * @returns {undefined}
+ * @private
+ */
+
 ArcticMadness.map.Map.prototype.m_breakIce2 = function (index) {
   this.tileLayer.setTileValueAt(index, 5);
   this.m_createTimer(
@@ -410,6 +298,14 @@ ArcticMadness.map.Map.prototype.m_breakIce2 = function (index) {
     index
   );
 };
+
+/**
+ * This method breaks the ice at a specific tile index.
+ * @param {number} index The index of the tile to break.
+ * @returns {undefined}
+ * @private
+ */
+
 ArcticMadness.map.Map.prototype.m_breakIce3 = function (index) {
   this.tileLayer.setTileValueAt(index, 6);
   this.m_createTimer(
@@ -420,6 +316,14 @@ ArcticMadness.map.Map.prototype.m_breakIce3 = function (index) {
     index
   );
 };
+
+/**
+ * This method breaks the ice at a specific tile index.
+ * @param {number} index The index of the tile to break.
+ * @returns {undefined}
+ * @private
+ */
+
 ArcticMadness.map.Map.prototype.m_breakIce4 = function (index) {
   this.tileLayer.setTileValueAt(index, 7);
   this.m_createCracksAround(index);
@@ -436,11 +340,19 @@ ArcticMadness.map.Map.prototype.m_breakIce4 = function (index) {
  * This method removes the ice at a specific tile index.
  * @param {number} index The index of the tile to remove.
  * @returns {undefined}
+ * @private
  */
 
 ArcticMadness.map.Map.prototype.m_removeIce = function (index) {
   this.tileLayer.setTileValueAt(index, 1);
 };
+
+/**
+ * This method creates cracks around a specific tile index.
+ * @param {number} index The index of the tile to create cracks around.
+ * @returns {undefined}
+ * @private
+ */
 
 ArcticMadness.map.Map.prototype.m_createCracksAround = function (index) {
   var coreTile = this.tileLayer.getTileAt(index);
@@ -486,92 +398,6 @@ ArcticMadness.map.Map.prototype.m_createCracksAround = function (index) {
 };
 
 /**
- * This method changes a random ice tile to a crack tile.
- * @returns {undefined}
- */
-
-ArcticMadness.map.Map.prototype.m_crackRandomTile = function () {
-  var iceTiles = [];
-
-  // Find all tiles with with ice
-  for (var i = 0; i < this.tiles.length; i++) {
-    // if (this.tiles[i] === 3 || this.tiles[i] === 4 || this.tiles[i] === 5 || this.tiles[i] === 6 || this.tiles[i] === 7 || this.tiles[i] === 8 || this.tiles[i] === 19 || this.tiles[i] === 20) {
-    if (this.tiles[i] === 2) {
-      iceTiles.push(i);
-    }
-  }
-
-  if (iceTiles.length > 0) {
-    // Randomly select one of the ice tiles
-    var randomIndex = iceTiles[Math.floor(Math.random() * iceTiles.length)];
-    this.crackSound = this.map.application.sounds.sound.get("cracking");
-    // this.crackSound.play();
-    this.crackSound.loop = false;
-    this.tileLayer.setTileValueAt(randomIndex, 3); // Change tile value to 19 (crack)
-    this.m_createTimer(
-      2000,
-      function () {
-        this.m_breakIce(randomIndex);
-      },
-      randomIndex
-    ); // Create a timer for this tile
-  }
-};
-
-/**
- * This method handles the input from the gamepad.
- * @param {object} player The player object.
- * @returns {undefined}
- */
-
-ArcticMadness.map.Map.prototype.m_handleInputGamepad = function (player) {
-  var gamepad = player.gamepad;
-  var playerTile = this.tileLayer.getTileOf(player.centerX, player.centerY);
-  var playerTileIndex = playerTile.index;
-  var tileValue = this.tileLayer.getTileValueAt(playerTileIndex);
-  var timer = this.tileTimers[playerTileIndex];
-
-  if (gamepad.pressed(0) && timer && player.isRepairing === false) {
-    this.m_startRepair(player, timer, tileValue, playerTile, playerTileIndex);
-  } else if (gamepad.justReleased(0)) {
-    this.m_stopRepair(player, timer);
-  }
-};
-
-/**
- * This method starts the repair process.
- * @param {object} player The player object.
- * @param {object} timer The timer object.
- * @param {number} tileValue The value of the tile.
- * @param {object} playerTile The tile object.
- * @param {number} playerTileIndex The index of the player's tile.
- * @returns {undefined}
- */
-
-ArcticMadness.map.Map.prototype.m_startRepair = function (
-  player,
-  timer,
-  tileValue,
-  playerTile,
-  playerTileIndex
-) {
-  timer.pause();
-  player.isRepairing = true;
-  player.velocity.x = 0;
-  player.velocity.y = 0;
-  player.animation.gotoAndPlay("repair");
-  player.gun.alpha = 0; // Hide the gun
-
-  this.m_createAnimationBlock(
-    player,
-    tileValue,
-    playerTile,
-    playerTileIndex,
-    timer
-  );
-};
-
-/**
  * This method creates an animation block for the repair process.
  * @param {object} player The player object.
  * @param {number} tileValue The value of the tile.
@@ -579,6 +405,7 @@ ArcticMadness.map.Map.prototype.m_startRepair = function (
  * @param {number} playerTileIndex The index of the player's tile.
  * @param {object} timer The timer object.
  * @returns {undefined}
+ * @private
  */
 
 ArcticMadness.map.Map.prototype.m_createAnimationBlock = function (
@@ -618,11 +445,203 @@ ArcticMadness.map.Map.prototype.m_createAnimationBlock = function (
   player.animationBlock = this.animationBlock;
 };
 
+//------------------------------------------------------------------------------
+// Private methods related to the players interaction with the map
+//------------------------------------------------------------------------------
+
+/**
+ * This method checks if the player is standing on a water tile.
+ * @param {object} player The player object.
+ * @returns {boolean} Returns true if the player is standing on water.
+ * @returns {boolean} Returns false if the player is not standing on water.
+ * @private
+ */
+
+ArcticMadness.map.Map.prototype.m_isPlayerInWater = function (player) {
+  var tileValue = this.tileLayer.getTileValueOf(
+    player.centerX,
+    player.centerY + 18
+  );
+
+  if (tileValue === 1) {
+    return true;
+  }
+
+  return false;
+};
+
+/**
+ * This method updates the player's state when standing on a water tile.
+ * @param {object} player The player object.
+ * @returns {undefined}
+ * @private
+ */
+
+ArcticMadness.map.Map.prototype.m_updatePlayerState = function (player) {
+  if (player != null && player.isAlive) {
+    player.isInWater = true;
+    player.velocity.x = 0;
+    player.velocity.y = 0;
+    player.health -= 1;
+    var playerTile = this.tileLayer.getTileOf(
+      player.centerX,
+      player.centerY + 18
+    );
+
+    var playerTileIndex = this.tileLayer.getTileIndexOf(
+      player.centerX,
+      player.centerY + 18
+    );
+    player.inWaterTile = playerTileIndex;
+    player.isRevivable = true;
+    if (player.revivingTileSet === false) {
+      this.m_setReviveTile(player);
+    }
+
+    if (player.health <= 0) {
+      this.m_killPlayer(player);
+      this.removeReviveTile(player);
+    }
+
+    if (!player.falling) {
+      this.game.tweenWater(player, playerTile);
+      player.gun.alpha = 0;
+    }
+  }
+};
+
+/**
+ * This method checks if the player is standing on a revive tile.
+ * @param {object} player The player object.
+ * @returns {boolean} Returns true if the player is standing on a revive tile.
+ * @returns {boolean} Returns false if the player is not standing on a revive tile.
+ * @private
+ */
+
+ArcticMadness.map.Map.prototype.m_isPlayerOnReviveTile = function (player) {
+  var tileValue = this.tileLayer.getTileValueOf(
+    player.centerX,
+    player.centerY + 18
+  );
+
+  if (tileValue === 17) {
+    return true;
+  }
+  return false;
+};
+
+/**
+ * This method sets a revive tile for the player.
+ * @param {object} player The player object.
+ * @returns {undefined}
+ * @private
+ */
+
+ArcticMadness.map.Map.prototype.m_setReviveTile = function (player) {
+  player.revivingTileSet = true;
+  var offsets = [
+    { x: 0, y: -32 }, // Above
+    { x: 0, y: 96 }, // Below
+    { x: -32, y: 0 }, // Left
+    { x: 96, y: 0 }, // Right
+  ];
+
+  if (player.isRevivable && player.inWaterTile != null) {
+    var playerWaterTile = this.tileLayer.getTileAt(player.inWaterTile);
+
+    for (var i = 0; i < offsets.length; i++) {
+      var offset = offsets[i];
+      var tileIndex = this.tileLayer.getTileIndexOfPoint({
+        x: playerWaterTile.x + offset.x,
+        y: playerWaterTile.y + offset.y,
+      });
+      if (tileIndex >= 0) {
+        var tileValue = this.tileLayer.getTileValueAt(tileIndex);
+        if (tileValue === 2) {
+          this.tileLayer.setTileValueAt(tileIndex, 17);
+          return;
+        }
+      }
+    }
+  }
+};
+
+/**
+ * This method kills the player.
+ * @param {object} player The player object.
+ * @returns {undefined}
+ * @private
+  */
+
+ArcticMadness.map.Map.prototype.m_killPlayer = function (player) {
+  player.isAlive = false;
+  player.isRevivable = false;
+  player.animation.gotoAndPlay("death");
+  //this.game.gameOver();
+};
+
+/**
+ * This method handles the input from the gamepad.
+ * @param {object} player The player object.
+ * @returns {undefined}
+ * @private
+ */
+
+ArcticMadness.map.Map.prototype.m_handleInputGamepad = function (player) {
+  var gamepad = player.gamepad;
+  var playerTile = this.tileLayer.getTileOf(player.centerX, player.centerY);
+  var playerTileIndex = playerTile.index;
+  var tileValue = this.tileLayer.getTileValueAt(playerTileIndex);
+  var timer = this.tileTimers[playerTileIndex];
+
+  if (gamepad.pressed(0) && timer && player.isRepairing === false) {
+    this.m_startRepair(player, timer, tileValue, playerTile, playerTileIndex);
+  } else if (gamepad.justReleased(0)) {
+    this.m_stopRepair(player, timer);
+  }
+};
+
+/**
+ * This method starts the repair process.
+ * @param {object} player The player object.
+ * @param {object} timer The timer object.
+ * @param {number} tileValue The value of the tile.
+ * @param {object} playerTile The tile object.
+ * @param {number} playerTileIndex The index of the player's tile.
+ * @returns {undefined}
+ * @private
+ */
+
+ArcticMadness.map.Map.prototype.m_startRepair = function (
+  player,
+  timer,
+  tileValue,
+  playerTile,
+  playerTileIndex
+) {
+  timer.pause();
+  player.isRepairing = true;
+  player.velocity.x = 0;
+  player.velocity.y = 0;
+  player.animation.gotoAndPlay("repair");
+  player.gun.alpha = 0; // Hide the gun
+
+  this.m_createAnimationBlock(
+    player,
+    tileValue,
+    playerTile,
+    playerTileIndex,
+    timer
+  );
+};
+
+
 /**
  * This method stops the repair process and resumes the timer when the player releases the repair button.
  * @param {object} player The player object.
  * @param {object} timer The timer object.
  * @returns {undefined}
+ * @private
  */
 
 ArcticMadness.map.Map.prototype.m_stopRepair = function (player, timer) {
@@ -649,6 +668,7 @@ ArcticMadness.map.Map.prototype.m_stopRepair = function (player, timer) {
  * @param {number} tileValue The value of the tile.
  * @param {number} playerTileIndex The index of the player's tile.
  * @param {object} timer The timer object.
+ * @private
  */
 
 ArcticMadness.map.Map.prototype.m_repairIce = function (
@@ -682,4 +702,131 @@ ArcticMadness.map.Map.prototype.m_repairIce = function (
   player.isRepairing = false;
   player.animation.gotoAndPlay("idle");
   player.gun.alpha = 1; // Show the gun
+};
+
+/**
+ * This method revives the nearest player.
+ * @param {object} revivingPlayer The player object.
+ * @returns {undefined}
+ * @private
+ */
+
+ArcticMadness.map.Map.prototype.m_reviveNearestPlayer = function (
+  revivingPlayer
+) {
+  var nearestPlayer = null;
+  var nearestDistance = Infinity;
+
+  for (var i = 0; i < this.game.players.length; i++) {
+    var player = this.game.players[i];
+    if (player.isRevivable) {
+      var distance = this.m_getDistanceBetween(revivingPlayer, player);
+      if (distance < nearestDistance) {
+        nearestDistance = distance;
+        nearestPlayer = player;
+      }
+    }
+  }
+
+  if (nearestPlayer) {
+    this.game.revivePlayer(nearestPlayer);
+  }
+};
+
+//------------------------------------------------------------------------------
+// Private utility methods related to the tilemap
+//------------------------------------------------------------------------------
+
+/**
+ * This method gets the distance between two entities.
+ * @param {object} entity1 The first entity object.
+ * @param {object} entity2 The second entity object.
+ * @returns {number} The distance between the two entities.
+ * @private
+ */
+
+ArcticMadness.map.Map.prototype.m_getDistanceBetween = function (
+  entity1,
+  entity2
+) {
+  var x2, y2;
+
+  // If the second entity is a tile, use its position
+  if (entity2 instanceof rune.tilemap.Tile) {
+    x2 = entity2.x;
+    y2 = entity2.y;
+  } else {
+    // Otherwise, assume it's a player and use the player's position
+    x2 = entity2.x;
+    y2 = entity2.y;
+  }
+
+  var dx = entity1.x - x2;
+  var dy = entity1.y - y2;
+  return Math.sqrt(dx * dx + dy * dy);
+};
+
+/**
+ * This method creates a timer for a tile.
+ * @param {number} time The duration of the timer.
+ * @param {function} callback The callback function.
+ * @param {number} tileIndex The index of the tile.
+ * @returns {undefined}
+ * @private
+ */
+
+ArcticMadness.map.Map.prototype.m_createTimer = function (
+  time,
+  callback,
+  tileIndex
+) {
+  var timer = this.game.timers.create(
+    {
+      duration: time,
+      onTick: callback,
+      scope: this,
+    },
+    true
+  );
+
+  this.tileTimers[tileIndex] = timer;
+};
+
+//------------------------------------------------------------------------------
+// Private utility methods related to the game, waves and enemies
+//------------------------------------------------------------------------------
+
+/**
+ * This method revives all players.
+ * @returns {undefined}
+ * @private
+ */
+
+ArcticMadness.map.Map.prototype.m_reviveAllPlayers = function () {
+  for (var i = 0; i < this.players.length; i++) {
+    var player = this.players[i];
+    this.game.revivePlayer(player);
+  }
+};
+
+/**
+ * This method disposes all enemies.
+ * @returns {undefined}
+ * @private
+ */
+
+ArcticMadness.map.Map.prototype.m_disposeEnemies = function () {
+  this.game.enemies.disposeEnemies();
+};
+
+/**
+ * This method stops the new enemy timer.
+ * @returns {undefined}
+ * @private
+ */
+
+ArcticMadness.map.Map.prototype.m_stopNewEnemyTimer = function () {
+  if (this.game.enemies.newEnemyTimer) {
+    this.game.enemies.newEnemyTimer.stop();
+  }
 };
