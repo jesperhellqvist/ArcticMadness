@@ -45,6 +45,7 @@ ArcticMadness.data.Requests.prototype.m_construct = function() {
     rune.resource.Requests.prototype.m_construct.call(this);
     this.add("64_enemy_lepardseal", "./../asset/64_enemy_lepardseal.png");
 	this.add("64_penguin_nogun", "./../asset/64_penguin_nogun.png");
+	this.add("Ice_map_64x64", "./../asset/Ice_map_64x64.png");
 	this.add("Splash", "./../asset/Splash.mp3");
 	this.add("controller", "./../asset/controller.png");
 	this.add("cracking", "./../asset/cracking.mp3");

@@ -39,9 +39,10 @@ ArcticMadness.scene.Menu.prototype.constructor = ArcticMadness.scene.Menu;
 ArcticMadness.scene.Menu.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
     this.m_initBackground();
+    this.m_initAnimations();
     this.m_initMenu();
-    this.m_initController();
     this.m_highscoreList();
+
 
 }
 
@@ -67,9 +68,52 @@ ArcticMadness.scene.Menu.prototype.update = function (step) {
         this.menu.select();
 
     }
+
+    if (this.divingPenguin.y ==600 && this.divingPenguin.x == -500) {
+        this.divingPenguin.y = 500;
+        console.log("hej");
+    
+    }
+    else if (this.divingPenguin.x >= 600) {
+        this.divingPenguin.velocity.x = 0;
+        this.createDivingTween();
+    }
+
+
+
+
 }
 
 //------------------------------------------------------------------------------
+
+ArcticMadness.scene.Menu.prototype.createDivingTween = function () {
+    if (!this.divingTweenActive) {
+        this.divingTweenActive = true;
+        this.divingPenguin.animation.gotoAndPlay("diving");
+        this.tweens.create({
+            target: this.divingPenguin,
+            scope: this,
+            duration: 550,
+            onUpdate: function (divingPenguin) {
+
+            },
+            onDispose: function (divingPenguin) {
+                this.splashEffect = this.application.sounds.sound.get("Splash");
+                this.splashEffect.play();
+                this.splashEffect.loop = false;
+                this.divingTweenActive = false;
+                divingPenguin.x = -500;
+                this.divingPenguin.velocity.x = 2;
+                this.divingPenguin.animation.gotoAndPlay("walking");
+            },
+            args: {
+                x: 650,
+                y:this.divingPenguin.y+20,
+            },
+        });
+    }
+}
+
 
 ArcticMadness.scene.Menu.prototype.m_initBackground = function () {
     this.background = new rune.display.Graphic(
@@ -79,29 +123,20 @@ ArcticMadness.scene.Menu.prototype.m_initBackground = function () {
         this.application.screen.height, "menu_bg"
     );
     this.stage.addChild(this.background);
+    this.divingPenguin = new rune.display.Sprite(-50, 500, 64, 64, "64_penguin_nogun");
+    this.stage.addChild(this.divingPenguin);
+
 }
 
 //------------------------------------------------------------------------------
 
-// Method to initialize the controller graphic
-ArcticMadness.scene.Menu.prototype.m_initController = function () {
-    // this.controllerGraphic = new rune.display.Graphic(
-    //     0,
-    //     0,
-    //     400,
-    //     400, "controller"
-    // );
-    // this.controllerGraphic.center = this.application.screen.center;
-    // this.text = new rune.text.BitmapField("JKLMNOPQRSTUVXYZ0123456789");
-    // this.text.autoSize = true;
-    // this.text.x = 200;
-    // this.text.y = 200;
-    // // this.text.x = this.controllerGraphic.x + 100;
-    // // this.text.y = this.controllerGraphic.y + 50;
-    // this.text.scaleX = 2;
-    // this.text.scaleY = 2;
-    // this.stage.addChild(this.text);
-    // this.stage.addChild(this.controllerGraphic);
+ArcticMadness.scene.Menu.prototype.m_initAnimations = function () {
+    this.divingPenguin.animation.create("walking", [5, 6, 7, 8], 8, true);
+    this.divingPenguin.animation.create("diving", [25, 26, 27, 28, 29], 9, true);
+    this.divingPenguin.animation.create("splashing", [30, 31, 30, 31, 42], 8, true);
+    this.divingPenguin.velocity.x = 2;
+
+
 }
 
 //Method to initialize the menu
@@ -127,7 +162,7 @@ ArcticMadness.scene.Menu.prototype.m_highscoreList = function () {
     this.highscoreText.scaleY = 2;
     this.highscoreText.x = 780;
     this.highscoreText.y = 300;
-    
+
     this.stage.addChild(this.highscoreText);
 }
 
