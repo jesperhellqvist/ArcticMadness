@@ -99,7 +99,7 @@ ArcticMadness.scene.Menu.prototype.createDivingTween = function () {
             },
             onDispose: function (divingPenguin) {
                 this.splashEffect = this.application.sounds.sound.get("Splash");
-                this.splashEffect.play();
+                //this.splashEffect.play();
                 this.splashEffect.loop = false;
                 this.divingTweenActive = false;
                 divingPenguin.x = -500;
