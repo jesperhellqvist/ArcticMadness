@@ -98,7 +98,7 @@ ArcticMadness.entity.Enemies.prototype.disposeEnemies = function () {
 ArcticMadness.entity.Enemies.prototype.startNewEnemyTimer = function () {
   this.newEnemyTimer = this.game.timers.create(
     {
-      duration: 1000,
+      duration: 500,
       onTick: function () {
         this.m_createEnemy();
       },

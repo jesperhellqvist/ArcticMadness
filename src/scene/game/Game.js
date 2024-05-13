@@ -243,9 +243,17 @@ ArcticMadness.scene.Game.prototype.m_checkBulletHitEnemy = function (bullet) {
   for (var i = 0; i < this.enemies.enemies.length; i++) {
     if (bullet.hitTestObject(this.enemies.enemies[i])) {
       bullet.dispose();
-      // this.enemies.enemies[i].animation.gotoAndPlay("death");//trying to make animation when enemy is hit
       this.stage.removeChild(this.enemies.enemies[i], true);
       this.enemies.enemies.splice(i, 1);
+      
+    //   this.enemies.enemies[i].animation.create("death", [8,9,10,11,12,13], 5, false);
+    //   this.enemies.enemies[i].animation.gotoAndPlay("death");
+    //  this.enemies.enemies[i].animation.current.scripts.add(13, function () {
+    //   console.log("enemy killed");
+    //   this.stage.removeChild(this.enemies.enemies[i], true);
+    //   this.enemies.enemies.splice(i, 1);
+    //  }, this);
+    //  console.log(this.enemies.enemies[i].animation.current.name);
     }
   }
 };
@@ -260,7 +268,7 @@ ArcticMadness.scene.Game.prototype.m_addPlayersToStage = function () {
 ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
   console.log("Wave: " + this.currentWave);
   this.waveTimer = this.timers.create({
-    duration: 30000,
+    duration: 45000,
     scope: this,
     onComplete: function () {
       this.currentWave++;
@@ -288,12 +296,12 @@ ArcticMadness.scene.Game.prototype.m_showWaveText = function (wave) {
     scope: this,
     onComplete: function () {
       this.stage.removeChild(text, true);
-      this.m_countDown();
+      this.m_countDown(wave);
     },
   }).start();
 };
 
-ArcticMadness.scene.Game.prototype.m_countDown = function () {
+ArcticMadness.scene.Game.prototype.m_countDown = function (wave) {
   var createText = function (textString) {
     var text = new rune.text.BitmapField(textString, "thefont");
     text.center = this.application.screen.center;
@@ -328,7 +336,7 @@ ArcticMadness.scene.Game.prototype.m_countDown = function () {
             onComplete: function () {
               this.stage.removeChild(text, true);
               this.m_startWaveTimer();
-              this.m_startNextWave();
+              this.m_startNextWave(wave);
             },
           }).start();
         },
@@ -340,6 +348,6 @@ ArcticMadness.scene.Game.prototype.m_countDown = function () {
 
 ArcticMadness.scene.Game.prototype.m_startNextWave = function () {
   this.enemies.startNewEnemyTimer();
-  this.map.crackRandomTile();
-  this.map.setCrackTimer();
+  this.map.crackRandomTile(this.currentWave);
+  this.map.setCrackTimer(this.currentWave);
 };

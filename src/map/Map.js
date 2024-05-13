@@ -14,6 +14,7 @@ ArcticMadness.map.Map = function (map, players, game, gamepads, enemies) {
   this.newCrackTimer = null;
   this.animationBlock = null;
   this.enemies = enemies; // Reference to the enemies object
+  this.numRandamCracks = 0;
 
   ArcticMadness.map.Map.prototype.init.call(this);
 };
@@ -84,7 +85,10 @@ ArcticMadness.map.Map.prototype.getRandomWaterTile = function () {
       this.tiles[i] === 14 ||
       this.tiles[i] === 15 ||
       this.tiles[i] === 16 ||
+      this.tiles[i] === 17 ||
       this.tiles[i] === 18 ||
+      this.tiles[i] === 19 ||
+      this.tiles[i] === 20 ||
       this.tiles[i] === 21 ||
       this.tiles[i] === 22 ||
       this.tiles[i] === 23 ||
@@ -178,7 +182,8 @@ ArcticMadness.map.Map.prototype.getNearestIceTileIndex = function (player) {
  * @returns {undefined}
  */
 
-ArcticMadness.map.Map.prototype.setCrackTimer = function () {
+ArcticMadness.map.Map.prototype.setCrackTimer = function (currentWave) {
+  console.log(currentWave);
   this.newCrackTimer = this.game.timers.create(
     {
       duration: 2000,
@@ -197,8 +202,12 @@ ArcticMadness.map.Map.prototype.setCrackTimer = function () {
  * @returns {undefined}
  */
 
-ArcticMadness.map.Map.prototype.crackRandomTile = function () {
+ArcticMadness.map.Map.prototype.crackRandomTile = function (currentWave) {
   var iceTiles = [];
+  if(currentWave != undefined){
+    this.numRandamCracks = currentWave;
+    this.m_callCrackRandomTile(this.numRandamCracks);
+  }
 
   // Find all tiles with with ice
   for (var i = 0; i < this.tiles.length; i++) {
@@ -230,8 +239,20 @@ ArcticMadness.map.Map.prototype.crackRandomTile = function () {
       },
       randomIndex
     ); // Create a timer for this tile
+
+    
+
+
   }
 };
+
+ArcticMadness.map.Map.prototype.m_callCrackRandomTile = function (currentWave) {
+  currentWave *= 2;
+  console.log(currentWave);
+  for (var i = 0; i < currentWave; i++) {
+    this.crackRandomTile();
+  }
+}
 
 /**
  * This method resets the map to its original state. Then it revives all players, disposes all enemies, and stops the new crack and enemy timers.
@@ -494,8 +515,6 @@ ArcticMadness.map.Map.prototype.m_createAnimationBlock = function (
   for (var i = tileValue - 1; i >= 31; i--) {
     animationFrames.push(i);
   }
-  console.log(animationFrames);
-  //Osäker på om den här fungerar -fråga jesper
   var lastFrame = animationFrames.length - 1;
   this.animationBlock.animation.create("crackToIce", animationFrames, 2, false);
   this.animationBlock.animation.current.scripts.add(
