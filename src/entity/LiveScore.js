@@ -33,10 +33,6 @@ ArcticMadness.entity.LiveScore.prototype.init = function () {
     this.m_createScoreText();
 }
 
-ArcticMadness.entity.LiveScore.prototype.update = function (step) {
-    rune.display.DisplayObject.prototype.update.call(this, step);
-    
-}
 
 ArcticMadness.entity.LiveScore.prototype.m_createScoreText = function () {
     this.scoreText = new rune.text.BitmapField("score " + this.score, "thefont");

@@ -816,6 +816,8 @@ ArcticMadness.map.Map.prototype.m_repairIce = function (
       this.map.application.sounds.sound.get("repaircomplete");
     this.completedSound.play();
     this.completedSound.loop = false;
+    this.game.updateScore(10);
+
   }
   // animationBlock.dispose();  fixa så att animationBlock försvinner med dispose
   this.game.stage.removeChild(player.animationBlock, true);

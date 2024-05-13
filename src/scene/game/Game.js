@@ -53,16 +53,9 @@ ArcticMadness.scene.Game.prototype.constructor = ArcticMadness.scene.Game;
 ArcticMadness.scene.Game.prototype.init = function () {
   rune.scene.Scene.prototype.init.call(this);
   this.stage.map.load("map");
-  this.liveScore = new ArcticMadness.entity.LiveScore(this);
-  this.timerText = new rune.text.BitmapField("wave " + this.currentWave + Math.floor(this.duration / 1000), "thefont");
-  this.timerText.autoSize = false;
-  this.timerText.width = 200;
-  this.timerText.height = 100;
-  this.timerText.scaleX = 2;
-  this.timerText.scaleY = 2;
-  this.timerText.x = 700;
-  this.timerText.y = 20;
-  this.stage.addChild(this.timerText);
+  this.m_initLiveScore();
+  this.m_initWaveText();
+
 
   if (this.gamepads.get(0) != null) {
     this.player = new ArcticMadness.entity.Player(
@@ -148,6 +141,26 @@ ArcticMadness.scene.Game.prototype.init = function () {
   this.m_startWaveTimer();
   //this.stage.addChild(this.player);
 };
+
+//------------------------------------------------------------------------------
+// Private prototype init methods
+//------------------------------------------------------------------------------
+
+ArcticMadness.scene.Game.prototype.m_initLiveScore = function () {
+  this.liveScore = new ArcticMadness.entity.LiveScore(this);
+}
+
+ArcticMadness.scene.Game.prototype.m_initWaveText = function () {
+  this.timerText = new rune.text.BitmapField("wave " + this.currentWave + Math.floor(this.duration / 1000), "thefont");
+  this.timerText.autoSize = false;
+  this.timerText.width = 200;
+  this.timerText.height = 100;
+  this.timerText.scaleX = 2;
+  this.timerText.scaleY = 2;
+  this.timerText.x = 700;
+  this.timerText.y = 20;
+  this.stage.addChild(this.timerText);
+}
 
 /**
  * This method is automatically executed once per "tick". The method is used for
@@ -265,7 +278,7 @@ ArcticMadness.scene.Game.prototype.m_checkBulletHitEnemy = function (bullet) {
       this.stage.removeChild(this.enemies.enemies[i], true);
       this.enemies.enemies.splice(i, 1);
       
-      this.m_updateScore();
+      this.updateScore(10);
       
     //   this.enemies.enemies[i].animation.create("death", [8,9,10,11,12,13], 5, false);
     //   this.enemies.enemies[i].animation.gotoAndPlay("death");
@@ -279,9 +292,9 @@ ArcticMadness.scene.Game.prototype.m_checkBulletHitEnemy = function (bullet) {
   }
 };
 
-ArcticMadness.scene.Game.prototype.m_updateScore = function () {
+ArcticMadness.scene.Game.prototype.updateScore = function (score) {
  
-  this.liveScore.score += 10;
+  this.liveScore.score += score;
   this.liveScore.updateScoreText();
   
 }
@@ -305,7 +318,10 @@ ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
       this.waveCompleteSoundEffect.play();
       this.waveCompleteSoundEffect.loop = false;
       this.m_showWaveText(this.currentWave);
-
+    },
+    onUpdate: function (step) {
+      
+      this.updateScore();
     }
   });
   this.waveTimer.start();
