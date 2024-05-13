@@ -15,6 +15,7 @@ ArcticMadness.map.Map = function (map, players, game, gamepads, enemies) {
   this.animationBlock = null;
   this.enemies = enemies; // Reference to the enemies object
   this.numRandamCracks = 0;
+  this.repairedTilesScore = 0;
 
   ArcticMadness.map.Map.prototype.init.call(this);
 };
@@ -816,6 +817,8 @@ ArcticMadness.map.Map.prototype.m_repairIce = function (
       this.map.application.sounds.sound.get("repaircomplete");
     this.completedSound.play();
     this.completedSound.loop = false;
+    this.repairedTilesScore += 10;
+   
   }
   // animationBlock.dispose();  fixa så att animationBlock försvinner med dispose
   this.game.stage.removeChild(player.animationBlock, true);
@@ -953,3 +956,10 @@ ArcticMadness.map.Map.prototype.m_stopNewEnemyTimer = function () {
     this.game.enemies.newEnemyTimer.stop();
   }
 };
+
+
+
+// //Hitta en bättre plats för den här metoden , det är den här jag tror borde
+// ArcticMadness.scene.Map.prototype.getRepairedTilesScore = function() {
+//     return this.repairedTilesScore;
+// };

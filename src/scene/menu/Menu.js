@@ -73,6 +73,7 @@ ArcticMadness.scene.Menu.prototype.update = function (step) {
     //Temporary go back to menu when pressing ("b" on the controller, square, X on xbox)
     if (this.gamepads.get(0).justPressed(2)) {
         this.stage.removeChild(this.controller_bg);
+        this.stage.removeChild(this.highscore_bg);
         this.stage.addChild(this.menu);
     }
 
@@ -150,8 +151,9 @@ ArcticMadness.scene.Menu.prototype.m_initMenu = function () {
     this.menu = new rune.ui.VTMenu();
     this.menu.add("Single Player");
     this.menu.add("Multiplayer");
-    this.menu.add("Highscore");
     this.menu.add("How to play");
+    this.menu.add("Highscore");
+    
     this.menu.x = 200;
     this.menu.y = 230;
     this.menu.scaleX = 3;
@@ -173,20 +175,24 @@ ArcticMadness.scene.Menu.prototype.m_highscoreList = function () {
 }
 
 ArcticMadness.scene.Menu.prototype.m_initSound = function () {
-    this.menuSound = this.application.sounds.sound.get("lobby");
+    this.menuSound = this.application.sounds.master.get("lobby2");
     this.menuSound.play();
     this.menuSound.loop = true;
+  
 }
 
 //Method to select the option
 ArcticMadness.scene.Menu.prototype.selectOption = function (option) {
     switch (option.text) {
         case "Single Player":
+            this.menuSound.fade();
             this.application.scenes.load([
                 new ArcticMadness.scene.Game()
+               
             ]);
             break;
         case "Multiplayer":
+            this.menuSound.fade();
             this.application.scenes.load([
                 new ArcticMadness.scene.Game()
             ]);
@@ -203,9 +209,14 @@ ArcticMadness.scene.Menu.prototype.selectOption = function (option) {
        
             break;
         case "Highscore":
-            this.application.scenes.load([
-                new ArcticMadness.scene.Highscore()
-            ]);
+            this.highscore_bg = new rune.display.Graphic(
+                350,
+                250,
+                600,
+                400, "bonuspoint"
+            );
+            this.stage.addChild(this.highscore_bg);
+            this.stage.removeChild(this.menu);
             break;
     }
 }
