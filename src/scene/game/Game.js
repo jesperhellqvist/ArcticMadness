@@ -19,9 +19,10 @@ ArcticMadness.scene.Game = function () {
   this.enemies = null;
   this.players = [];
   this.gamepadsConected = [];
-  this.currentWave = 0;
+  this.currentWave = 1;
   this.waveTimer = null;
   this.liveScore = null;
+  this.duration = 45000;
   //--------------------------------------------------------------------------
   // Super call
   //--------------------------------------------------------------------------
@@ -53,6 +54,16 @@ ArcticMadness.scene.Game.prototype.init = function () {
   rune.scene.Scene.prototype.init.call(this);
   this.stage.map.load("map");
   this.liveScore = new ArcticMadness.entity.LiveScore(this);
+  this.timerText = new rune.text.BitmapField("wave " + this.currentWave + Math.floor(this.duration / 1000), "thefont");
+  this.timerText.autoSize = false;
+  this.timerText.width = 200;
+  this.timerText.height = 100;
+  this.timerText.scaleX = 2;
+  this.timerText.scaleY = 2;
+  this.timerText.x = 700;
+  this.timerText.y = 20;
+  this.stage.addChild(this.timerText);
+
   if (this.gamepads.get(0) != null) {
     this.player = new ArcticMadness.entity.Player(
       700,
@@ -151,6 +162,13 @@ ArcticMadness.scene.Game.prototype.update = function (step) {
   this.m_checkBullet();
   this.map.update(step);
   this.enemies.update(step);
+  this.timerText.text = "wave " + this.currentWave + " " + Math.floor(this.duration / 1000);
+  this.duration -= step;
+  if (this.duration <= 0) {
+    this.timerText.text = "";
+    this.duration = 45000;
+
+  };
 };
 
 ArcticMadness.scene.Game.prototype.gameOver = function () {
@@ -276,7 +294,7 @@ ArcticMadness.scene.Game.prototype.m_addPlayersToStage = function () {
 
 
 ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
-  console.log("Wave: " + this.currentWave);
+
   this.waveTimer = this.timers.create({
     duration: 45000,
     scope: this,
@@ -288,7 +306,7 @@ ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
       this.waveCompleteSoundEffect.loop = false;
       this.m_showWaveText(this.currentWave);
 
-    },
+    }
   });
   this.waveTimer.start();
 }

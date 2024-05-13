@@ -183,7 +183,6 @@ ArcticMadness.map.Map.prototype.getNearestIceTileIndex = function (player) {
  */
 
 ArcticMadness.map.Map.prototype.setCrackTimer = function (currentWave) {
-  console.log(currentWave);
   this.newCrackTimer = this.game.timers.create(
     {
       duration: 2000,
