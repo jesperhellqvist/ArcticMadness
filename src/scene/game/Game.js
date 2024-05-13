@@ -21,6 +21,7 @@ ArcticMadness.scene.Game = function () {
   this.gamepadsConected = [];
   this.currentWave = 0;
   this.waveTimer = null;
+  this.liveScore = null;
   //--------------------------------------------------------------------------
   // Super call
   //--------------------------------------------------------------------------
@@ -51,7 +52,7 @@ ArcticMadness.scene.Game.prototype.constructor = ArcticMadness.scene.Game;
 ArcticMadness.scene.Game.prototype.init = function () {
   rune.scene.Scene.prototype.init.call(this);
   this.stage.map.load("map");
-
+  this.liveScore = new ArcticMadness.entity.LiveScore(this);
   if (this.gamepads.get(0) != null) {
     this.player = new ArcticMadness.entity.Player(
       700,
@@ -246,6 +247,8 @@ ArcticMadness.scene.Game.prototype.m_checkBulletHitEnemy = function (bullet) {
       this.stage.removeChild(this.enemies.enemies[i], true);
       this.enemies.enemies.splice(i, 1);
       
+      this.m_updateScore();
+      
     //   this.enemies.enemies[i].animation.create("death", [8,9,10,11,12,13], 5, false);
     //   this.enemies.enemies[i].animation.gotoAndPlay("death");
     //  this.enemies.enemies[i].animation.current.scripts.add(13, function () {
@@ -257,6 +260,13 @@ ArcticMadness.scene.Game.prototype.m_checkBulletHitEnemy = function (bullet) {
     }
   }
 };
+
+ArcticMadness.scene.Game.prototype.m_updateScore = function () {
+ 
+  this.liveScore.score += 10;
+  this.liveScore.updateScoreText();
+  
+}
 
 ArcticMadness.scene.Game.prototype.m_addPlayersToStage = function () {
   for (var i = 0; i < this.players.length; i++) {
