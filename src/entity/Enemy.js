@@ -42,7 +42,7 @@ ArcticMadness.entity.Enemy.prototype.init = function () {
   this.animation.create("water", [6,7], 6, true);
   this.animation.create("walk", [0, 1, 2, 3], 5, true);
   this.animation.create("attack", [4], 1, true);
-  this.animation.create("death", [8,9,10,11,12,13], 5, false);
+ 
   this.m_setHitbox();
 };
 
