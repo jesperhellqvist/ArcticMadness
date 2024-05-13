@@ -42,6 +42,7 @@ ArcticMadness.scene.Menu.prototype.init = function () {
     this.m_initAnimations();
     this.m_initMenu();
     this.m_highscoreList();
+    this.m_initSound();
 
 
 }
@@ -69,9 +70,14 @@ ArcticMadness.scene.Menu.prototype.update = function (step) {
 
     }
 
+    //Temporary go back to menu when pressing ("b" on the controller, square, X on xbox)
+    if (this.gamepads.get(0).justPressed(2)) {
+        this.stage.removeChild(this.controller_bg);
+        this.stage.addChild(this.menu);
+    }
+
     if (this.divingPenguin.y ==600 && this.divingPenguin.x == -500) {
         this.divingPenguin.y = 500;
-        console.log("hej");
     
     }
     else if (this.divingPenguin.x >= 600) {
@@ -99,7 +105,7 @@ ArcticMadness.scene.Menu.prototype.createDivingTween = function () {
             },
             onDispose: function (divingPenguin) {
                 this.splashEffect = this.application.sounds.sound.get("Splash");
-                //this.splashEffect.play();
+                this.splashEffect.play();
                 this.splashEffect.loop = false;
                 this.divingTweenActive = false;
                 divingPenguin.x = -500;
@@ -166,6 +172,12 @@ ArcticMadness.scene.Menu.prototype.m_highscoreList = function () {
     this.stage.addChild(this.highscoreText);
 }
 
+ArcticMadness.scene.Menu.prototype.m_initSound = function () {
+    this.menuSound = this.application.sounds.sound.get("lobby");
+    this.menuSound.play();
+    this.menuSound.loop = true;
+}
+
 //Method to select the option
 ArcticMadness.scene.Menu.prototype.selectOption = function (option) {
     switch (option.text) {
@@ -180,9 +192,15 @@ ArcticMadness.scene.Menu.prototype.selectOption = function (option) {
             ]);
             break;
         case "How to play":
-            this.application.scenes.load([
-                new ArcticMadness.scene.HowToPlay()
-            ]);
+            this.controller_bg = new rune.display.Graphic(
+                0,
+                0,
+                this.application.screen.width,
+                this.application.screen.height, "controller_bg"
+            );
+            this.stage.addChild(this.controller_bg);
+            this.stage.removeChild(this.menu);
+       
             break;
         case "Highscore":
             this.application.scenes.load([

@@ -166,7 +166,7 @@ ArcticMadness.scene.Game.prototype.tweenWater = function (player, playerTile) {
   this.tweens.create({
     target: player,
     scope: this,
-    duration: 500,
+    duration: 550,
     onUpdate: function (player) {
       player.animation.gotoAndPlay("falling");
       this.drownSoundEffect = this.application.sounds.sound.get("Splash");
