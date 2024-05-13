@@ -819,6 +819,8 @@ ArcticMadness.map.Map.prototype.m_repairIce = function (
     this.completedSound.loop = false;
     this.repairedTilesScore += 10;
    
+    this.game.updateScore(10);
+
   }
   // animationBlock.dispose();  fixa så att animationBlock försvinner med dispose
   this.game.stage.removeChild(player.animationBlock, true);
@@ -956,10 +958,3 @@ ArcticMadness.map.Map.prototype.m_stopNewEnemyTimer = function () {
     this.game.enemies.newEnemyTimer.stop();
   }
 };
-
-
-
-// //Hitta en bättre plats för den här metoden , det är den här jag tror borde
-// ArcticMadness.scene.Map.prototype.getRepairedTilesScore = function() {
-//     return this.repairedTilesScore;
-// };
