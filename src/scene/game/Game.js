@@ -25,7 +25,6 @@ ArcticMadness.scene.Game = function () {
   this.bonusContainer = null;
   this.duration = 45000;
 
-  
   //--------------------------------------------------------------------------
   // Super call
   //--------------------------------------------------------------------------
@@ -59,7 +58,6 @@ ArcticMadness.scene.Game.prototype.init = function () {
   this.m_initLiveScore();
   this.m_initWaveText();
   this.m_music();
-
 
   if (this.gamepads.get(0) != null) {
     this.player = new ArcticMadness.entity.Player(
@@ -152,10 +150,13 @@ ArcticMadness.scene.Game.prototype.init = function () {
 
 ArcticMadness.scene.Game.prototype.m_initLiveScore = function () {
   this.liveScore = new ArcticMadness.entity.LiveScore(this);
-}
+};
 
 ArcticMadness.scene.Game.prototype.m_initWaveText = function () {
-  this.timerText = new rune.text.BitmapField("wave " + this.currentWave + Math.floor(this.duration / 1000), "thefont");
+  this.timerText = new rune.text.BitmapField(
+    "wave " + this.currentWave + Math.floor(this.duration / 1000),
+    "thefont"
+  );
   this.timerText.autoSize = false;
   this.timerText.width = 200;
   this.timerText.height = 100;
@@ -164,7 +165,7 @@ ArcticMadness.scene.Game.prototype.m_initWaveText = function () {
   this.timerText.x = 700;
   this.timerText.y = 20;
   this.stage.addChild(this.timerText);
-}
+};
 
 /**
  * This method is automatically executed once per "tick". The method is used for
@@ -179,16 +180,19 @@ ArcticMadness.scene.Game.prototype.update = function (step) {
   this.m_checkBullet();
   this.map.update(step);
   this.enemies.update(step);
-  this.timerText.text = "wave " + this.currentWave + " " + Math.floor(this.duration / 1000);
-  this.duration -= step;
-  if (this.duration <= 0) {
-    this.timerText.text = "";
-    this.duration = 45000;
+  // this.timerText.text = "wave " + this.currentWave + " " + Math.floor(this.duration / 1000);
+  // this.duration -= step;
+  // if (this.duration <= 0) {
+  //   this.timerText.text = "";
+  //   this.duration = 45000;
 
-  };
+  // };
 };
 ArcticMadness.scene.Game.prototype.m_timerCountdown = function () {
-  this.timerText = new rune.text.BitmapField("wave " + this.currentWave + Math.floor(this.duration / 1000), "thefont");
+  this.timerText = new rune.text.BitmapField(
+    "wave " + this.currentWave + Math.floor(this.duration / 1000),
+    "thefont"
+  );
   this.timerText.autoSize = false;
   this.timerText.width = 200;
   this.timerText.height = 100;
@@ -202,11 +206,10 @@ ArcticMadness.scene.Game.prototype.m_timerCountdown = function () {
 ArcticMadness.scene.Game.prototype.m_music = function () {
   this.gameMusic = this.application.sounds.master.get("music_bg");
   this.gameMusic.play();
-  this.gameMusic.rate=1; //dynamiskt höja den här för att höja tempot i slutet av varje wave
+  this.gameMusic.rate = 1; //dynamiskt höja den här för att höja tempot i slutet av varje wave
   this.gameMusic.loop = true;
-  this.gameMusic.preservesPitch =true;
-
-}
+  this.gameMusic.preservesPitch = true;
+};
 
 ArcticMadness.scene.Game.prototype.gameOver = function () {
   var text = new rune.text.BitmapField("game over", "thefont");
@@ -245,10 +248,8 @@ ArcticMadness.scene.Game.prototype.tweenWater = function (player, playerTile) {
 };
 
 ArcticMadness.scene.Game.prototype.resetPlayer = function (player) {
-
   var nearestIceTileIndex = this.map.getNearestIceTileIndex(player);
   var nearestIceTile = this.map.tileLayer.getTileAt(nearestIceTileIndex);
-
 
   player.isInWater = false;
   player.isRevivable = false;
@@ -301,27 +302,25 @@ ArcticMadness.scene.Game.prototype.m_checkBulletHitEnemy = function (bullet) {
       bullet.dispose();
       this.stage.removeChild(this.enemies.enemies[i], true);
       this.enemies.enemies.splice(i, 1);
-      
+
       this.updateScore(10);
-      
-    //   this.enemies.enemies[i].animation.create("death", [8,9,10,11,12,13], 5, false);
-    //   this.enemies.enemies[i].animation.gotoAndPlay("death");
-    //  this.enemies.enemies[i].animation.current.scripts.add(13, function () {
-    //   console.log("enemy killed");
-    //   this.stage.removeChild(this.enemies.enemies[i], true);
-    //   this.enemies.enemies.splice(i, 1);
-    //  }, this);
-    //  console.log(this.enemies.enemies[i].animation.current.name);
+
+      //   this.enemies.enemies[i].animation.create("death", [8,9,10,11,12,13], 5, false);
+      //   this.enemies.enemies[i].animation.gotoAndPlay("death");
+      //  this.enemies.enemies[i].animation.current.scripts.add(13, function () {
+      //   console.log("enemy killed");
+      //   this.stage.removeChild(this.enemies.enemies[i], true);
+      //   this.enemies.enemies.splice(i, 1);
+      //  }, this);
+      //  console.log(this.enemies.enemies[i].animation.current.name);
     }
   }
 };
 
 ArcticMadness.scene.Game.prototype.updateScore = function (score) {
- 
   this.liveScore.score += score;
   this.liveScore.updateScoreText();
-  
-}
+};
 
 ArcticMadness.scene.Game.prototype.m_addPlayersToStage = function () {
   for (var i = 0; i < this.players.length; i++) {
@@ -329,45 +328,67 @@ ArcticMadness.scene.Game.prototype.m_addPlayersToStage = function () {
   }
 };
 
-
 ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
-
+  this.lastScoreUpdate = 0;
   this.waveTimer = this.timers.create({
     duration: 45000,
     scope: this,
     onComplete: function () {
-      // this.bonusContainer = new ArcticMadness.entity.BonusContainer(this); //create bonuscontainer
       this.currentWave++;
+      this.duration = 45000;
+      this.m_updateWaveTimerText();
       this.map.resetMap();
-      this.waveCompleteSoundEffect = this.application.sounds.sound.get("wavecomplete");
+      this.waveCompleteSoundEffect =
+        this.application.sounds.sound.get("wavecomplete");
       this.waveCompleteSoundEffect.play();
       this.waveCompleteSoundEffect.loop = false;
       this.m_showWaveText(this.currentWave);
     },
-    onUpdate: function (step) {
-      
-      this.updateScore();
-    }
+    onUpdate: function () {
+      if (
+        Math.floor(this.waveTimer.progressTotal * 45) > this.lastScoreUpdate
+      ) {
+        this.m_updateWaveTimerText();
+        this.updateScore(1);
+        this.lastScoreUpdate = Math.floor(this.waveTimer.progressTotal * 45);
+      }
+    },
   });
   this.waveTimer.start();
-}
+};
 
 ArcticMadness.scene.Game.prototype.m_showWaveText = function (wave) {
-  var text = new rune.text.BitmapField("wave " + wave + " completed!", "thefont");
+  var text = new rune.text.BitmapField(
+    "wave " + wave + " completed!",
+    "thefont"
+  );
   text.autoSize = true;
   text.scaleX = 4;
   text.scaleY = 4;
   text.center = this.application.screen.center;
 
+  this.bonusContainer = new ArcticMadness.entity.BonusContainer(this);
+  console.log(this.map.repairedTilesScore);
+  this.bonusContainer.updateScore(this.map.repairedTilesScore);
+
+
   this.stage.addChild(text);
-  this.timers.create({
-    duration: 3000,
-    scope: this,
-    onComplete: function () {
-      this.stage.removeChild(text, true);
-      this.m_countDown(wave);
-    },
-  }).start();
+  this.timers
+    .create({
+      duration: 3000,
+      scope: this,
+      onComplete: function () {
+        this.stage.removeChild(text, true);
+       this.bonusContainer.dispose(); //remove bonuscontainer
+        this.m_countDown(wave);
+      },
+    })
+    .start();
+};
+
+ArcticMadness.scene.Game.prototype.m_updateWaveTimerText = function () {
+  this.timerText.text = "wave " + this.currentWave + " " + this.duration / 1000;
+  this.duration -= 1000;
 };
 
 ArcticMadness.scene.Game.prototype.m_countDown = function (wave) {
@@ -383,38 +404,43 @@ ArcticMadness.scene.Game.prototype.m_countDown = function (wave) {
   var text = createText("3");
   this.stage.addChild(text);
 
-  this.timers.create({
-    duration: 1000,
-    scope: this,
-    onComplete: function () {
-      this.stage.removeChild(text, true);
-      text = createText("2");
-      this.stage.addChild(text);
+  this.timers
+    .create({
+      duration: 1000,
+      scope: this,
+      onComplete: function () {
+        this.stage.removeChild(text, true);
+        text = createText("2");
+        this.stage.addChild(text);
 
-      this.timers.create({
-        duration: 1000,
-        scope: this,
-        onComplete: function () {
-          this.stage.removeChild(text, true);
-          text = createText("1");
-          this.stage.addChild(text);
-
-          this.timers.create({
+        this.timers
+          .create({
             duration: 1000,
             scope: this,
             onComplete: function () {
               this.stage.removeChild(text, true);
-              this.m_startWaveTimer();
-              this.m_startNextWave(wave);
-              // this.stage.BonusContainer.removeChild(this.bonusContainer,true); remove bonuscontainer
-            },
-          }).start();
-        },
-      }).start();
-    },
-  }).start();
-};
+              text = createText("1");
+              this.stage.addChild(text);
 
+              this.timers
+                .create({
+                  duration: 1000,
+                  scope: this,
+                  onComplete: function () {
+                    this.stage.removeChild(text, true);
+                    this.m_startWaveTimer();
+                    this.m_startNextWave(wave);
+                    // this.stage.BonusContainer.removeChild(this.bonusContainer,true); remove bonuscontainer
+                  },
+                })
+                .start();
+            },
+          })
+          .start();
+      },
+    })
+    .start();
+};
 
 ArcticMadness.scene.Game.prototype.m_startNextWave = function () {
   this.enemies.startNewEnemyTimer();

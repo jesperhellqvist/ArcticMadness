@@ -818,7 +818,6 @@ ArcticMadness.map.Map.prototype.m_repairIce = function (
     this.completedSound.play();
     this.completedSound.loop = false;
     this.repairedTilesScore += 10;
-   
     this.game.updateScore(10);
 
   }
