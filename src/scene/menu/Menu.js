@@ -43,7 +43,7 @@ ArcticMadness.scene.Menu.prototype.init = function () {
     this.m_initMenu();
     this.m_highscoreList();
     this.m_initSound();
-
+    console.log("Menu initialized");
 
 }
 
