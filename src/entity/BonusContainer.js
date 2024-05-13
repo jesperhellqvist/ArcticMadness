@@ -4,7 +4,7 @@
 
 ArcticMadness.entity.BonusContainer = function (game) {
   this.game = game;
-  this.controller_bg = null;
+  this.wavesCompleted = null;
   this.repairedScore = null;
 
   //--------------------------------------------------------------------------
@@ -31,7 +31,7 @@ ArcticMadness.entity.BonusContainer.prototype.constructor =
 
 ArcticMadness.entity.BonusContainer.prototype.init = function () {
   rune.display.DisplayObjectContainer.prototype.init.call(this);
-  this.m_setBackGround();
+  this.m_createWavesCompeltedText();
   this.m_createRepairedScoreText();
 };
 
@@ -41,28 +41,30 @@ ArcticMadness.entity.BonusContainer.prototype.update = function (step) {
 
 ArcticMadness.entity.BonusContainer.prototype.dispose = function () {
   rune.display.DisplayObjectContainer.prototype.dispose.call(this);
-  console.log("dispose BonusContainer");
-  this.game.stage.removeChild(this.controller_bg, true);
-  this.controller_bg = null;
+  this.game.stage.removeChild(this.wavesCompleted, true);
+  this.wavesCompleted = null;
   this.game.stage.removeChild(this.repairedScore, true);
   this.repairedScore = null;
 
   //this.game.stage.removeChild(this.repairedScore, true);
 };
 
-ArcticMadness.entity.BonusContainer.prototype.m_setBackGround = function () {
-  this.controller_bg = new rune.display.Sprite(
-    400,
-    400,
-    700,
-    700,
-    "bonuspoint"
-  );
-  this.controller_bg.scaleX = 1;
-  this.controller_bg.scaleY = 1;
-    this.controller_bg.alpha = 0.5;
-  this.game.stage.addChild(this.controller_bg);
-};
+ArcticMadness.entity.BonusContainer.prototype.m_createWavesCompeltedText =
+  function () {
+    console.log("m_createWavesCompeltedText");
+    this.wavesCompleted = new rune.text.BitmapField(
+      "WAVES COMPLETED: 0",
+      "thefont"
+    );
+    this.wavesCompleted.width = 250;
+    this.wavesCompleted.height = 50;
+    this.wavesCompleted.scaleX = 2;
+    this.wavesCompleted.scaleY = 2;
+    this.wavesCompleted.autosize = true;
+    this.wavesCompleted.x = 500;
+    this.wavesCompleted.y = 500;
+    this.game.stage.addChild(this.wavesCompleted);
+  };
 
 ArcticMadness.entity.BonusContainer.prototype.m_createRepairedScoreText =
   function () {
@@ -80,4 +82,10 @@ ArcticMadness.entity.BonusContainer.prototype.m_createRepairedScoreText =
 
 ArcticMadness.entity.BonusContainer.prototype.updateScore = function (score) {
   this.repairedScore.text = "reparied: " + score;
+};
+
+ArcticMadness.entity.BonusContainer.prototype.updateWavesCompleted = function (
+  waves
+) {
+  this.wavesCompleted.text = "waves completed " + waves;
 };

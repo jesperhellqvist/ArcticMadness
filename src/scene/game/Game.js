@@ -58,88 +58,10 @@ ArcticMadness.scene.Game.prototype.init = function () {
   this.m_initLiveScore();
   this.m_initWaveText();
   this.m_music();
+  this.m_initPlayers();
+  this.m_initEnemies();
+  this.m_initMap();
 
-  if (this.gamepads.get(0) != null) {
-    this.player = new ArcticMadness.entity.Player(
-      700,
-      100,
-      "64_penguin_nogun",
-      {
-        r: "250",
-        g: "0",
-        b: "0",
-      },
-      {
-        left: "A",
-        right: "D",
-        up: "W",
-        down: "S",
-        shoot: "SPACE",
-      },
-      this.gamepads.get(0),
-      0
-    );
-    this.players.push(this.player);
-    this.gamepadsConected.push(this.gamepads.get(0));
-  }
-  if (this.gamepads.get(1) != null) {
-    this.player = new ArcticMadness.entity.Player(
-      700,
-      200,
-      "64_penguin_nogun",
-      {
-        r: "0",
-        g: "250",
-        b: "0",
-      },
-      {
-        left: "LEFT",
-        right: "RIGHT",
-        up: "UP",
-        down: "DOWN",
-        shoot: "ENTER",
-      },
-      this.gamepads.get(1),
-      1
-    );
-    this.players.push(this.player);
-    this.gamepadsConected.push(this.gamepads.get(1));
-  }
-  // if (this.gamepads.get(2) != null) {
-  //   this.player = new ArcticMadness.entity.Player(
-  //     700,
-  //     100,
-  //     "64_penguin_nogun",
-  //     {
-  //       r: "0",
-  //       g: "0",
-  //       b: "250",
-  //     },
-  //     {
-  //       left: "J",
-  //       right: "L",
-  //       up: "I",
-  //       down: "K",
-  //       shoot: "O",
-  //     },
-  //     this.gamepads.get(2),
-  //     2
-  //   );
-  //   this.players.push(this.player);
-  //   this.gamepadsConected.push(this.gamepads.get(2));
-  // }
-
-  this.enemies = new ArcticMadness.entity.Enemies(this, this.players);
-
-  this.map = new ArcticMadness.map.Map(
-    this.stage.map,
-    this.players,
-    this,
-    this.gamepadsConected,
-    this.enemies
-  );
-
-  this.m_addPlayersToStage();
   this.m_startWaveTimer();
   //this.stage.addChild(this.player);
 };
@@ -209,6 +131,71 @@ ArcticMadness.scene.Game.prototype.m_music = function () {
   this.gameMusic.rate = 1; //dynamiskt höja den här för att höja tempot i slutet av varje wave
   this.gameMusic.loop = true;
   this.gameMusic.preservesPitch = true;
+};
+
+ArcticMadness.scene.Game.prototype.m_initPlayers = function () {
+  if (this.gamepads.get(0) != null) {
+    this.player = new ArcticMadness.entity.Player(
+      700,
+      100,
+      "64_penguin_nogun",
+      {
+        r: "250",
+        g: "0",
+        b: "0",
+      },
+      {
+        left: "A",
+        right: "D",
+        up: "W",
+        down: "S",
+        shoot: "SPACE",
+      },
+      this.gamepads.get(0),
+      0
+    );
+    this.players.push(this.player);
+    this.gamepadsConected.push(this.gamepads.get(0));
+  }
+  if (this.gamepads.get(1) != null) {
+    this.player = new ArcticMadness.entity.Player(
+      700,
+      200,
+      "64_penguin_nogun",
+      {
+        r: "0",
+        g: "250",
+        b: "0",
+      },
+      {
+        left: "LEFT",
+        right: "RIGHT",
+        up: "UP",
+        down: "DOWN",
+        shoot: "ENTER",
+      },
+      this.gamepads.get(1),
+      1
+    );
+    this.players.push(this.player);
+    this.gamepadsConected.push(this.gamepads.get(1));
+  }
+
+  this.m_addPlayersToStage();
+};
+
+ArcticMadness.scene.Game.prototype.m_initEnemies = function () {
+  this.enemies = new ArcticMadness.entity.Enemies(this, this.players);
+};
+
+ArcticMadness.scene.Game.prototype.m_initMap = function () {
+  this.map = new ArcticMadness.map.Map(
+    this.stage.map,
+    this.players,
+    this,
+    this.gamepadsConected,
+    this.enemies
+  );
 };
 
 ArcticMadness.scene.Game.prototype.gameOver = function () {
@@ -358,28 +345,19 @@ ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
 };
 
 ArcticMadness.scene.Game.prototype.m_showWaveText = function (wave) {
-  var text = new rune.text.BitmapField(
-    "wave " + wave + " completed!",
-    "thefont"
-  );
-  text.autoSize = true;
-  text.scaleX = 4;
-  text.scaleY = 4;
-  text.center = this.application.screen.center;
 
   this.bonusContainer = new ArcticMadness.entity.BonusContainer(this);
-  console.log(this.map.repairedTilesScore);
+
+  this.bonusContainer.updateWavesCompleted(wave);
   this.bonusContainer.updateScore(this.map.repairedTilesScore);
 
 
-  this.stage.addChild(text);
   this.timers
     .create({
       duration: 3000,
       scope: this,
       onComplete: function () {
-        this.stage.removeChild(text, true);
-       this.bonusContainer.dispose(); //remove bonuscontainer
+        this.bonusContainer.dispose(); //remove bonuscontainer
         this.m_countDown(wave);
       },
     })
