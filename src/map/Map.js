@@ -260,9 +260,8 @@ ArcticMadness.map.Map.prototype.m_callCrackRandomTile = function (currentWave) {
  */
 
 ArcticMadness.map.Map.prototype.resetMap = function () {
-  // this.map.clear();
 
-  var tileValues = [
+   var tileValues = [
     19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
     23, 19, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 19, 19, 3, 1,
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 19, 22, 3, 1, 1, 1, 1, 1, 1,
@@ -698,7 +697,7 @@ ArcticMadness.map.Map.prototype.m_setReviveTile = function (player) {
 ArcticMadness.map.Map.prototype.m_killPlayer = function (player) {
   player.isAlive = false;
   player.isRevivable = false;
-  player.animation.gotoAndPlay("death");
+  player.animation.gotoAndPlay("death",0);
   //this.game.gameOver();
 };
 

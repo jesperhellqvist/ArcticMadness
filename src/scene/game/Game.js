@@ -133,12 +133,12 @@ ArcticMadness.scene.Game.prototype.m_initPlayers = function () {
   for (var i = 0; i < this.numberOfPlayers; i++) {
     this.player = new ArcticMadness.entity.Player(
           700,
-          100,
+          100 + i * 100,
           "64_penguin_nogun",
           {
-            r: "250",
-            g: "0",
-            b: "0",
+            r: Math.floor(Math.random() * 255),
+            g: Math.floor(Math.random() * 255),
+            b: Math.floor(Math.random() * 255),
           },
           {
             left: "A",
@@ -153,75 +153,6 @@ ArcticMadness.scene.Game.prototype.m_initPlayers = function () {
     this.players.push(this.player);
     this.gamepadsConected.push(this.gamepads.get(0));
   }
-  if (this.gamepads.get(1) != null) {
-    this.player = new ArcticMadness.entity.Player(
-      700,
-      100,
-      "64_penguin_nogun",
-      {
-        r: "0",
-        g: "250",
-        b: "0",
-      },
-      {
-        left: "LEFT",
-        right: "RIGHT",
-        up: "UP",
-        down: "DOWN",
-        shoot: "ENTER",
-      },
-      this.gamepads.get(1),
-      1
-    );
-    this.players.push(this.player);
-    this.gamepadsConected.push(this.gamepads.get(1));
-  }
-  // if (this.gamepads.get(2) != null) {
-  //   this.player = new ArcticMadness.entity.Player(
-  //     700,
-  //     100,
-  //     "64_penguin_nogun",
-  //     {
-  //       r: "250",
-  //       g: "0",
-  //       b: "0",
-  //     },
-  //     {
-  //       left: "A",
-  //       right: "D",
-  //       up: "W",
-  //       down: "S",
-  //       shoot: "SPACE",
-  //     },
-  //     this.gamepads.get(0),
-  //     0
-  //   );
-  //   this.players.push(this.player);
-  //   this.gamepadsConected.push(this.gamepads.get(0));
-  // }
-  // if (this.gamepads.get(1) != null) {
-  //   this.player = new ArcticMadness.entity.Player(
-  //     700,
-  //     200,
-  //     "64_penguin_nogun",
-  //     {
-  //       r: "0",
-  //       g: "250",
-  //       b: "0",
-  //     },
-  //     {
-  //       left: "LEFT",
-  //       right: "RIGHT",
-  //       up: "UP",
-  //       down: "DOWN",
-  //       shoot: "ENTER",
-  //     },
-  //     this.gamepads.get(1),
-  //     1
-  //   );
-  //   this.players.push(this.player);
-  //   this.gamepadsConected.push(this.gamepads.get(1));
-  // }
 
   this.m_addPlayersToStage();
 };
