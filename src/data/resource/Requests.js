@@ -50,6 +50,7 @@ ArcticMadness.data.Requests.prototype.m_construct = function() {
 	this.add("controller_bg", "./../asset/controller_bg.png");
 	this.add("fish", "./../asset/fish.png");
 	this.add("gun_directions2", "./../asset/gun_directions2.png");
+	this.add("how_to", "./../asset/how_to.png");
 	this.add("join_graphics", "./../asset/join_graphics.png");
 	this.add("map", "./../asset/map.json");
 	this.add("menu_bg", "./../asset/menu_bg.png");
@@ -63,5 +64,6 @@ ArcticMadness.data.Requests.prototype.m_construct = function() {
 	this.add("repaircomplete", "./../asset/sound/repaircomplete.wav");
 	this.add("saved", "./../asset/sound/saved.wav");
 	this.add("wavecomplete", "./../asset/sound/wavecomplete.wav");
+	this.add("test", "./../asset/test.png");
 	this.add("thefont", "./../asset/thefont.png");
 };

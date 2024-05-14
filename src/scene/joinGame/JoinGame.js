@@ -90,6 +90,8 @@ ArcticMadness.scene.JoinGame.prototype.m_initBackground = function () {
     "join_graphics"
   );
 
+  this.howTo= new rune.display.Sprite(30, 20, 220, 220, "how_to");
+
   this.stage.addChild(this.background);
   this.stage.addChild(this.background2);
   this.stage.addChild(this.background3);
@@ -110,6 +112,7 @@ ArcticMadness.scene.JoinGame.prototype.m_initAnimations = function () {
   this.background2.animation.create("ice", [2], 4, false);
   this.background3.animation.create("ice", [2], 4, false);
   this.background4.animation.create("ice", [2], 4, false);
+  this.howTo.animation.create("move", [0,1,2,3,5,6,7,8,9,10,11,11,11,11,10,12,13,13,12,13,13], 4, true);
 };
 
 ArcticMadness.scene.JoinGame.prototype.m_playerJoinGame = function () {
@@ -140,6 +143,7 @@ ArcticMadness.scene.JoinGame.prototype.m_playerJoinGame = function () {
     this.stage.addChild(this.player);
     this.m_startGameTimer();
     this.background.animation.gotoAndStop("ice");
+    this.stage.addChild(this.howTo);
   }
   if (
     this.gamepads.get(1).justPressed(0) &&
@@ -236,7 +240,7 @@ ArcticMadness.scene.JoinGame.prototype.m_startGameTimer = function () {
   this.gameStartTimer = this.timers.create({
     duration: 10000,
     onComplete: function () {
-        this.menuSound.fade();
+      // this.menuSound.fade();
       this.application.scenes.load([
         new ArcticMadness.scene.Game(this.connectedGamepads.length),
       ]);
