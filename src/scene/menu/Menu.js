@@ -15,7 +15,9 @@
  */
 
 ArcticMadness.scene.Menu = function () {
-
+    this.moveSound = null;
+    this.chooseSound = null;
+    this.menuSound = null;
 
     rune.scene.Scene.call(this);
 
@@ -38,14 +40,15 @@ ArcticMadness.scene.Menu.prototype.constructor = ArcticMadness.scene.Menu;
 
 ArcticMadness.scene.Menu.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
+    this.moveSound = this.application.sounds.sound.get("shoot");
+    this.chooseSound = this.application.sounds.sound.get("repaircomplete");
+    this.menuSound = this.application.sounds.master.get("lobby2");
     this.m_initBackground();
     this.m_initAnimations();
     this.m_initMenu();
     this.m_highscoreList();
     this.m_initSound();
-    console.log("Menu initialized");
-    this.moveSound = this.application.sounds.sound.get("shoot");
-    this.chooseSound = this.application.sounds.sound.get("repaircomplete");
+
 
 }
 
@@ -188,8 +191,7 @@ ArcticMadness.scene.Menu.prototype.m_initMenu = function () {
             frequency: 100
         }
     );
-    this.menu.add("SINGLEPLAYER");
-    this.menu.add("MULTIPLAYER");
+    this.menu.add("START GAME");
     this.menu.add("HOW TO PLAY");
     this.menu.add("HIGHSCORE");
 
@@ -214,7 +216,6 @@ ArcticMadness.scene.Menu.prototype.m_highscoreList = function () {
 }
 
 ArcticMadness.scene.Menu.prototype.m_initSound = function () {
-    this.menuSound = this.application.sounds.master.get("lobby2");
     this.menuSound.play();
     this.menuSound.loop = true;
 
@@ -223,18 +224,11 @@ ArcticMadness.scene.Menu.prototype.m_initSound = function () {
 //Method to select the option
 ArcticMadness.scene.Menu.prototype.selectOption = function (option) {
     switch (option.text) {
-        case "SINGLEPLAYER":
-            this.menuSound.fade();
+        case "START GAME":
             this.application.scenes.load([
-                new ArcticMadness.scene.Game(1)
+                new ArcticMadness.scene.JoinGame(this.menuSound)
 
             ]);
-            break;
-        case "MULTIPLAYER":
-            this.m_multiplayerMenu();
-            // this.application.scenes.load([
-            //     new ArcticMadness.scene.Game()
-            // ]);
             break;
         case "HOW TO PLAY":
             this.controller_bg = new rune.display.Graphic(
@@ -260,55 +254,3 @@ ArcticMadness.scene.Menu.prototype.selectOption = function (option) {
     }
 }
 
-ArcticMadness.scene.Menu.prototype.m_multiplayerMenu = function () {
-    this.stage.removeChild(this.menu);
-    this.multiplayerMenu = new rune.ui.VTMenu(
-        {
-            resource: "thefont",
-            duration: 1000,
-            frequency: 100
-        }
-    );
-    this.multiplayerMenu.add("2 Players");
-    this.multiplayerMenu.add("3 Players");
-    this.multiplayerMenu.add("4 Players");
-    this.multiplayerMenu.add("Back");
-    this.multiplayerMenu.x = 200;
-    this.multiplayerMenu.y = 230;
-    this.multiplayerMenu.scaleX = 3;
-    this.multiplayerMenu.scaleY = 3;
-    this.multiplayerMenu.onSelect(this.selectMultiplayerOption, this);
-    this.stage.addChild(this.multiplayerMenu);
-
-
-
-
-}
-
-ArcticMadness.scene.Menu.prototype.selectMultiplayerOption = function (option) {
-    switch (option.text) {
-        case "2 Players":
-            this.menuSound.fade();
-            this.application.scenes.load([
-                new ArcticMadness.scene.Game(2)
-            ]);
-            break;
-        case "3 Players":
-            this.menuSound.fade();
-            this.application.scenes.load([
-                new ArcticMadness.scene.Game(3)
-            ]);
-            break;
-        case "4 Players":
-            this.menuSound.fade();
-            this.application.scenes.load([
-                new ArcticMadness.scene.Game(4)
-            ]);
-            break;
-        case "Back":
-            this.stage.removeChild(this.multiplayerMenu);
-            this.multiplayerMenu = null;
-            this.stage.addChild(this.menu);
-            break;
-    }
-}
