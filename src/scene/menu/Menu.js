@@ -43,7 +43,6 @@ ArcticMadness.scene.Menu.prototype.init = function () {
     this.m_initMenu();
     this.m_highscoreList();
     this.m_initSound();
-    console.log("Menu initialized");
 
 }
 
@@ -194,7 +193,7 @@ ArcticMadness.scene.Menu.prototype.selectOption = function (option) {
         case "Multiplayer":
             this.menuSound.fade();
             this.application.scenes.load([
-                new ArcticMadness.scene.Game()
+                new ArcticMadness.scene.Game(2)
             ]);
             break;
         case "How to play":

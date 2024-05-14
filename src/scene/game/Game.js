@@ -13,7 +13,8 @@
  *
  * Game scene.
  */
-ArcticMadness.scene.Game = function () {
+ArcticMadness.scene.Game = function (numberOfPlayers) {
+  this.numberOfPlayers = numberOfPlayers;
   this.map = null;
   this.player = null;
   this.enemies = null;
@@ -102,13 +103,6 @@ ArcticMadness.scene.Game.prototype.update = function (step) {
   this.m_checkBullet();
   this.map.update(step);
   this.enemies.update(step);
-  // this.timerText.text = "wave " + this.currentWave + " " + Math.floor(this.duration / 1000);
-  // this.duration -= step;
-  // if (this.duration <= 0) {
-  //   this.timerText.text = "";
-  //   this.duration = 45000;
-
-  // };
 };
 ArcticMadness.scene.Game.prototype.m_timerCountdown = function () {
   this.timerText = new rune.text.BitmapField(
@@ -134,52 +128,76 @@ ArcticMadness.scene.Game.prototype.m_music = function () {
 };
 
 ArcticMadness.scene.Game.prototype.m_initPlayers = function () {
-  if (this.gamepads.get(0) != null) {
+  console.log(this.numberOfPlayers);
+
+  for (var i = 0; i < this.numberOfPlayers; i++) {
     this.player = new ArcticMadness.entity.Player(
-      700,
-      100,
-      "64_penguin_nogun",
-      {
-        r: "250",
-        g: "0",
-        b: "0",
-      },
-      {
-        left: "A",
-        right: "D",
-        up: "W",
-        down: "S",
-        shoot: "SPACE",
-      },
-      this.gamepads.get(0),
-      0
-    );
+          700,
+          100,
+          "64_penguin_nogun",
+          {
+            r: "250",
+            g: "0",
+            b: "0",
+          },
+          {
+            left: "A",
+            right: "D",
+            up: "W",
+            down: "S",
+            shoot: "SPACE",
+          },
+          this.gamepads.get(i),
+          0
+        );
     this.players.push(this.player);
-    this.gamepadsConected.push(this.gamepads.get(0));
   }
-  if (this.gamepads.get(1) != null) {
-    this.player = new ArcticMadness.entity.Player(
-      700,
-      200,
-      "64_penguin_nogun",
-      {
-        r: "0",
-        g: "250",
-        b: "0",
-      },
-      {
-        left: "LEFT",
-        right: "RIGHT",
-        up: "UP",
-        down: "DOWN",
-        shoot: "ENTER",
-      },
-      this.gamepads.get(1),
-      1
-    );
-    this.players.push(this.player);
-    this.gamepadsConected.push(this.gamepads.get(1));
-  }
+  // if (this.gamepads.get(0) != null) {
+  //   this.player = new ArcticMadness.entity.Player(
+  //     700,
+  //     100,
+  //     "64_penguin_nogun",
+  //     {
+  //       r: "250",
+  //       g: "0",
+  //       b: "0",
+  //     },
+  //     {
+  //       left: "A",
+  //       right: "D",
+  //       up: "W",
+  //       down: "S",
+  //       shoot: "SPACE",
+  //     },
+  //     this.gamepads.get(0),
+  //     0
+  //   );
+  //   this.players.push(this.player);
+  //   this.gamepadsConected.push(this.gamepads.get(0));
+  // }
+  // if (this.gamepads.get(1) != null) {
+  //   this.player = new ArcticMadness.entity.Player(
+  //     700,
+  //     200,
+  //     "64_penguin_nogun",
+  //     {
+  //       r: "0",
+  //       g: "250",
+  //       b: "0",
+  //     },
+  //     {
+  //       left: "LEFT",
+  //       right: "RIGHT",
+  //       up: "UP",
+  //       down: "DOWN",
+  //       shoot: "ENTER",
+  //     },
+  //     this.gamepads.get(1),
+  //     1
+  //   );
+  //   this.players.push(this.player);
+  //   this.gamepadsConected.push(this.gamepads.get(1));
+  // }
 
   this.m_addPlayersToStage();
 };
