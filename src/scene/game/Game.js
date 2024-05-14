@@ -103,6 +103,7 @@ ArcticMadness.scene.Game.prototype.update = function (step) {
   this.m_checkBullet();
   this.map.update(step);
   this.enemies.update(step);
+  this.m_checkIfPlayersAreDead();
 };
 ArcticMadness.scene.Game.prototype.m_timerCountdown = function () {
   this.timerText = new rune.text.BitmapField(
@@ -169,15 +170,15 @@ ArcticMadness.scene.Game.prototype.m_initMap = function () {
     this.gamepadsConected,
     this.enemies
   );
+  this.map.resetMap();
 };
 
 ArcticMadness.scene.Game.prototype.gameOver = function () {
-  var text = new rune.text.BitmapField("game over", "thefont");
-  text.center = this.application.screen.center;
-  text.autoSize = true;
-  text.scaleX = 4;
-  text.scaleY = 4;
-  this.stage.addChild(text);
+  this.application.scenes.load([
+    new ArcticMadness.scene.GameOver(this.liveScore.score),
+
+])
+  this.m_stopWaveTimer();
 };
 
 ArcticMadness.scene.Game.prototype.tweenWater = function (player, playerTile) {
@@ -298,6 +299,8 @@ ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
       this.duration = 45000;
       this.m_updateWaveTimerText();
       this.map.resetMap();
+      this.map.stopWave();
+      this.map.reviveAllPlayers();
       this.waveCompleteSoundEffect =
         this.application.sounds.sound.get("wavecomplete");
       this.waveCompleteSoundEffect.play();
@@ -315,6 +318,13 @@ ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
     },
   });
   this.waveTimer.start();
+};
+
+ArcticMadness.scene.Game.prototype.m_stopWaveTimer = function () {
+  if (this.waveTimer != null){
+    this.waveTimer.stop();
+  }
+  
 };
 
 ArcticMadness.scene.Game.prototype.m_showWaveText = function (wave) {
@@ -398,3 +408,20 @@ ArcticMadness.scene.Game.prototype.m_startNextWave = function () {
   this.map.crackRandomTile(this.currentWave);
   this.map.setCrackTimer(this.currentWave);
 };
+
+
+
+ArcticMadness.scene.Game.prototype.m_checkIfPlayersAreDead = function () {
+  var allPlayersDead = true;
+  for (var i = 0; i < this.players.length; i++) {
+    if (this.players[i].isAlive === true) {
+      allPlayersDead = false;
+      break;
+    }
+  }
+  if (allPlayersDead) {
+    this.gameOver();
+  }
+};
+
+

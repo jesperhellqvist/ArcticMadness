@@ -238,7 +238,7 @@ ArcticMadness.scene.JoinGame.prototype.m_startGameTimer = function () {
   }
 
   this.gameStartTimer = this.timers.create({
-    duration: 10000,
+    duration: 5000,
     onComplete: function () {
       // this.menuSound.fade();
       this.application.scenes.load([

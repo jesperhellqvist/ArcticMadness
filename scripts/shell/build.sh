@@ -9,6 +9,7 @@ npx google-closure-compiler \
 --js "./../../lib/rune.js" \
 --js "./../../src/scope/Manifest.js" \
 --js "./../../src/data/resource/Requests.js" \
+--js "./../../src/scene/gameover/GameOver.js" \
 --js "./../../src/entity/LiveScore.js" \
 --js "./../../src/entity/Bullet.js" \
 --js "./../../src/entity/Gun.js" \
@@ -18,6 +19,7 @@ npx google-closure-compiler \
 --js "./../../src/entity/Players.js" \
 --js "./../../src/map/Map.js" \
 --js "./../../src/scene/game/Game.js" \
+--js "./../../src/scene/joinGame/JoinGame.js" \
 --js "./../../src/scene/menu/Menu.js" \
 --js "./../../src/system/Main.js" \
 --js "./../../src/scope/Alias.js" \
