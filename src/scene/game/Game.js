@@ -88,7 +88,7 @@ ArcticMadness.scene.Game.prototype.init = function () {
   if (this.gamepads.get(1) != null) {
     this.player = new ArcticMadness.entity.Player(
       700,
-      100,
+      200,
       "64_penguin_nogun",
       {
         r: "0",
