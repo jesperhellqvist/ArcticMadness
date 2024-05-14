@@ -204,7 +204,7 @@ ArcticMadness.map.Map.prototype.setCrackTimer = function (currentWave) {
 
 ArcticMadness.map.Map.prototype.crackRandomTile = function (currentWave) {
   var iceTiles = [];
-  if(currentWave != undefined){
+  if (currentWave != undefined) {
     this.numRandamCracks = currentWave;
     this.m_callCrackRandomTile(this.numRandamCracks);
   }
@@ -239,10 +239,6 @@ ArcticMadness.map.Map.prototype.crackRandomTile = function (currentWave) {
       },
       randomIndex
     ); // Create a timer for this tile
-
-    
-
-
   }
 };
 
@@ -252,7 +248,7 @@ ArcticMadness.map.Map.prototype.m_callCrackRandomTile = function (currentWave) {
   for (var i = 0; i < currentWave; i++) {
     this.crackRandomTile();
   }
-}
+};
 
 /**
  * This method resets the map to its original state. Then it revives all players, disposes all enemies, and stops the new crack and enemy timers.
@@ -260,8 +256,7 @@ ArcticMadness.map.Map.prototype.m_callCrackRandomTile = function (currentWave) {
  */
 
 ArcticMadness.map.Map.prototype.resetMap = function () {
-
-   var tileValues = [
+  var tileValues = [
     19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
     23, 19, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 19, 19, 3, 1,
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 19, 22, 3, 1, 1, 1, 1, 1, 1,
@@ -278,13 +273,25 @@ ArcticMadness.map.Map.prototype.resetMap = function () {
   for (var i = 0; i < tileValues.length; i++) {
     this.tileLayer.setTileValueAt(i, tileValues[i]);
   }
+};
 
+/**
+ * This method ends a wave.
+ * @returns {undefined}
+ * 
+  */
+
+ArcticMadness.map.Map.prototype.stopWave = function () {
   this.m_stopTileTimers();
-  this.m_reviveAllPlayers();
   this.m_disposeEnemies();
   this.m_stopNewCrackTimer();
   this.m_stopNewEnemyTimer();
 };
+
+ArcticMadness.map.Map.prototype.reviveAllPlayers = function () {
+  this.m_reviveAllPlayers();
+};
+
 
 //------------------------------------------------------------------------------
 // Public methods related to the enemies
@@ -697,7 +704,8 @@ ArcticMadness.map.Map.prototype.m_setReviveTile = function (player) {
 ArcticMadness.map.Map.prototype.m_killPlayer = function (player) {
   player.isAlive = false;
   player.isRevivable = false;
-  player.animation.gotoAndPlay("death",0);
+  player.animation.gotoAndPlay("death", 0);
+  console.log("Player died");
   //this.game.gameOver();
 };
 
@@ -818,7 +826,6 @@ ArcticMadness.map.Map.prototype.m_repairIce = function (
     this.completedSound.loop = false;
     this.repairedTilesScore += 10;
     this.game.updateScore(10);
-
   }
   // animationBlock.dispose();  fixa så att animationBlock försvinner med dispose
   this.game.stage.removeChild(player.animationBlock, true);
