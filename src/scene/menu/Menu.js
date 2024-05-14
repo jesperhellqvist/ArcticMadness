@@ -43,6 +43,9 @@ ArcticMadness.scene.Menu.prototype.init = function () {
     this.m_initMenu();
     this.m_highscoreList();
     this.m_initSound();
+    console.log("Menu initialized");
+    this.moveSound = this.application.sounds.sound.get("shoot");
+    this.chooseSound = this.application.sounds.sound.get("repaircomplete");
 
 }
 
@@ -55,17 +58,23 @@ ArcticMadness.scene.Menu.prototype.init = function () {
 ArcticMadness.scene.Menu.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
     if (this.gamepads.get(0).justPressed(12)) {
+        this.moveSound.play();
+        this.moveSound.loop = false;
         if (this.menu.up()) {
         }
     }
 
     if (this.gamepads.get(0).justPressed(13)) {
+        this.moveSound.play();
+        this.moveSound.loop = false;
         if (this.menu.down()) {
         }
     }
 
     if (this.gamepads.get(0).justPressed(0)) {
         this.menu.select();
+        this.chooseSound.play();
+        this.chooseSound.loop = false;
 
     }
 
