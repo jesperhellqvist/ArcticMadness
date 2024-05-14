@@ -69,6 +69,8 @@ ArcticMadness.scene.Menu.prototype.update = function (step) {
         }
 
         if (this.gamepads.get(0).justPressed(13)) {
+            this.moveSound.play();
+            this.moveSound.loop = false;
             if (this.menu.down()) {
             }
 
@@ -83,11 +85,15 @@ ArcticMadness.scene.Menu.prototype.update = function (step) {
     // Multiplayer menu
     if (this.multiplayerMenu) { // Check if multiplayerMenu exists
         if (this.gamepads.get(0).justPressed(12)) {
+            this.moveSound.play();
+            this.moveSound.loop = false;
             if (this.multiplayerMenu.up()) {
             }
         }
 
         if (this.gamepads.get(0).justPressed(13)) {
+            this.moveSound.play();
+            this.moveSound.loop = false;
             if (this.multiplayerMenu.down()) {
             }
         }
@@ -270,16 +276,19 @@ ArcticMadness.scene.Menu.prototype.m_multiplayerMenu = function () {
 ArcticMadness.scene.Menu.prototype.selectMultiplayerOption = function (option) {
     switch (option.text) {
         case "2 Players":
+            this.menuSound.fade();
             this.application.scenes.load([
                 new ArcticMadness.scene.Game(2)
             ]);
             break;
         case "3 Players":
+            this.menuSound.fade();
             this.application.scenes.load([
                 new ArcticMadness.scene.Game(3)
             ]);
             break;
         case "4 Players":
+            this.menuSound.fade();
             this.application.scenes.load([
                 new ArcticMadness.scene.Game(4)
             ]);
