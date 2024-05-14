@@ -59,10 +59,10 @@ ArcticMadness.scene.Menu.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
 
     //Start menu
-    if (!this.multiplayerMenu ) {
+    if (!this.multiplayerMenu) {
         if (this.gamepads.get(0).justPressed(12)) {
-        this.moveSound.play();
-        this.moveSound.loop = false;
+            this.moveSound.play();
+            this.moveSound.loop = false;
             if (this.menu.up()) {
             }
 
@@ -129,7 +129,7 @@ ArcticMadness.scene.Menu.prototype.update = function (step) {
 ArcticMadness.scene.Menu.prototype.createDivingTween = function () {
     if (!this.divingTweenActive) {
         this.divingTweenActive = true;
-        this.divingPenguin.animation.gotoAndPlay("diving");
+        this.divingPenguin.animation.gotoAndPlay("diving", 0);
         this.tweens.create({
             target: this.divingPenguin,
             scope: this,
@@ -172,7 +172,7 @@ ArcticMadness.scene.Menu.prototype.m_initBackground = function () {
 
 ArcticMadness.scene.Menu.prototype.m_initAnimations = function () {
     this.divingPenguin.animation.create("walking", [5, 6, 7, 8], 8, true);
-    this.divingPenguin.animation.create("diving", [25, 26, 27, 28, 29], 9, true);
+    this.divingPenguin.animation.create("diving", [25, 26, 27, 28, 29], 9, false);
     this.divingPenguin.animation.create("splashing", [30, 31, 30, 31, 42], 8, true);
     this.divingPenguin.velocity.x = 2;
 
@@ -181,16 +181,22 @@ ArcticMadness.scene.Menu.prototype.m_initAnimations = function () {
 
 //Method to initialize the menu
 ArcticMadness.scene.Menu.prototype.m_initMenu = function () {
-    this.menu = new rune.ui.VTMenu();
-    this.menu.add("Single Player");
-    this.menu.add("Multiplayer");
-    this.menu.add("How to play");
-    this.menu.add("Highscore");
-    
+    this.menu = new rune.ui.VTMenu(
+        {
+            resource: "thefont",
+            duration: 1000,
+            frequency: 100
+        }
+    );
+    this.menu.add("SINGLEPLAYER");
+    this.menu.add("MULTIPLAYER");
+    this.menu.add("HOW TO PLAY");
+    this.menu.add("HIGHSCORE");
+
     this.menu.x = 200;
-    this.menu.y = 230;
-    this.menu.scaleX = 3;
-    this.menu.scaleY = 3;
+    this.menu.y = 210;
+    this.menu.scaleX = 2;
+    this.menu.scaleY = 2;
     this.menu.onSelect(this.selectOption, this);
     this.stage.addChild(this.menu);
 }
@@ -211,26 +217,26 @@ ArcticMadness.scene.Menu.prototype.m_initSound = function () {
     this.menuSound = this.application.sounds.master.get("lobby2");
     this.menuSound.play();
     this.menuSound.loop = true;
-  
+
 }
 
 //Method to select the option
 ArcticMadness.scene.Menu.prototype.selectOption = function (option) {
     switch (option.text) {
-        case "Single Player":
+        case "SINGLEPLAYER":
             this.menuSound.fade();
             this.application.scenes.load([
-                new ArcticMadness.scene.Game()
-               
+                new ArcticMadness.scene.Game(1)
+
             ]);
             break;
-        case "Multiplayer":
+        case "MULTIPLAYER":
             this.m_multiplayerMenu();
             // this.application.scenes.load([
             //     new ArcticMadness.scene.Game()
             // ]);
             break;
-        case "How to play":
+        case "HOW TO PLAY":
             this.controller_bg = new rune.display.Graphic(
                 0,
                 0,
@@ -241,7 +247,7 @@ ArcticMadness.scene.Menu.prototype.selectOption = function (option) {
             this.stage.removeChild(this.menu);
 
             break;
-        case "Highscore":
+        case "HIGHSCORE":
             this.highscore_bg = new rune.display.Graphic(
                 350,
                 250,
@@ -256,7 +262,13 @@ ArcticMadness.scene.Menu.prototype.selectOption = function (option) {
 
 ArcticMadness.scene.Menu.prototype.m_multiplayerMenu = function () {
     this.stage.removeChild(this.menu);
-    this.multiplayerMenu = new rune.ui.VTMenu();
+    this.multiplayerMenu = new rune.ui.VTMenu(
+        {
+            resource: "thefont",
+            duration: 1000,
+            frequency: 100
+        }
+    );
     this.multiplayerMenu.add("2 Players");
     this.multiplayerMenu.add("3 Players");
     this.multiplayerMenu.add("4 Players");
