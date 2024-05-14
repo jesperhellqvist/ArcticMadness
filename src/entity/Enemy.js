@@ -173,7 +173,7 @@ ArcticMadness.entity.Enemy.prototype.m_getNearestWater = function (
 
 ArcticMadness.entity.Enemy.prototype.m_setHitbox = function () {
   this.hitbox.set(0, 16, 64, 28);
-  this.hitbox.debug = true;
+  this.hitbox.debug = false;
 };
 
 ArcticMadness.entity.Enemy.prototype.m_getClosestPlayer = function () {

@@ -57,25 +57,44 @@ ArcticMadness.scene.Menu.prototype.init = function () {
 
 ArcticMadness.scene.Menu.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
-    if (this.gamepads.get(0).justPressed(12)) {
+
+    //Start menu
+    if (!this.multiplayerMenu ) {
+        if (this.gamepads.get(0).justPressed(12)) {
         this.moveSound.play();
         this.moveSound.loop = false;
-        if (this.menu.up()) {
+            if (this.menu.up()) {
+            }
+
+        }
+
+        if (this.gamepads.get(0).justPressed(13)) {
+            if (this.menu.down()) {
+            }
+
+        }
+
+        if (this.gamepads.get(0).justPressed(0)) {
+            this.menu.select();
+
         }
     }
 
-    if (this.gamepads.get(0).justPressed(13)) {
-        this.moveSound.play();
-        this.moveSound.loop = false;
-        if (this.menu.down()) {
+    // Multiplayer menu
+    if (this.multiplayerMenu) { // Check if multiplayerMenu exists
+        if (this.gamepads.get(0).justPressed(12)) {
+            if (this.multiplayerMenu.up()) {
+            }
         }
-    }
 
-    if (this.gamepads.get(0).justPressed(0)) {
-        this.menu.select();
-        this.chooseSound.play();
-        this.chooseSound.loop = false;
+        if (this.gamepads.get(0).justPressed(13)) {
+            if (this.multiplayerMenu.down()) {
+            }
+        }
 
+        if (this.gamepads.get(0).justPressed(0)) {
+            this.multiplayerMenu.select();
+        }
     }
 
     //Temporary go back to menu when pressing ("b" on the controller, square, X on xbox)
@@ -85,9 +104,9 @@ ArcticMadness.scene.Menu.prototype.update = function (step) {
         this.stage.addChild(this.menu);
     }
 
-    if (this.divingPenguin.y ==600 && this.divingPenguin.x == -500) {
+    if (this.divingPenguin.y == 600 && this.divingPenguin.x == -500) {
         this.divingPenguin.y = 500;
-    
+
     }
     else if (this.divingPenguin.x >= 600) {
         this.divingPenguin.velocity.x = 0;
@@ -123,7 +142,7 @@ ArcticMadness.scene.Menu.prototype.createDivingTween = function () {
             },
             args: {
                 x: 650,
-                y:this.divingPenguin.y+20,
+                y: this.divingPenguin.y + 20,
             },
         });
     }
@@ -200,10 +219,10 @@ ArcticMadness.scene.Menu.prototype.selectOption = function (option) {
             ]);
             break;
         case "Multiplayer":
-            this.menuSound.fade();
-            this.application.scenes.load([
-                new ArcticMadness.scene.Game(2)
-            ]);
+            this.m_multiplayerMenu();
+            // this.application.scenes.load([
+            //     new ArcticMadness.scene.Game()
+            // ]);
             break;
         case "How to play":
             this.controller_bg = new rune.display.Graphic(
@@ -214,7 +233,7 @@ ArcticMadness.scene.Menu.prototype.selectOption = function (option) {
             );
             this.stage.addChild(this.controller_bg);
             this.stage.removeChild(this.menu);
-       
+
             break;
         case "Highscore":
             this.highscore_bg = new rune.display.Graphic(
@@ -225,6 +244,50 @@ ArcticMadness.scene.Menu.prototype.selectOption = function (option) {
             );
             this.stage.addChild(this.highscore_bg);
             this.stage.removeChild(this.menu);
+            break;
+    }
+}
+
+ArcticMadness.scene.Menu.prototype.m_multiplayerMenu = function () {
+    this.stage.removeChild(this.menu);
+    this.multiplayerMenu = new rune.ui.VTMenu();
+    this.multiplayerMenu.add("2 Players");
+    this.multiplayerMenu.add("3 Players");
+    this.multiplayerMenu.add("4 Players");
+    this.multiplayerMenu.add("Back");
+    this.multiplayerMenu.x = 200;
+    this.multiplayerMenu.y = 230;
+    this.multiplayerMenu.scaleX = 3;
+    this.multiplayerMenu.scaleY = 3;
+    this.multiplayerMenu.onSelect(this.selectMultiplayerOption, this);
+    this.stage.addChild(this.multiplayerMenu);
+
+
+
+
+}
+
+ArcticMadness.scene.Menu.prototype.selectMultiplayerOption = function (option) {
+    switch (option.text) {
+        case "2 Players":
+            this.application.scenes.load([
+                new ArcticMadness.scene.Game(2)
+            ]);
+            break;
+        case "3 Players":
+            this.application.scenes.load([
+                new ArcticMadness.scene.Game(3)
+            ]);
+            break;
+        case "4 Players":
+            this.application.scenes.load([
+                new ArcticMadness.scene.Game(4)
+            ]);
+            break;
+        case "Back":
+            this.stage.removeChild(this.multiplayerMenu);
+            this.multiplayerMenu = null;
+            this.stage.addChild(this.menu);
             break;
     }
 }
