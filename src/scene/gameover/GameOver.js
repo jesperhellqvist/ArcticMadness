@@ -14,7 +14,6 @@ ArcticMadness.scene.GameOver = function (score) {
    * Calls the constructor method of the super class.
    */
   rune.scene.Scene.call(this);
-  this.init();
 };
 
 //------------------------------------------------------------------------------
