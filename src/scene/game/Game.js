@@ -133,24 +133,24 @@ ArcticMadness.scene.Game.prototype.m_initPlayers = function () {
 
   for (var i = 0; i < this.numberOfPlayers; i++) {
     this.player = new ArcticMadness.entity.Player(
-          700,
-          100 + i * 100,
-          "64_penguin_nogun",
-          {
-            r: Math.floor(Math.random() * 255),
-            g: Math.floor(Math.random() * 255),
-            b: Math.floor(Math.random() * 255),
-          },
-          {
-            left: "A",
-            right: "D",
-            up: "W",
-            down: "S",
-            shoot: "SPACE",
-          },
-          this.gamepads.get(i),
-          0
-        );
+      700,
+      100 + i * 100,
+      "64_penguin_nogun",
+      {
+        r: Math.floor(Math.random() * 255),
+        g: Math.floor(Math.random() * 255),
+        b: Math.floor(Math.random() * 255),
+      },
+      {
+        left: "A",
+        right: "D",
+        up: "W",
+        down: "S",
+        shoot: "SPACE",
+      },
+      this.gamepads.get(i),
+      0
+    );
     this.players.push(this.player);
     this.gamepadsConected.push(this.gamepads.get(0));
   }
@@ -173,13 +173,6 @@ ArcticMadness.scene.Game.prototype.m_initMap = function () {
   this.map.resetMap();
 };
 
-ArcticMadness.scene.Game.prototype.gameOver = function () {
-  this.application.scenes.load([
-    new ArcticMadness.scene.GameOver(this.liveScore.score),
-
-])
-  this.m_stopWaveTimer();
-};
 
 ArcticMadness.scene.Game.prototype.tweenWater = function (player, playerTile) {
   player.falling = true;
@@ -239,6 +232,15 @@ ArcticMadness.scene.Game.prototype.revivePlayer = function (player) {
  * @returns {undefined}
  */
 ArcticMadness.scene.Game.prototype.dispose = function () {
+  console.log("dispose");
+  for(var i = 0; i < this.players.length; i++) {
+    this.stage.removeChild(this.players[i], true);
+  };
+  this.stage.removeChild(this.timerText, true);
+  this.stage.removeChild(this.liveScore, true);
+  this.stage.removeChild(this.map, true);
+  this.stage.removeChild(this.enemies, true);
+  this.gameMusic.stop();
   rune.scene.Scene.prototype.dispose.call(this);
 };
 
@@ -265,15 +267,6 @@ ArcticMadness.scene.Game.prototype.m_checkBulletHitEnemy = function (bullet) {
       this.enemies.enemies.splice(i, 1);
 
       this.updateScore(10);
-
-      //   this.enemies.enemies[i].animation.create("death", [8,9,10,11,12,13], 5, false);
-      //   this.enemies.enemies[i].animation.gotoAndPlay("death");
-      //  this.enemies.enemies[i].animation.current.scripts.add(13, function () {
-      //   console.log("enemy killed");
-      //   this.stage.removeChild(this.enemies.enemies[i], true);
-      //   this.enemies.enemies.splice(i, 1);
-      //  }, this);
-      //  console.log(this.enemies.enemies[i].animation.current.name);
     }
   }
 };
@@ -321,19 +314,16 @@ ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
 };
 
 ArcticMadness.scene.Game.prototype.m_stopWaveTimer = function () {
-  if (this.waveTimer != null){
+  if (this.waveTimer != null) {
     this.waveTimer.stop();
   }
-  
 };
 
 ArcticMadness.scene.Game.prototype.m_showWaveText = function (wave) {
-
   this.bonusContainer = new ArcticMadness.entity.BonusContainer(this);
 
   this.bonusContainer.updateWavesCompleted(wave);
   this.bonusContainer.updateScore(this.map.repairedTilesScore);
-
 
   this.timers
     .create({
@@ -409,8 +399,6 @@ ArcticMadness.scene.Game.prototype.m_startNextWave = function () {
   this.map.setCrackTimer(this.currentWave);
 };
 
-
-
 ArcticMadness.scene.Game.prototype.m_checkIfPlayersAreDead = function () {
   var allPlayersDead = true;
   for (var i = 0; i < this.players.length; i++) {
@@ -420,8 +408,28 @@ ArcticMadness.scene.Game.prototype.m_checkIfPlayersAreDead = function () {
     }
   }
   if (allPlayersDead) {
-    this.gameOver();
+    this.m_stopWaveTimer();
+    this.timers
+      .create({
+        duration: 3000,
+        scope: this,
+        onComplete: function () {
+          this.m_checkIfNewHighscore();
+        },
+      })
+      .start();
   }
 };
 
-
+ArcticMadness.scene.Game.prototype.m_checkIfNewHighscore = function () {
+  console.log("Checking highscore");
+  if (this.application.highscores.test(this.liveScore.score, 0) != -1) {
+    this.application.scenes.load([
+      new ArcticMadness.scene.NewHighscore(this.liveScore.score),
+    ]);
+  } else {
+    this.application.scenes.load([
+      new ArcticMadness.scene.GameOver(this.liveScore.score),
+    ]);
+  }
+};

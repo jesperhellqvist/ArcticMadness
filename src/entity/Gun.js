@@ -51,6 +51,7 @@ ArcticMadness.entity.Gun.prototype.update = function (step) {
 };
 
 ArcticMadness.entity.Gun.prototype.dispose = function () {
+
   rune.display.Sprite.prototype.dispose.call(this);
 };
 

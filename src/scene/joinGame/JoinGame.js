@@ -59,16 +59,17 @@ ArcticMadness.scene.JoinGame.prototype.update = function (step) {
 };
 
 ArcticMadness.scene.JoinGame.prototype.dispose = function () {
+  console.log("dispose");
+  this.stage.removeChild(this.background, true);
+  this.stage.removeChild(this.background2, true);
+  this.stage.removeChild(this.background3, true);
+  this.stage.removeChild(this.background4,  true);
+  this.stage.removeChild(this.howTo, true);
+  this.stage.removeChild(this.player, true);
+  this.stage.removeChild(this.player2, true);
+  this.stage.removeChild(this.player3, true);
+  this.stage.removeChild(this.player4, true);
   rune.scene.Scene.prototype.dispose.call(this);
-  //   this.stage.removeChild(this.background, true);
-  //   this.background = null;
-  //   this.stage.removeChild(this.player, true);
-  //   this.player = null;
-  //   this.stage.removeChild(this.player2, true);
-  //   this.player2 = null;
-  //   this.stage.removeChild(this.player3, true);
-  //   this.player3 = null;
-  //   this.stage.removeChild(this.player4, true);
 };
 
 //------------------------------------------------------------------------------

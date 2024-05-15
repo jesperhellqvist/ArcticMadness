@@ -2,10 +2,9 @@
 // Constructor scope
 //--------------------------------
 
-ArcticMadness.scene.GameOver = function (score) {
+ArcticMadness.scene.NewHighscore = function (score) {
   this.score = score;
 
-  this.gameOverText = null;
   //--------------------------------------------------------------------------
   // Super call
   //--------------------------------------------------------------------------
@@ -14,37 +13,40 @@ ArcticMadness.scene.GameOver = function (score) {
    * Calls the constructor method of the super class.
    */
   rune.scene.Scene.call(this);
-  this.init();
 };
 
 //------------------------------------------------------------------------------
 // Inheritance
 //------------------------------------------------------------------------------
 
-ArcticMadness.scene.GameOver.prototype = Object.create(
+ArcticMadness.scene.NewHighscore.prototype = Object.create(
   rune.scene.Scene.prototype
 );
-ArcticMadness.scene.GameOver.prototype.constructor =
-  ArcticMadness.scene.GameOver;
+ArcticMadness.scene.NewHighscore.prototype.constructor =
+  ArcticMadness.scene.NewHighscore;
 
 //------------------------------------------------------------------------------
 // Override public prototype methods (ENGINE)
 //------------------------------------------------------------------------------
 
-ArcticMadness.scene.GameOver.prototype.init = function () {
+ArcticMadness.scene.NewHighscore.prototype.init = function () {
   rune.scene.Scene.prototype.init.call(this);
-  this.m_createGameOverText();
+  this.m_createNewHighscoreText();
   this.m_createScoreText();
+  this.m_addHighscore();
+  // this.m_initSaveHighscoreButton();
 };
 
-ArcticMadness.scene.GameOver.prototype.update = function (step) {
+ArcticMadness.scene.NewHighscore.prototype.update = function (step) {
   rune.scene.Scene.prototype.update.call(this, step);
   if (this.keyboard.pressed("ENTER")) {
     this.application.scenes.load([new ArcticMadness.scene.Menu()]);
   }
 };
 
-ArcticMadness.scene.GameOver.prototype.dispose = function () {
+//------------------------------------------------------------------------------
+
+ArcticMadness.scene.NewHighscore.prototype.dispose = function () {
   rune.scene.Scene.prototype.dispose.call(this);
 };
 
@@ -52,30 +54,35 @@ ArcticMadness.scene.GameOver.prototype.dispose = function () {
 // Privat prototype methods
 //------------------------------------------------------------------------------
 
-ArcticMadness.scene.GameOver.prototype.m_createGameOverText = function () {
-  this.gameOverText = new rune.text.BitmapField("game over", "thefont");
-  this.gameOverText.autoSize = true;
-  this.gameOverText.width = 250;
-  this.gameOverText.height = 50;
-  this.gameOverText.x =
-    this.application.screen.width / 2 - this.gameOverText.width / 2;
-  this.gameOverText.y =
-    this.application.screen.height / 2 - this.gameOverText.height / 2;
-  this.gameOverText.scaleX = 4;
-  this.gameOverText.scaleY = 4;
-  this.stage.addChild(this.gameOverText);
-};
+ArcticMadness.scene.NewHighscore.prototype.m_createNewHighscoreText =
+  function () {
+    this.newHighscoreText = new rune.text.BitmapField(
+      "new highscore",
+      "thefont"
+    );
+    this.newHighscoreText.autoSize = true;
+    this.newHighscoreText.width = 250;
+    this.newHighscoreText.height = 50;
+    this.newHighscoreText.x = 200;
+    this.newHighscoreText.y = 100;
+    this.newHighscoreText.scaleX = 2;
+    this.newHighscoreText.scaleY = 2;
+    this.stage.addChild(this.newHighscoreText);
+  };
 
-ArcticMadness.scene.GameOver.prototype.m_createScoreText = function () {
+ArcticMadness.scene.NewHighscore.prototype.m_createScoreText = function () {
   this.scoreText = new rune.text.BitmapField("score: " + this.score, "thefont");
   this.scoreText.autoSize = true;
   this.scoreText.width = 250;
   this.scoreText.height = 50;
-  this.scoreText.x =
-    this.application.screen.width / 2 - this.scoreText.width / 2;
-  this.scoreText.y =
-    this.application.screen.height / 2 - this.scoreText.height / 2 + 100;
-  this.scoreText.scaleX = 4;
-  this.scoreText.scaleY = 4;
+  this.scoreText.x = 200;
+  this.scoreText.y = 200;
+  this.scoreText.scaleX = 2;
+  this.scoreText.scaleY = 2;
   this.stage.addChild(this.scoreText);
+};
+
+ArcticMadness.scene.NewHighscore.prototype.m_addHighscore = function () {
+  console;
+  this.application.highscores.send(this.score, "Jesper", 0);
 };

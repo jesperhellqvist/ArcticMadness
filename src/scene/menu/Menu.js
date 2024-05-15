@@ -127,6 +127,19 @@ ArcticMadness.scene.Menu.prototype.update = function (step) {
 
 }
 
+ArcticMadness.scene.Menu.prototype.dispose = function () {
+    console.log("dispose");
+    this.stage.removeChild(this.menu);
+    this.stage.removeChild(this.highscoreText);
+    this.stage.removeChild(this.divingPenguin);
+    this.stage.removeChild(this.background);
+    this.stage.removeChild(this.controller_bg);
+    this.stage.removeChild(this.highscore_bg);
+    this.menuSound.stop();
+    rune.scene.Scene.prototype.dispose.call(this);
+    
+}
+
 //------------------------------------------------------------------------------
 
 ArcticMadness.scene.Menu.prototype.createDivingTween = function () {

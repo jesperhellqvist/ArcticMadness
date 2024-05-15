@@ -88,7 +88,6 @@ ArcticMadness.entity.Enemies.prototype.disposeEnemies = function () {
   for (var i = 0; i < this.enemies.length; i++) {
     this.game.stage.removeChild(this.enemies[i], true);
   }
-
   this.enemies = [];
 };
 
