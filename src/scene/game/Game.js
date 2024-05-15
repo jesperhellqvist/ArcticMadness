@@ -13,18 +13,20 @@
  *
  * Game scene.
  */
-ArcticMadness.scene.Game = function (numberOfPlayers) {
+ArcticMadness.scene.Game = function (numberOfPlayers,menuSound) {
   this.numberOfPlayers = numberOfPlayers;
   this.map = null;
   this.player = null;
   this.enemies = null;
   this.players = [];
   this.gamepadsConected = [];
+  this.menuSound = menuSound;
   this.currentWave = 1;
   this.waveTimer = null;
   this.liveScore = null;
   this.bonusContainer = null;
   this.duration = 45000;
+  this.highscoreList = this.numberOfPlayers-1;
 
   //--------------------------------------------------------------------------
   // Super call
@@ -125,7 +127,7 @@ ArcticMadness.scene.Game.prototype.m_music = function () {
   this.gameMusic.play();
   this.gameMusic.rate = 1; //dynamiskt höja den här för att höja tempot i slutet av varje wave
   this.gameMusic.loop = true;
-  this.gameMusic.preservesPitch = true;
+
 };
 
 ArcticMadness.scene.Game.prototype.m_initPlayers = function () {
@@ -240,7 +242,7 @@ ArcticMadness.scene.Game.prototype.dispose = function () {
   this.stage.removeChild(this.liveScore, true);
   this.stage.removeChild(this.map, true);
   this.stage.removeChild(this.enemies, true);
-  this.gameMusic.stop();
+ 
   rune.scene.Scene.prototype.dispose.call(this);
 };
 
@@ -408,6 +410,7 @@ ArcticMadness.scene.Game.prototype.m_checkIfPlayersAreDead = function () {
     }
   }
   if (allPlayersDead) {
+    this.gameMusic.fade();
     this.m_stopWaveTimer();
     this.timers
       .create({
@@ -433,3 +436,4 @@ ArcticMadness.scene.Game.prototype.m_checkIfNewHighscore = function () {
     ]);
   }
 };
+

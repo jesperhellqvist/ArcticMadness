@@ -50,6 +50,7 @@ ArcticMadness.scene.Menu.prototype.init = function () {
     this.m_initSound();
 
 
+
 }
 
 /**
@@ -135,9 +136,8 @@ ArcticMadness.scene.Menu.prototype.dispose = function () {
     this.stage.removeChild(this.background);
     this.stage.removeChild(this.controller_bg);
     this.stage.removeChild(this.highscore_bg);
-    this.menuSound.stop();
     rune.scene.Scene.prototype.dispose.call(this);
-    
+
 }
 
 //------------------------------------------------------------------------------
@@ -217,15 +217,20 @@ ArcticMadness.scene.Menu.prototype.m_initMenu = function () {
 }
 
 ArcticMadness.scene.Menu.prototype.m_highscoreList = function () {
-    this.playerHighscore = "1.mathias 1337";
-    this.highscoreText = new rune.text.BitmapField(this.playerHighscore, "thefont");
-    this.highscoreText.autoSize = true;
-    this.highscoreText.scaleX = 2;
-    this.highscoreText.scaleY = 2;
-    this.highscoreText.x = 780;
-    this.highscoreText.y = 300;
+    this.highscoreList = new rune.ui.VTList("thefont");
+    this.highscoreList.add("highscores");
+    for (let i = 0; i < 5; i++) {
+        var score = this.application.highscores.get(i,0);
+        console.log(score);
+        this.highscoreList.add(score.name + " " + score.score);
 
-    this.stage.addChild(this.highscoreText);
+    }
+    this.highscoreList.x = 850;
+    this.highscoreList.y = 280;
+    this.highscoreList.scaleX = 2;
+    this.highscoreList.scaleY = 2;
+    this.stage.addChild(this.highscoreList);
+
 }
 
 ArcticMadness.scene.Menu.prototype.m_initSound = function () {
