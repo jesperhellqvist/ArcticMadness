@@ -2,10 +2,11 @@
 // Constructor scope
 //--------------------------------
 
-ArcticMadness.scene.GameOver = function (score) {
+ArcticMadness.scene.GameOver = function (score,menuSound) {
   this.score = score;
-
   this.gameOverText = null;
+  this.menuSound = menuSound;
+  
   //--------------------------------------------------------------------------
   // Super call
   //--------------------------------------------------------------------------
@@ -32,12 +33,33 @@ ArcticMadness.scene.GameOver.prototype.constructor =
 
 ArcticMadness.scene.GameOver.prototype.init = function () {
   rune.scene.Scene.prototype.init.call(this);
-  this.m_createGameOverText();
+  this.m_createBackground();
   this.m_createScoreText();
+  this.m_createMenu();
+  
 };
 
 ArcticMadness.scene.GameOver.prototype.update = function (step) {
   rune.scene.Scene.prototype.update.call(this, step);
+      if (this.gamepads.get(0).justPressed(12)) {
+          // this.moveSound.play();
+          // this.moveSound.loop = false;
+          if (this.gameoverMenu.up()) {
+          }
+      }
+
+      if (this.gamepads.get(0).justPressed(13)) {
+          // this.moveSound.play();
+          // this.moveSound.loop = false;
+          if (this.gameoverMenu.down()) {
+          }
+      }
+
+      if (this.gamepads.get(0).justPressed(0)) {
+          this.gameoverMenu.select();
+      }
+  
+
   if (this.keyboard.pressed("ENTER")) {
     this.application.scenes.load([new ArcticMadness.scene.Menu()]);
   }
@@ -51,30 +73,54 @@ ArcticMadness.scene.GameOver.prototype.dispose = function () {
 // Privat prototype methods
 //------------------------------------------------------------------------------
 
-ArcticMadness.scene.GameOver.prototype.m_createGameOverText = function () {
-  this.gameOverText = new rune.text.BitmapField("game over", "thefont");
-  this.gameOverText.autoSize = true;
-  this.gameOverText.width = 250;
-  this.gameOverText.height = 50;
-  this.gameOverText.x =
-    this.application.screen.width / 2 - this.gameOverText.width / 2;
-  this.gameOverText.y =
-    this.application.screen.height / 2 - this.gameOverText.height / 2;
-  this.gameOverText.scaleX = 4;
-  this.gameOverText.scaleY = 4;
-  this.stage.addChild(this.gameOverText);
+ArcticMadness.scene.GameOver.prototype.m_createBackground = function () {
+  this.gameover_bg = new rune.display.Graphic(
+    0,
+    0,
+    this.application.screen.width,
+    this.application.screen.height, "gameover_bg"
+  );
+  this.stage.addChild(this.gameover_bg);
 };
 
 ArcticMadness.scene.GameOver.prototype.m_createScoreText = function () {
   this.scoreText = new rune.text.BitmapField("score: " + this.score, "thefont");
   this.scoreText.autoSize = true;
-  this.scoreText.width = 250;
-  this.scoreText.height = 50;
-  this.scoreText.x =
-    this.application.screen.width / 2 - this.scoreText.width / 2;
-  this.scoreText.y =
-    this.application.screen.height / 2 - this.scoreText.height / 2 + 100;
   this.scoreText.scaleX = 4;
-  this.scoreText.scaleY = 4;
+  this.scoreText.scaleY = 3;
+  this.scoreText.center = this.application.screen.center;
+  this.scoreText.y = this.application.screen.height / 2;
   this.stage.addChild(this.scoreText);
+};
+
+ArcticMadness.scene.GameOver.prototype.m_createMenu = function () {
+  this.gameoverMenu = new rune.ui.VTMenu(
+    {
+      resource: "thefont",
+      duration: 1000,
+      frequency: 100
+    }
+  );
+  this.gameoverMenu.add("PLAY AGAIN");
+  this.gameoverMenu.add("MAIN MENU");
+  this.gameoverMenu.width = 200;
+  this.gameoverMenu.height = 50;
+  this.gameoverMenu.x = 400;
+  this.gameoverMenu.y = 500;
+  this.gameoverMenu.scaleX = 3;
+  this.gameoverMenu.scaleY = 3;
+  this.gameoverMenu.onSelect(this.selectOption, this);
+
+  this.stage.addChild(this.gameoverMenu);
+};
+
+ArcticMadness.scene.GameOver.prototype.selectOption = function (option) {
+  switch (option.text) {
+    case "PLAY AGAIN":
+      this.application.scenes.load([new ArcticMadness.scene.JoinGame(this.menuSound)]);
+      break;
+    case "MAIN MENU":
+      this.application.scenes.load([new ArcticMadness.scene.Menu()]);
+      break;
+  }
 };

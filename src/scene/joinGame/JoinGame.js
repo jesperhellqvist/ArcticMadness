@@ -243,7 +243,7 @@ ArcticMadness.scene.JoinGame.prototype.m_startGameTimer = function () {
     onComplete: function () {
       this.menuSound.fade();
       this.application.scenes.load([
-        new ArcticMadness.scene.Game(this.connectedGamepads.length),
+        new ArcticMadness.scene.Game(this.connectedGamepads.length,this.menuSound),
       ]);
     },
     scope: this,
