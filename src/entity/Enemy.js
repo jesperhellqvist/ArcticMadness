@@ -82,38 +82,38 @@ ArcticMadness.entity.Enemy.prototype.m_followPlayer = function () {
     if (closestPlayer.isInWater) {
       if (Math.abs(this.x - centerX) > proximityThreshold) {
         if (this.x < centerX) {
-          this.x += 1;
+          this.x += 2;
           this.animation.gotoAndPlay("walk");
           this.flippedX = false;
         } else {
-          this.x -= 1;
+          this.x -= 2;
           this.flippedX = true;
         }
       }
       if (Math.abs(this.y - centerY) > proximityThreshold) {
         if (this.y < centerY) {
-          this.y += 1;
+          this.y += 2;
         } else {
-          this.y -= 1;
+          this.y -= 2;
         }
       }
     }
     if (!closestPlayer.isInWater) {
       if (Math.abs(this.x - closestPlayer.x) > proximityThreshold) {
         if (this.x < closestPlayer.x) {
-          this.x += 1;
+          this.x += 2;
           this.animation.gotoAndPlay("walk");
           this.flippedX = false;
         } else {
-          this.x -= 1;
+          this.x -= 2;
           this.flippedX = true;
         }
       }
       if (Math.abs(this.y - closestPlayer.y) > proximityThreshold) {
         if (this.y < closestPlayer.y) {
-          this.y += 1;
+          this.y += 2;
         } else {
-          this.y -= 1;
+          this.y -= 2;
         }
       }
     }

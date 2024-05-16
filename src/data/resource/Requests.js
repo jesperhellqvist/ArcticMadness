@@ -50,15 +50,16 @@ ArcticMadness.data.Requests.prototype.m_construct = function() {
 	this.add("join_graphics", "./../asset/bgs_menus/join_graphics.png");
 	this.add("menu_bg", "./../asset/bgs_menus/menu_bg.png");
 	this.add("newhighscore_bg", "./../asset/bgs_menus/newhighscore_bg.png");
+	this.add("highscores_bg", "./../asset/highscores_bg.png");
 	this.add("map", "./../asset/map.json");
 	this.add("Shoot", "./../asset/sound/Shoot.wav");
+	this.add("Splash", "./../asset/sound/Splash.mp3");
 	this.add("fastcrack", "./../asset/sound/fastcrack.mp3");
 	this.add("help", "./../asset/sound/help.wav");
 	this.add("lobby", "./../asset/sound/lobby.mp3");
 	this.add("music_bg", "./../asset/sound/music_bg.mp3");
 	this.add("repaircomplete", "./../asset/sound/repaircomplete.mp3");
 	this.add("saved", "./../asset/sound/saved.wav");
-	this.add("splash", "./../asset/sound/splash.mp3");
 	this.add("wavecomplete", "./../asset/sound/wavecomplete.wav");
 	this.add("64_enemy_lepardseal", "./../asset/textures/64_enemy_lepardseal.png");
 	this.add("64_penguin_nogun", "./../asset/textures/64_penguin_nogun.png");
