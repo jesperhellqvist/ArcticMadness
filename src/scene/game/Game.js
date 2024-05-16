@@ -137,7 +137,7 @@ ArcticMadness.scene.Game.prototype.m_initPlayers = function () {
     this.player = new ArcticMadness.entity.Player(
       700,
       100 + i * 100,
-      "64_penguin_nogun",
+      "penguin_texture_64x64",
       {
         r: Math.floor(Math.random() * 255),
         g: Math.floor(Math.random() * 255),

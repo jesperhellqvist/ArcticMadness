@@ -72,7 +72,7 @@ ArcticMadness.entity.Player.prototype.init = function () {
   this.animation.create("up", [15, 16, 17, 18], 10, true);
   //Looking animations, standing still, different directions
   this.animation.create("lookup", [15], 10, true);
-  this.animation.create("lookdown", [10], 10, true);
+  this.animation.create("lookdown", [10], 10, true); //delete this if not used
   this.animation.create("lookside", [5, 9], 10, true); //test for idle when looking sideways
   //Action animations
 

@@ -55,7 +55,7 @@ ArcticMadness.scene.Menu.prototype.init = function () {
   this.m_initAnimations();
   this.m_initMenu();
   this.m_highscoreList();
-  this.m_initSound();
+  // this.m_initSound();
 };
 
 /**
@@ -65,69 +65,40 @@ ArcticMadness.scene.Menu.prototype.init = function () {
 ArcticMadness.scene.Menu.prototype.update = function (step) {
   rune.scene.Scene.prototype.update.call(this, step);
 
-  //Start menu
-  if (!this.multiplayerMenu) {
-    if (this.gamepads.get(0).justPressed(12)) {
-      this.moveSound.play();
-      this.moveSound.loop = false;
-      if (this.menu.up()) {
-      }
-    }
-
-    if (this.gamepads.get(0).justPressed(13)) {
-      this.moveSound.play();
-      this.moveSound.loop = false;
-      if (this.menu.down()) {
-      }
-    }
-
-    if (this.gamepads.get(0).justPressed(0)) {
-      this.menu.select();
+  //Controller input
+  if (this.gamepads.get(0).justPressed(12)) {
+    this.moveSound.play();
+    this.moveSound.loop = false;
+    if (this.menu.up()) {
     }
   }
 
-  // Multiplayer menu
-  if (this.multiplayerMenu) {
-    // Check if multiplayerMenu exists
-    if (this.gamepads.get(0).justPressed(12)) {
-      this.moveSound.play();
-      this.moveSound.loop = false;
-      if (this.multiplayerMenu.up()) {
-      }
-    }
-
-    if (this.gamepads.get(0).justPressed(13)) {
-      this.moveSound.play();
-      this.moveSound.loop = false;
-      if (this.multiplayerMenu.down()) {
-      }
-    }
-
-    if (this.gamepads.get(0).justPressed(0)) {
-      this.multiplayerMenu.select();
+  if (this.gamepads.get(0).justPressed(13)) {
+    this.moveSound.play();
+    this.moveSound.loop = false;
+    if (this.menu.down()) {
     }
   }
 
-  //Temporary go back to menu when pressing ("b" on the controller, square, X on xbox)
-  if (this.gamepads.get(0).justPressed(2)) {
-    this.stage.removeChild(this.controller_bg);
-    this.stage.removeChild(this.highscore_bg);
-    this.stage.removeChild(this.highscoreText);
-    this.stage.removeChild(this.hs1.highscoreList);
-    this.stage.removeChild(this.hs2.highscoreList);
-    this.stage.removeChild(this.hs3.highscoreList);
-    this.stage.removeChild(this.hs4.highscoreList);
-    this.stage.addChild(this.menu);
+  if (this.gamepads.get(0).justPressed(0)) {
+    this.menu.select();
+    this.chooseSound.play();
+    this.chooseSound.loop = false;
   }
 
+
+  //diving penguin animation on homescreen
   if (this.divingPenguin.y == 600 && this.divingPenguin.x == -500) {
     this.divingPenguin.y = 500;
   } else if (this.divingPenguin.x >= 600) {
     this.divingPenguin.velocity.x = 0;
     this.createDivingTween();
   }
+
 };
 
+
+//Kolla igenom så dessa inte är har "gamla" metoder som inte används, och är flyttade till ny scene
 ArcticMadness.scene.Menu.prototype.dispose = function () {
   console.log("dispose");
   this.stage.removeChild(this.menu);
@@ -149,10 +120,13 @@ ArcticMadness.scene.Menu.prototype.createDivingTween = function () {
       target: this.divingPenguin,
       scope: this,
       duration: 550,
-      onDispose: function (divingPenguin) {
-        this.splashEffect = this.application.sounds.sound.get("Splash");
+      onUpdate : function () {
+        //this.splashEffect = this.application.sounds.sound.get("Splash");
         this.splashEffect.play();
         this.splashEffect.loop = false;
+        
+      },
+      onDispose: function (divingPenguin) {
         this.divingTweenActive = false;
         divingPenguin.x = -500;
         this.divingPenguin.velocity.x = 2;
@@ -180,7 +154,7 @@ ArcticMadness.scene.Menu.prototype.m_initBackground = function () {
     500,
     64,
     64,
-    "64_penguin_nogun"
+    "penguin_texture_64x64"
   );
   this.stage.addChild(this.divingPenguin);
 };
@@ -209,6 +183,7 @@ ArcticMadness.scene.Menu.prototype.m_initMenu = function () {
   this.menu.add("START GAME");
   this.menu.add("HOW TO PLAY");
   this.menu.add("HIGHSCORE");
+  this.menu.add("CREDITS");
 
   this.menu.x = 200;
   this.menu.y = 210;
@@ -221,6 +196,8 @@ ArcticMadness.scene.Menu.prototype.m_initMenu = function () {
 ArcticMadness.scene.Menu.prototype.m_highscoreList = function () {
   this.highscoreList = new rune.ui.VTList("thefont");
   this.highscoreList.add("highscores");
+
+  //make this a slideshow of all highscores, 1-4 players
   for (var i = 0; i < 5; i++) {
     var score = this.application.highscores.get(i, 0);
     console.log(score);
@@ -247,64 +224,18 @@ ArcticMadness.scene.Menu.prototype.selectOption = function (option) {
       ]);
       break;
     case "HOW TO PLAY":
-      this.controller_bg = new rune.display.Graphic(
-        0,
-        0,
-        this.application.screen.width,
-        this.application.screen.height,
-        "controller_bg"
-      );
-      this.stage.addChild(this.controller_bg);
-      this.stage.removeChild(this.menu);
-
+      this.application.scenes.load([
+        new ArcticMadness.scene.HowtoPlay(),
+      ]);
       break;
     case "HIGHSCORE":
-      this.m_initHighscore();
+      this.application.scenes.load([
+        new ArcticMadness.scene.Highscores(),
+      ]);
+      break;
+      case "CREDITS":
+      console.log("CREDITS, visa ljudskapare, samt mig o jepa")
       break;
   }
 };
 
-ArcticMadness.scene.Menu.prototype.m_initHighscore = function () {
-  this.highscore_bg = new rune.display.Graphic(
-    0,
-    0,
-    this.application.screen.width,
-    this.application.screen.height,
-    "highscores_bg"
-  );
-  this.stage.addChild(this.highscore_bg);
-  this.stage.removeChild(this.menu);
-  this.init_hs1();
-  this.init_hs2();
-  this.init_hs3();
-  this.init_hs4();
-};
-
-ArcticMadness.scene.Menu.prototype.init_hs1 = function () {
-  this.hs1 = new ArcticMadness.entity.HighscoreList("singeplayer", 0, this, 100, 100);
-  this.hs1.x = 35;
-    this.hs1.y = 270;
- 
-  this.stage.addChild(this.hs1);
-};
-
-ArcticMadness.scene.Menu.prototype.init_hs2 = function () {
-  this.hs2 = new ArcticMadness.entity.HighscoreList("2 players", 1, this, 300, 100);
-    this.hs2.x = 370;
-    this.hs2.y = 270;
-  this.stage.addChild(this.hs2);
-};
-
-ArcticMadness.scene.Menu.prototype.init_hs3 = function () {
-  this.hs3 = new ArcticMadness.entity.HighscoreList("3 players", 2, this, 500, 100);
-  this.hs3.x = 690;
-  this.hs3.y = 270;
-  this.stage.addChild(this.hs3);
-};
-
-ArcticMadness.scene.Menu.prototype.init_hs4 = function () {
-  this.hs4 = new ArcticMadness.entity.HighscoreList("4 players", 3, this, 700, 100);
-  this.hs4.x = 1000;
-  this.hs4.y = 270;
-  this.stage.addChild(this.hs4);
-};
