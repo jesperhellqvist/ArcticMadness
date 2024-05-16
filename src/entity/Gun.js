@@ -78,21 +78,21 @@ ArcticMadness.entity.Gun.prototype.m_handleInputStickRight = function () {
     this.player.flippedX = false;
     this.x = this.player.x + 26;
     this.y = this.player.y + 20;
-    this.player.animation.gotoAndPlay("lookside");
+    // this.player.animation.gotoAndPlay("lookside");
   }
 
   //Down
   if (angle > 45 && angle < 135) {
-    this.player.animation.gotoAndPlay("lookdown");
+    // this.player.animation.gotoAndPlay("lookdown");
   }
   //Left
   if (angle > 135 && angle < 225) {
     this.player.flippedX = true;
     this.x = this.player.x + 10;
     this.y = this.player.y + 20;
-    this.player.animation.gotoAndPlay("lookside");
+    // this.player.animation.gotoAndPlay("lookside");
    if (this.gamepad.stickLeftLeft) {
-    this.player.animation.gotoAndPlay("lookside");
+    // this.player.animation.gotoAndPlay("lookside");
   
    }
 
@@ -101,7 +101,7 @@ ArcticMadness.entity.Gun.prototype.m_handleInputStickRight = function () {
   if (angle > 225 && angle < 315) {
     this.x = this.player.x + 16;
     this.y = this.player.y + 10;
-    this.player.animation.gotoAndPlay("lookup");
+    // this.player.animation.gotoAndPlay("lookup");
    
   }
 

@@ -125,7 +125,7 @@ ArcticMadness.scene.JoinGame.prototype.m_playerJoinGame = function () {
     this.player = new ArcticMadness.entity.Player(
       320,
       180,
-      "64_penguin_nogun",
+      "penguin_texture_64x64",
       {
         r: Math.floor(Math.random() * 255),
         g: Math.floor(Math.random() * 255),
