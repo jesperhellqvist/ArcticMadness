@@ -55,7 +55,7 @@ ArcticMadness.scene.Menu.prototype.init = function () {
   this.m_initAnimations();
   this.m_initMenu();
   this.m_highscoreList();
-  // this.m_initSound();
+  this.m_initSound();
 };
 
 /**
@@ -121,7 +121,7 @@ ArcticMadness.scene.Menu.prototype.createDivingTween = function () {
       scope: this,
       duration: 550,
       onUpdate : function () {
-        //this.splashEffect = this.application.sounds.sound.get("Splash");
+        this.splashEffect = this.application.sounds.sound.get("Splash");
         this.splashEffect.play();
         this.splashEffect.loop = false;
         

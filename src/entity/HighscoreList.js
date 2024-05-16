@@ -70,7 +70,7 @@ ArcticMadness.entity.HighscoreList.prototype.m_createTable = function () {
   }
   this.highscoreList.x = this.x;
   this.highscoreList.y = this.y;
-  this.highscoreList.scaleX = 2;
-  this.highscoreList.scaleY = 2;
+  this.highscoreList.scaleX = 1.8;
+  this.highscoreList.scaleY = 1.8;
   this.menu.stage.addChild(this.highscoreList);
 };
