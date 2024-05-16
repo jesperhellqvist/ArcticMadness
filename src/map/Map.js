@@ -133,7 +133,14 @@ ArcticMadness.map.Map.prototype.removeReviveTile = function (player) {
       if (tileIndex >= 0) {
         var tileValue = this.tileLayer.getTileValueAt(tileIndex);
         if (tileValue === 38) {
-          this.tileLayer.setTileValueAt(tileIndex, 1);
+          this.tileLayer.setTileValueAt(tileIndex, 33); // test
+          this.m_createTimer(
+            2000,
+            function () {
+              this.m_breakIce(tileIndex);
+            },
+            tileIndex
+          );
           return;
         }
       }
@@ -607,6 +614,8 @@ ArcticMadness.map.Map.prototype.m_updatePlayerState = function (player) {
     );
     player.inWaterTile = playerTileIndex;
     player.isRevivable = true;
+
+
     if (player.revivingTileSet === false) {
       this.m_setReviveTile(player);
     }
