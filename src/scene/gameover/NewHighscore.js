@@ -2,6 +2,15 @@
 // Constructor scope
 //--------------------------------
 
+ArcticMadness.scene.NewHighscore = function (score, numberOfPlayers, bestScore) {
+  this.score = score;
+  this.numberOfPlayers = numberOfPlayers;
+  this.bestScore = bestScore;
+  this.visualKeyboard = null;
+  this.selectBox = null;
+  this.ListName = "";
+  this.ListNameText = null;
+  this.titleText = null;
 ArcticMadness.scene.NewHighscore = function (score,menuSound) {
     this.score = score;
     this.visualKeyboard = null;
@@ -38,6 +47,11 @@ ArcticMadness.scene.NewHighscore.prototype.constructor =
 //------------------------------------------------------------------------------
 
 ArcticMadness.scene.NewHighscore.prototype.init = function () {
+  rune.scene.Scene.prototype.init.call(this);
+  this.m_createNewHighscoreText();
+  this.m_createScoreText();
+  this.m_initVisualKeyboard();
+  this.m_initSelectBox();
     rune.scene.Scene.prototype.init.call(this);
     this.m_createBackground();
     this.m_createNewHighscoreText();
@@ -51,6 +65,10 @@ ArcticMadness.scene.NewHighscore.prototype.init = function () {
 };
 
 ArcticMadness.scene.NewHighscore.prototype.update = function (step) {
+  rune.scene.Scene.prototype.update.call(this, step);
+  this.m_handleSelectBoxMovement();
+  this.m_handleSelectBoxInput();
+  this.m_removeLetter();
     rune.scene.Scene.prototype.update.call(this, step);
     if (this.keyboard.pressed("ENTER")) {
         this.application.scenes.load([new ArcticMadness.scene.Menu()]);
@@ -63,7 +81,10 @@ ArcticMadness.scene.NewHighscore.prototype.update = function (step) {
 //------------------------------------------------------------------------------
 
 ArcticMadness.scene.NewHighscore.prototype.dispose = function () {
-    rune.scene.Scene.prototype.dispose.call(this);
+  this.stage.removeChild(this.visualKeyboard, true);
+    this.stage.removeChild(this.selectBox, true);
+    this.stage.removeChild(this.ListNameText, true);  
+  rune.scene.Scene.prototype.dispose.call(this);
 };
 
 //------------------------------------------------------------------------------
@@ -77,6 +98,21 @@ ArcticMadness.scene.NewHighscore.prototype.m_createBackground = function () {
         this.application.screen.width,
         this.application.screen.height,
         "newhighscore_bg"
+    );
+    this.stage.addChild(this.background);
+};
+
+ArcticMadness.scene.NewHighscore.prototype.m_createNewHighscoreText =
+  function () {
+    if(this.bestScore){
+      this.titleText = "new highscore";
+    }else{
+      this.titleText = "top five";
+    }
+
+    this.newHighscoreText = new rune.text.BitmapField(
+      this.titleText,
+      "thefont"
     );
     this.stage.addChild(this.background);
 };
@@ -115,6 +151,14 @@ ArcticMadness.scene.NewHighscore.prototype.m_initVisualKeyboard = function () {
         "keyboard");
     this.stage.addChild(this.visualKeyboard);
 
+  this.visualKeyboard = new rune.display.Graphic(
+    325,
+    400,
+    630,
+    280,
+    "keyboard"
+  );
+  this.stage.addChild(this.visualKeyboard);
 };
 
 ArcticMadness.scene.NewHighscore.prototype.m_initSelectBox = function () {
@@ -127,6 +171,9 @@ ArcticMadness.scene.NewHighscore.prototype.m_initSelectBox = function () {
 
 ArcticMadness.scene.NewHighscore.prototype.m_handleSelectBoxMovement = function () {
     var gamepad = this.gamepads.get(0);
+ArcticMadness.scene.NewHighscore.prototype.m_handleSelectBoxMovement =
+  function () {
+    var gamepad = this.gamepads.get(0);
     if (gamepad.justPressed(12) && this.selectBox.y > 400) {
         this.selectBox.y -= 70;
     }
@@ -134,11 +181,23 @@ ArcticMadness.scene.NewHighscore.prototype.m_handleSelectBoxMovement = function 
         this.selectBox.y += 70;
     }
     if (gamepad.justPressed(14) && this.selectBox.x > 325) {
+      this.selectBox.x -= 70;
+    if (gamepad.justPressed(14) && this.selectBox.x > 325) {
         this.selectBox.x -= 70;
     }
     if (gamepad.justPressed(15) && this.selectBox.x < 885) {
+      this.selectBox.x += 70;
+    if (gamepad.justPressed(15) && this.selectBox.x < 885) {
         this.selectBox.x += 70;
     }
+    if (this.selectBox.y > 540) {
+      this.selectBox.x = 535;
+      this.selectBox.y = 610;
+      this.selectBox.scaleX = 3;
+    } else {
+      this.selectBox.scaleX = 1;
+    }
+  };
     if (this.selectBox.y > 540) {
         this.selectBox.x = 535;
         this.selectBox.y = 610;
@@ -148,7 +207,8 @@ ArcticMadness.scene.NewHighscore.prototype.m_handleSelectBoxMovement = function 
     }
 };
 
-ArcticMadness.scene.NewHighscore.prototype.m_handleSelectBoxInput = function () {
+ArcticMadness.scene.NewHighscore.prototype.m_handleSelectBoxInput =
+  function () {
     var gamepad = this.gamepads.get(0);
 
     if (gamepad.justPressed(0)) {
@@ -268,6 +328,8 @@ ArcticMadness.scene.NewHighscore.prototype.updateListName = function (letter) {
     if (this.ListNameText != null) {
         this.stage.removeChild(this.ListNameText, true);
     }
+  }
+};
 
     if (this.ListName.length < 9) {
         this.ListName += letter;

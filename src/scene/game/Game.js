@@ -13,7 +13,7 @@
  *
  * Game scene.
  */
-ArcticMadness.scene.Game = function (numberOfPlayers,menuSound) {
+ArcticMadness.scene.Game = function (numberOfPlayers, menuSound) {
   this.numberOfPlayers = numberOfPlayers;
   this.map = null;
   this.player = null;
@@ -425,10 +425,16 @@ ArcticMadness.scene.Game.prototype.m_checkIfPlayersAreDead = function () {
 };
 
 ArcticMadness.scene.Game.prototype.m_checkIfNewHighscore = function () {
-  console.log("Checking highscore");
-  if (this.application.highscores.test(this.liveScore.score, 0) != -1) {
+  console.log(this.numberOfPlayers -1);
+  console.log(this.application.highscores);
+
+  if (this.application.highscores.test(this.liveScore.score, this.numberOfPlayers - 1) != -1) {
+    var bestScore = false;
+    if(this.liveScore.score > this.application.highscores.get(0, this.numberOfPlayers - 1).score) {
+      bestScore = true;
+    }
     this.application.scenes.load([
-      new ArcticMadness.scene.NewHighscore(this.liveScore.score,this.menuSound),
+      new ArcticMadness.scene.NewHighscore(this.liveScore.score, this.numberOfPlayers, bestScore),
     ]);
   } else {
     this.application.scenes.load([
@@ -436,4 +442,3 @@ ArcticMadness.scene.Game.prototype.m_checkIfNewHighscore = function () {
     ]);
   }
 };
-
