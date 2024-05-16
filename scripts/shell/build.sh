@@ -13,6 +13,7 @@ npx google-closure-compiler \
 --js "./../../src/scene/gameover/NewHighscore.js" \
 --js "./../../src/scene/gameover/GameOver.js" \
 --js "./../../src/entity/LiveScore.js" \
+--js "./../../src/entity/BonusContainer.js" \
 --js "./../../src/entity/Bullet.js" \
 --js "./../../src/entity/Gun.js" \
 --js "./../../src/entity/Enemy.js" \
