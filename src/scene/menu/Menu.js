@@ -42,7 +42,7 @@ ArcticMadness.scene.Menu.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
     this.moveSound = this.application.sounds.sound.get("shoot");
     this.chooseSound = this.application.sounds.sound.get("repaircomplete");
-    this.menuSound = this.application.sounds.master.get("lobby2");
+    this.menuSound = this.application.sounds.master.get("lobby");
     this.m_initBackground();
     this.m_initAnimations();
     this.m_initMenu();
@@ -154,7 +154,7 @@ ArcticMadness.scene.Menu.prototype.createDivingTween = function () {
 
             },
             onDispose: function (divingPenguin) {
-                this.splashEffect = this.application.sounds.sound.get("Splash");
+                this.splashEffect = this.application.sounds.sound.get("splash");
                 this.splashEffect.play();
                 this.splashEffect.loop = false;
                 this.divingTweenActive = false;

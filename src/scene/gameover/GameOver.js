@@ -36,6 +36,9 @@ ArcticMadness.scene.GameOver.prototype.init = function () {
   this.m_createBackground();
   this.m_createScoreText();
   this.m_createMenu();
+  this.m_createAnimations();
+  this.menuSound.stop();
+  this.menuSound.play();
   
 };
 
@@ -87,10 +90,14 @@ ArcticMadness.scene.GameOver.prototype.m_createScoreText = function () {
   this.scoreText = new rune.text.BitmapField("score: " + this.score, "thefont");
   this.scoreText.autoSize = true;
   this.scoreText.scaleX = 4;
-  this.scoreText.scaleY = 3;
+  this.scoreText.scaleY = 4;
   this.scoreText.center = this.application.screen.center;
   this.scoreText.y = this.application.screen.height / 2;
   this.stage.addChild(this.scoreText);
+};
+
+ArcticMadness.scene.GameOver.prototype.m_createAnimations = function () {
+  this.drowningPenguin = new rune.display.Sprite(-50, 500, 64, 64, "64_penguin_nogun");
 };
 
 ArcticMadness.scene.GameOver.prototype.m_createMenu = function () {

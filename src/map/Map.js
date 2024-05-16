@@ -228,8 +228,8 @@ ArcticMadness.map.Map.prototype.crackRandomTile = function (currentWave) {
   if (iceTiles.length > 0) {
     // Randomly select one of the ice tiles
     var randomIndex = iceTiles[Math.floor(Math.random() * iceTiles.length)];
-    this.crackSound = this.map.application.sounds.sound.get("cracking");
-    // this.crackSound.play();
+    this.crackSound = this.map.application.sounds.sound.get("fastcrack");
+    this.crackSound.play();
     this.crackSound.loop = false;
     this.tileLayer.setTileValueAt(randomIndex, 33); // Change tile value to 19 (crack)
     this.m_createTimer(
@@ -821,7 +821,7 @@ ArcticMadness.map.Map.prototype.m_repairIce = function (
   ) {
     this.tileLayer.setTileValueAt(playerTileIndex, 1);
     this.completedSound =
-      this.map.application.sounds.sound.get("repaircomplete");
+    this.map.application.sounds.sound.get("repaircomplete");
     this.completedSound.play();
     this.completedSound.loop = false;
     this.repairedTilesScore += 10;

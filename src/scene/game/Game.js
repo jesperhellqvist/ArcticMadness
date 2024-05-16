@@ -184,7 +184,7 @@ ArcticMadness.scene.Game.prototype.tweenWater = function (player, playerTile) {
     duration: 550,
     onUpdate: function (player) {
       player.animation.gotoAndPlay("falling");
-      this.drownSoundEffect = this.application.sounds.sound.get("Splash");
+      this.drownSoundEffect = this.application.sounds.sound.get("splash");
       this.drownSoundEffect.play();
       this.drownSoundEffect.loop = false;
     },
@@ -428,11 +428,11 @@ ArcticMadness.scene.Game.prototype.m_checkIfNewHighscore = function () {
   console.log("Checking highscore");
   if (this.application.highscores.test(this.liveScore.score, 0) != -1) {
     this.application.scenes.load([
-      new ArcticMadness.scene.NewHighscore(this.liveScore.score),
+      new ArcticMadness.scene.NewHighscore(this.liveScore.score,this.menuSound),
     ]);
   } else {
     this.application.scenes.load([
-      new ArcticMadness.scene.GameOver(this.liveScore.score),
+      new ArcticMadness.scene.GameOver(this.liveScore.score,this.menuSound),
     ]);
   }
 };
