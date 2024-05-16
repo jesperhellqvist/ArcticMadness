@@ -52,6 +52,7 @@ ArcticMadness.data.Requests.prototype.m_construct = function() {
 	this.add("fish", "./../asset/fish.png");
 	this.add("gameover_bg", "./../asset/gameover_bg.png");
 	this.add("gun_directions2", "./../asset/gun_directions2.png");
+	this.add("highscores_bg", "./../asset/highscores_bg.png");
 	this.add("how_to", "./../asset/how_to.png");
 	this.add("join_graphics", "./../asset/join_graphics.png");
 	this.add("keyboard", "./../asset/keyboard.png");
