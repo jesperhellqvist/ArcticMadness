@@ -513,33 +513,32 @@ ArcticMadness.map.Map.prototype.m_createAnimationBlock = function (
   playerTileIndex,
   timer
 ) {
-  this.animationBlock = new rune.tilemap.Block(this.map, tileValue);
-  this.animationBlock.x = playerTile.x;
-  this.animationBlock.y = playerTile.y;
+  player.animationBlock = new rune.tilemap.Block(this.map, tileValue);
+  player.animationBlock.x = playerTile.x;
+  player.animationBlock.y = playerTile.y;
   console.log(tileValue);
   var animationFrames = [];
   for (var i = tileValue - 1; i >= 31; i--) {
     animationFrames.push(i);
   }
   var lastFrame = animationFrames.length - 1;
-  this.animationBlock.animation.create("crackToIce", animationFrames, 2, false);
-  this.animationBlock.animation.current.scripts.add(
+  player.animationBlock.animation.create("crackToIce", animationFrames, 2, false);
+  player.animationBlock.animation.current.scripts.add(
     lastFrame,
     function () {
       this.m_repairIce(player, tileValue, playerTileIndex, timer);
       if (
-        this.animationBlock &&
-        this.animationBlock.animation &&
-        this.animationBlock.animation.current
+        player.animationBlock &&
+        player.animationBlock.animation &&
+        player.animationBlock.animation.current
       ) {
-        this.animationBlock.animation.current.scripts.remove(lastFrame);
+        player.animationBlock.animation.current.scripts.remove(lastFrame);
       }
     },
     this
   );
 
-  this.game.stage.addChildAt(this.animationBlock, 0);
-  player.animationBlock = this.animationBlock;
+  this.game.stage.addChildAt(player.animationBlock, 0);
 };
 
 //------------------------------------------------------------------------------
