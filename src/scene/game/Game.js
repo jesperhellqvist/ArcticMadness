@@ -217,6 +217,7 @@ ArcticMadness.scene.Game.prototype.resetPlayer = function (player) {
   player.health = 250; // Or whatever the max health is
   player.x = nearestIceTile.x;
   player.y = nearestIceTile.y;
+  player.gun.alpha = 1;
   player.animation.gotoAndPlay("idle");
 };
 
