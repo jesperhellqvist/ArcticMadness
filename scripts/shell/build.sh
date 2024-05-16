@@ -22,6 +22,8 @@ npx google-closure-compiler \
 --js "./../../src/map/Map.js" \
 --js "./../../src/scene/game/Game.js" \
 --js "./../../src/scene/joinGame/JoinGame.js" \
+--js "./../../src/scene/howtoPlay/HowtoPlay.js" \
+--js "./../../src/scene/highscores/Highscores.js" \
 --js "./../../src/scene/menu/Menu.js" \
 --js "./../../src/system/Main.js" \
 --js "./../../src/scope/Alias.js" \
