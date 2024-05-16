@@ -117,10 +117,7 @@ ArcticMadness.scene.JoinGame.prototype.m_initAnimations = function () {
 };
 
 ArcticMadness.scene.JoinGame.prototype.m_playerJoinGame = function () {
-  if (
-    this.gamepads.get(0).justPressed(0) &&
-    !this.connectedGamepads.includes(0)
-  ) {
+  if (this.gamepads.get(0).justPressed(0)) {
     this.connectedGamepads.push(0);
     this.player = new ArcticMadness.entity.Player(
       320,
@@ -147,8 +144,7 @@ ArcticMadness.scene.JoinGame.prototype.m_playerJoinGame = function () {
     this.stage.addChild(this.howTo);
   }
   if (
-    this.gamepads.get(1).justPressed(0) &&
-    !this.connectedGamepads.includes(1)
+    this.gamepads.get(1).justPressed(0) 
   ) {
     this.connectedGamepads.push(1);
     this.player2 = new ArcticMadness.entity.Player(
@@ -175,12 +171,38 @@ ArcticMadness.scene.JoinGame.prototype.m_playerJoinGame = function () {
     this.background2.animation.gotoAndStop("ice");
   }
   if (
-    this.gamepads.get(2).justPressed(0) &&
-    !this.connectedGamepads.includes(2)
+    this.gamepads.get(2).justPressed(0)
   ) {
     this.connectedGamepads.push(2);
     this.player3 = new ArcticMadness.entity.Player(
       320,
+      540,
+      "penguin_texture_64x64",
+      {
+        r: Math.floor(Math.random() * 255),
+        g: Math.floor(Math.random() * 255),
+        b: Math.floor(Math.random() * 255),
+      },
+      {
+        left: "F",
+        right: "H",
+        up: "T",
+        down: "G",
+        shoot: "R",
+      },
+      this.gamepads.get(2),
+      2
+    );
+    this.stage.addChild(this.player3);
+    this.m_startGameTimer();
+    this.background3.animation.gotoAndStop("ice");
+  }
+  if (
+    this.gamepads.get(3).justPressed(0)
+  ) {
+    this.connectedGamepads.push(3);
+    this.player4 = new ArcticMadness.entity.Player(
+      930,
       540,
       "64_penguin_nogun",
       {
@@ -194,34 +216,6 @@ ArcticMadness.scene.JoinGame.prototype.m_playerJoinGame = function () {
         up: "I",
         down: "K",
         shoot: "O",
-      },
-      this.gamepads.get(2),
-      2
-    );
-    this.stage.addChild(this.player3);
-    this.m_startGameTimer();
-    this.background3.animation.gotoAndStop("ice");
-  }
-  if (
-    this.gamepads.get(3).justPressed(0) &&
-    !this.connectedGamepads.includes(3)
-  ) {
-    this.connectedGamepads.push(3);
-    this.player4 = new ArcticMadness.entity.Player(
-      930,
-      540,
-      "64_penguin_nogun",
-      {
-        r: Math.floor(Math.random() * 255),
-        g: Math.floor(Math.random() * 255),
-        b: Math.floor(Math.random() * 255),
-      },
-      {
-        left: "N",
-        right: "M",
-        up: "U",
-        down: "H",
-        shoot: "Y",
       },
       this.gamepads.get(3),
       3
@@ -243,7 +237,7 @@ ArcticMadness.scene.JoinGame.prototype.m_startGameTimer = function () {
     onComplete: function () {
       this.menuSound.fade();
       this.application.scenes.load([
-        new ArcticMadness.scene.Game(this.connectedGamepads.length,this.menuSound),
+        new ArcticMadness.scene.Game(this.connectedGamepads.length,this.menuSound, this.connectedGamepads),
       ]);
     },
     scope: this,

@@ -13,12 +13,13 @@
  *
  * Game scene.
  */
-ArcticMadness.scene.Game = function (numberOfPlayers, menuSound) {
+ArcticMadness.scene.Game = function (numberOfPlayers, menuSound, gamepads) {
   this.numberOfPlayers = numberOfPlayers;
   this.map = null;
   this.player = null;
   this.enemies = null;
   this.players = [];
+  this.gamepadsFromJoin = gamepads;
   this.gamepadsConected = [];
   this.menuSound = menuSound;
   this.currentWave = 1;
@@ -27,6 +28,7 @@ ArcticMadness.scene.Game = function (numberOfPlayers, menuSound) {
   this.bonusContainer = null;
   this.duration = 45000;
   this.highscoreList = this.numberOfPlayers-1;
+  
 
   //--------------------------------------------------------------------------
   // Super call
@@ -131,7 +133,6 @@ ArcticMadness.scene.Game.prototype.m_music = function () {
 };
 
 ArcticMadness.scene.Game.prototype.m_initPlayers = function () {
-  console.log(this.numberOfPlayers);
 
   for (var i = 0; i < this.numberOfPlayers; i++) {
     this.player = new ArcticMadness.entity.Player(
@@ -150,7 +151,7 @@ ArcticMadness.scene.Game.prototype.m_initPlayers = function () {
         down: "S",
         shoot: "SPACE",
       },
-      this.gamepads.get(i),
+      this.gamepads.get(this.gamepadsFromJoin[i]),
       0
     );
     this.players.push(this.player);
@@ -218,6 +219,7 @@ ArcticMadness.scene.Game.prototype.resetPlayer = function (player) {
   player.x = nearestIceTile.x;
   player.y = nearestIceTile.y;
   player.gun.alpha = 1;
+  player.flicker.start();
   player.animation.gotoAndPlay("idle");
 };
 
