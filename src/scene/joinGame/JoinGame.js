@@ -159,7 +159,7 @@ ArcticMadness.scene.JoinGame.prototype.m_playerJoinGame = function () {
     this.player2 = new ArcticMadness.entity.Player(
       930,
       180,
-      "64_penguin_nogun",
+      "penguin_texture_64x64",
       {
         r: Math.floor(Math.random() * 255),
         g: Math.floor(Math.random() * 255),
@@ -215,7 +215,7 @@ ArcticMadness.scene.JoinGame.prototype.m_playerJoinGame = function () {
     this.player4 = new ArcticMadness.entity.Player(
       930,
       540,
-      "64_penguin_nogun",
+      "penguin_texture_64x64",
       {
         r: Math.floor(Math.random() * 255),
         g: Math.floor(Math.random() * 255),
