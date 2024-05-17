@@ -246,7 +246,7 @@ ArcticMadness.scene.JoinGame.prototype.m_startGameTimer = function () {
   this.gameStartTimer = this.timers.create({
     duration: 5000,
     onComplete: function () {
-      this.menuSound.fade();
+      this.menuSound.fade(0,3000);
       this.application.scenes.load([
         new ArcticMadness.scene.Game(
           this.connectedGamepads.length,

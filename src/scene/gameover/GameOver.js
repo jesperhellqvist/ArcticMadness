@@ -37,8 +37,7 @@ ArcticMadness.scene.GameOver.prototype.init = function () {
   this.m_createScoreText();
   this.m_createMenu();
   this.m_createAnimations();
-  this.menuSound.stop();
-  this.menuSound.play();
+  this.menuSound.fade(1,3000);
   
 };
 

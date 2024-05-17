@@ -126,8 +126,9 @@ ArcticMadness.scene.Game.prototype.m_timerCountdown = function () {
 
 ArcticMadness.scene.Game.prototype.m_music = function () {
   this.gameMusic = this.application.sounds.master.get("music_bg");
+  this.gameMusic.volume= 0;
+  this.gameMusic.fade(1,3000);
   this.gameMusic.play();
-  this.gameMusic.rate = 1; //dynamiskt höja den här för att höja tempot i slutet av varje wave
   this.gameMusic.loop = true;
 
 };
@@ -437,7 +438,7 @@ ArcticMadness.scene.Game.prototype.m_checkIfNewHighscore = function () {
       bestScore = true;
     }
     this.application.scenes.load([
-      new ArcticMadness.scene.NewHighscore(this.liveScore.score, this.numberOfPlayers, bestScore),
+      new ArcticMadness.scene.NewHighscore(this.liveScore.score, this.numberOfPlayers, bestScore, this.menuSound),
     ]);
   } else {
     this.application.scenes.load([
