@@ -63,7 +63,7 @@ ArcticMadness.scene.JoinGame.prototype.dispose = function () {
   this.stage.removeChild(this.background, true);
   this.stage.removeChild(this.background2, true);
   this.stage.removeChild(this.background3, true);
-  this.stage.removeChild(this.background4,  true);
+  this.stage.removeChild(this.background4, true);
   this.stage.removeChild(this.howTo, true);
   this.stage.removeChild(this.player, true);
   this.stage.removeChild(this.player2, true);
@@ -91,7 +91,7 @@ ArcticMadness.scene.JoinGame.prototype.m_initBackground = function () {
     "join_graphics"
   );
 
-  this.howTo= new rune.display.Sprite(30, 20, 220, 220, "how_to");
+  this.howTo = new rune.display.Sprite(30, 20, 220, 220, "how_to");
 
   this.stage.addChild(this.background);
   this.stage.addChild(this.background2);
@@ -113,13 +113,18 @@ ArcticMadness.scene.JoinGame.prototype.m_initAnimations = function () {
   this.background2.animation.create("ice", [2], 4, false);
   this.background3.animation.create("ice", [2], 4, false);
   this.background4.animation.create("ice", [2], 4, false);
-  this.howTo.animation.create("move", [0,1,2,3,5,6,7,8,9,10,11,11,11,11,10,12,13,13,12,13,13], 4, true);
+  this.howTo.animation.create(
+    "move",
+    [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 11, 11, 11, 10, 12, 13, 13, 12, 13, 13],
+    4,
+    true
+  );
 };
 
 ArcticMadness.scene.JoinGame.prototype.m_playerJoinGame = function () {
   if (
     this.gamepads.get(0).justPressed(0) &&
-    !this.connectedGamepads.includes(0)
+    this.connectedGamepads.indexOf(0) === -1
   ) {
     this.connectedGamepads.push(0);
     this.player = new ArcticMadness.entity.Player(
@@ -148,7 +153,7 @@ ArcticMadness.scene.JoinGame.prototype.m_playerJoinGame = function () {
   }
   if (
     this.gamepads.get(1).justPressed(0) &&
-    !this.connectedGamepads.includes(1)
+    this.connectedGamepads.indexOf(1) === -1
   ) {
     this.connectedGamepads.push(1);
     this.player2 = new ArcticMadness.entity.Player(
@@ -176,11 +181,39 @@ ArcticMadness.scene.JoinGame.prototype.m_playerJoinGame = function () {
   }
   if (
     this.gamepads.get(2).justPressed(0) &&
-    !this.connectedGamepads.includes(2)
+    this.connectedGamepads.indexOf(2) === -1
   ) {
     this.connectedGamepads.push(2);
     this.player3 = new ArcticMadness.entity.Player(
       320,
+      540,
+      "penguin_texture_64x64",
+      {
+        r: Math.floor(Math.random() * 255),
+        g: Math.floor(Math.random() * 255),
+        b: Math.floor(Math.random() * 255),
+      },
+      {
+        left: "F",
+        right: "H",
+        up: "T",
+        down: "G",
+        shoot: "R",
+      },
+      this.gamepads.get(2),
+      2
+    );
+    this.stage.addChild(this.player3);
+    this.m_startGameTimer();
+    this.background3.animation.gotoAndStop("ice");
+  }
+  if (
+    this.gamepads.get(3).justPressed(0) &&
+    this.connectedGamepads.indexOf(3) === -1
+  ) {
+    this.connectedGamepads.push(3);
+    this.player4 = new ArcticMadness.entity.Player(
+      930,
       540,
       "64_penguin_nogun",
       {
@@ -194,34 +227,6 @@ ArcticMadness.scene.JoinGame.prototype.m_playerJoinGame = function () {
         up: "I",
         down: "K",
         shoot: "O",
-      },
-      this.gamepads.get(2),
-      2
-    );
-    this.stage.addChild(this.player3);
-    this.m_startGameTimer();
-    this.background3.animation.gotoAndStop("ice");
-  }
-  if (
-    this.gamepads.get(3).justPressed(0) &&
-    !this.connectedGamepads.includes(3)
-  ) {
-    this.connectedGamepads.push(3);
-    this.player4 = new ArcticMadness.entity.Player(
-      930,
-      540,
-      "64_penguin_nogun",
-      {
-        r: Math.floor(Math.random() * 255),
-        g: Math.floor(Math.random() * 255),
-        b: Math.floor(Math.random() * 255),
-      },
-      {
-        left: "N",
-        right: "M",
-        up: "U",
-        down: "H",
-        shoot: "Y",
       },
       this.gamepads.get(3),
       3
@@ -243,7 +248,11 @@ ArcticMadness.scene.JoinGame.prototype.m_startGameTimer = function () {
     onComplete: function () {
       this.menuSound.fade();
       this.application.scenes.load([
-        new ArcticMadness.scene.Game(this.connectedGamepads.length,this.menuSound),
+        new ArcticMadness.scene.Game(
+          this.connectedGamepads.length,
+          this.menuSound,
+          this.connectedGamepads
+        ),
       ]);
     },
     scope: this,
