@@ -285,8 +285,8 @@ ArcticMadness.map.Map.prototype.resetMap = function () {
 /**
  * This method ends a wave.
  * @returns {undefined}
- * 
-  */
+ *
+ */
 
 ArcticMadness.map.Map.prototype.stopWave = function () {
   this.m_stopTileTimers();
@@ -298,7 +298,6 @@ ArcticMadness.map.Map.prototype.stopWave = function () {
 ArcticMadness.map.Map.prototype.reviveAllPlayers = function () {
   this.m_reviveAllPlayers();
 };
-
 
 //------------------------------------------------------------------------------
 // Public methods related to the enemies
@@ -529,7 +528,12 @@ ArcticMadness.map.Map.prototype.m_createAnimationBlock = function (
     animationFrames.push(i);
   }
   var lastFrame = animationFrames.length - 1;
-  player.animationBlock.animation.create("crackToIce", animationFrames, 2, false);
+  player.animationBlock.animation.create(
+    "crackToIce",
+    animationFrames,
+    2,
+    false
+  );
   player.animationBlock.animation.current.scripts.add(
     lastFrame,
     function () {
@@ -599,10 +603,14 @@ ArcticMadness.map.Map.prototype.m_isPlayerInWater = function (player) {
 
 ArcticMadness.map.Map.prototype.m_updatePlayerState = function (player) {
   if (player != null && player.isAlive) {
+    var alivePlayers = this.players.filter(function (p) {
+      return p.isAlive === true;
+    });
+
     player.isInWater = true;
     player.velocity.x = 0;
     player.velocity.y = 0;
-    player.health -= 1;
+
     var playerTile = this.tileLayer.getTileOf(
       player.centerX,
       player.centerY + 18
@@ -615,8 +623,14 @@ ArcticMadness.map.Map.prototype.m_updatePlayerState = function (player) {
     player.inWaterTile = playerTileIndex;
     player.isRevivable = true;
 
+    if (alivePlayers.length === 1 && player.isInWater && player.health < 235) {
+    
+      player.health = 0;
+    } else {
+      player.health -= 1;
+    }
 
-    if (player.revivingTileSet === false) {
+    if (player.revivingTileSet === false && player.health < 234) {
       this.m_setReviveTile(player);
     }
 
@@ -710,9 +724,18 @@ ArcticMadness.map.Map.prototype.m_setReviveTile = function (player) {
  */
 
 ArcticMadness.map.Map.prototype.m_killPlayer = function (player) {
-  player.isAlive = false;
-  player.isRevivable = false;
   player.animation.gotoAndPlay("death", 0);
+  this.game.timers
+    .create({
+      duration: 2000,
+      onComplete: function () {
+        player.isAlive = false;
+        player.isRevivable = false;
+      },
+      scope: this,
+    })
+    .start();
+
   console.log("Player died");
   //this.game.gameOver();
 };
@@ -829,7 +852,7 @@ ArcticMadness.map.Map.prototype.m_repairIce = function (
   ) {
     this.tileLayer.setTileValueAt(playerTileIndex, 1);
     this.completedSound =
-    this.map.application.sounds.sound.get("repaircomplete");
+      this.map.application.sounds.sound.get("repaircomplete");
     this.completedSound.play();
     this.completedSound.loop = false;
     this.repairedTilesScore += 10;
