@@ -6,11 +6,15 @@ ArcticMadness.scene.Highscores = function () {
     this.highscore_bg = null;
     this.headerGraphics = null;
     this.highscoreText = null;
+    this.m_emitter = null;
     this.hs1 = null;
     this.hs2 = null;
     this.hs3 = null;
     this.hs4 = null;
     this.backToMenu = null;
+    this.particleX = 300;
+    this.particleY = 500;
+    this.particleTimer = null;
 
 
     //--------------------------------------------------------------------------
@@ -42,6 +46,8 @@ ArcticMadness.scene.Highscores.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
     this.m_createBackground();
     this.m_createHeader();
+    this.m_createParticleTimer();
+    this.m_createEmitter();
     this.init_hs1();
     this.init_hs2();
     this.init_hs3();
@@ -58,6 +64,11 @@ ArcticMadness.scene.Highscores.prototype.update = function (step) {
 
         ]);
     }
+
+
+    // this.m_emitter.y = this.headerGraphics.centerY;
+    // this.m_emitter.x = this.headerGraphics.centerX;
+    // this.m_emitter.emit(1);
 }
 
 ArcticMadness.scene.Highscores.prototype.dispose = function () {
@@ -66,6 +77,7 @@ ArcticMadness.scene.Highscores.prototype.dispose = function () {
     this.stage.removeChild(this.hs3, true);
     this.stage.removeChild(this.hs2, true);
     this.stage.removeChild(this.hs1, true);
+    this.stage.removeChild(this.m_emitter, true);
     this.stage.removeChild(this.highscoreText, true);
     this.stage.removeChild(this.headerGraphics, true);
     this.stage.removeChild(this.highscore_bg, true);
@@ -102,7 +114,46 @@ ArcticMadness.scene.Highscores.prototype.m_createHeader = function () {
     this.highscoreText.center = this.application.screen.center;
     this.highscoreText.y = this.headerGraphics.y + 50;
     this.stage.addChild(this.highscoreText);
+};
+
+//Emitter
+ArcticMadness.scene.Highscores.prototype.m_createEmitter = function () {
+    this.particleX = Math.random() * 1280;
+    this.particleY = Math.random() * 720;
+    this.m_emitter = new rune.particle.Emitter(this.particleX, this.particleY, 30, 20, {
+        particles: [ArcticMadness.entity.Particle],
+        capacity: 100,
+        accelrationY: 1,
+        maxVelocityX: 4,
+        minVelocityX: -4,
+        maxVelocityY: 4,
+        minVelocityY: -4,
+        minRotation: 0,
+        maxRotation: 20
+    });
+
+    this.stage.addChild(this.m_emitter);
+    this.m_emitter.emit(30);
+
 }
+
+
+// DISPOSE INFINITY TIMER??
+ArcticMadness.scene.Highscores.prototype.m_createParticleTimer = function () {
+     this.particleTimer = this.timers.create({
+        duration: 3000,
+        repeat: Infinity,
+        scope: this,
+
+        onTick: function () {
+       
+            this.m_createEmitter();
+        },
+       
+
+    });
+}
+
 //1 player list
 ArcticMadness.scene.Highscores.prototype.init_hs1 = function () {
     this.hs1 = new ArcticMadness.entity.HighscoreList("$ PLAYER", 0, this, 100, 100, 70, 300);
