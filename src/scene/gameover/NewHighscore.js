@@ -2,16 +2,25 @@
 // Constructor scope
 //--------------------------------
 
-ArcticMadness.scene.NewHighscore = function (score, numberOfPlayers, bestScore,menuSound) {
+ArcticMadness.scene.NewHighscore = function (score, numberOfPlayers, bestScore, menuSound) {
   this.score = score;
   this.numberOfPlayers = numberOfPlayers;
+  this.background = null;
+  this.newHighscoreText = null;
+  this.scoreText = null;
+  this.headerGraphics = null;
   this.bestScore = bestScore;
-  this.visualKeyboard = null;
   this.selectBox = null;
   this.ListName = "";
   this.ListNameText = null;
   this.titleText = null;
+  this.particleX = 300;
+  this.particleY = 500;
+  this.particleTimer = null;
   this.menuSound = menuSound;
+  this.moveSound = null;
+  this.chooseSound = null;
+
 
 
 
@@ -45,10 +54,13 @@ ArcticMadness.scene.NewHighscore.prototype.init = function () {
   rune.scene.Scene.prototype.init.call(this);
   this.m_createBackground();
   this.m_createNewHighscoreText();
+  this.m_createHeaderGraphics();
   this.m_createScoreText();
-  this.m_initVisualKeyboard();
   this.m_initSelectBox();
-  this.menuSound.fade(1,3000);
+  this.m_createParticleTimer();
+  this.m_createEmitter();
+  this._createSound();
+  this.menuSound.fade(1, 3000);
 };
 
 ArcticMadness.scene.NewHighscore.prototype.update = function (step) {
@@ -61,9 +73,15 @@ ArcticMadness.scene.NewHighscore.prototype.update = function (step) {
 //------------------------------------------------------------------------------
 
 ArcticMadness.scene.NewHighscore.prototype.dispose = function () {
-  this.stage.removeChild(this.visualKeyboard, true);
   this.stage.removeChild(this.selectBox, true);
   this.stage.removeChild(this.ListNameText, true);
+  this.stage.removeChild(this.particleTimer, true);
+  this.stage.removeChild(this.m_emitter, true);
+  this.stage.removeChild(this.newHighscoreText, true);
+  this.stage.removeChild(this.scoreText, true);
+  this.stage.removeChild(this.headerGraphics, true);
+  this.stage.removeChild(this.background, true);
+
   rune.scene.Scene.prototype.dispose.call(this);
 };
 
@@ -82,6 +100,19 @@ ArcticMadness.scene.NewHighscore.prototype.m_createBackground = function () {
   this.stage.addChild(this.background);
 };
 
+ArcticMadness.scene.NewHighscore.prototype._createSound = function () {
+  this.moveSound = this.application.sounds.sound.get("shoot");
+  this.chooseSound = this.application.sounds.sound.get("repaircomplete");
+};
+
+ArcticMadness.scene.NewHighscore.prototype.m_createHeaderGraphics = function () {
+  this.headerGraphics = new rune.display.Sprite(240, 20, 800, 200, "highscorebar");
+  this.headerGraphics.animation.create("lights", [4, 3, 4, 3, 1, 2, 1, 2], 5, true);
+  this.headerGraphics.animation.gotoAndPlay("lights");
+  this.stage.addChild(this.headerGraphics);
+
+};
+
 ArcticMadness.scene.NewHighscore.prototype.m_createNewHighscoreText =
   function () {
     if (this.bestScore) {
@@ -95,12 +126,10 @@ ArcticMadness.scene.NewHighscore.prototype.m_createNewHighscoreText =
       "thefont"
     );
     this.newHighscoreText.autoSize = true;
-    this.newHighscoreText.width = 250;
-    this.newHighscoreText.height = 50;
-    this.newHighscoreText.x = 200;
-    this.newHighscoreText.y = 100;
-    this.newHighscoreText.scaleX = 2;
-    this.newHighscoreText.scaleY = 2;
+    this.newHighscoreText.scaleX = 4;
+    this.newHighscoreText.scaleY = 4;
+    this.newHighscoreText.center = this.application.screen.center;
+    this.newHighscoreText.y = 80;
     this.stage.addChild(this.newHighscoreText);
   };
 
@@ -111,23 +140,50 @@ ArcticMadness.scene.NewHighscore.prototype.m_createScoreText = function () {
   this.scoreText.scaleX = 3;
   this.scoreText.scaleY = 3;
   this.scoreText.center = this.application.screen.center;
-  this.scoreText.y = 200;
+  this.scoreText.y = 230;
   this.stage.addChild(this.scoreText);
 };
 
-ArcticMadness.scene.NewHighscore.prototype.m_initVisualKeyboard = function () {
-  this.visualKeyboard = new rune.display.Graphic(
-    325,
-    400,
-    630,
-    280,
-    "keyboard");
-  this.stage.addChild(this.visualKeyboard);
-};
+
+//Emitter
+ArcticMadness.scene.NewHighscore.prototype.m_createEmitter = function () {
+  this.particleX = Math.random() * 1280;
+  this.particleY = Math.random() * 720;
+  this.m_emitter = new rune.particle.Emitter(this.particleX, this.particleY, 30, 20, {
+      particles: [ArcticMadness.entity.Particle],
+      capacity: 100,
+      accelrationY: 1,
+      maxVelocityX: 4,
+      minVelocityX: -4,
+      maxVelocityY: 4,
+      minVelocityY: -4,
+      minRotation: 0,
+      maxRotation: 20
+  });
+
+  this.stage.addChild(this.m_emitter);
+  this.m_emitter.emit(30);
+
+}
+
+
+// DISPOSE INFINITY TIMER??
+ArcticMadness.scene.NewHighscore.prototype.m_createParticleTimer = function () {
+   this.particleTimer = this.timers.create({
+      duration: 3000,
+      repeat: Infinity,
+      scope: this,
+
+      onTick: function () {
+     
+          this.m_createEmitter();
+      },
+     
+
+  });
+}
 
 ArcticMadness.scene.NewHighscore.prototype.m_initSelectBox = function () {
-  // this.selectBox = new rune.display.Graphic(325, 400, 70, 70, "selected");
-  // this.stage.addChild(this.selectBox);
   this.selectBox = new rune.display.Sprite(325, 400, 70, 70, "selected"); //funkar med sprite?
   this.selectBox.animation.create("active", [0, 1, 2], 8, true);
   this.stage.addChild(this.selectBox);
@@ -137,15 +193,23 @@ ArcticMadness.scene.NewHighscore.prototype.m_handleSelectBoxMovement =
     var gamepad = this.gamepads.get(0);
     if (gamepad.justPressed(12) && this.selectBox.y > 400) {
       this.selectBox.y -= 70;
+      this.moveSound.play();
+      this.moveSound.loop = false;
     }
     if (gamepad.justPressed(13) && this.selectBox.y < 610) {
       this.selectBox.y += 70;
+      this.moveSound.play();
+      this.moveSound.loop = false;
     }
     if (gamepad.justPressed(14) && this.selectBox.x > 325) {
       this.selectBox.x -= 70;
+      this.moveSound.play();
+      this.moveSound.loop = false;
     }
     if (gamepad.justPressed(15) && this.selectBox.x < 885) {
       this.selectBox.x += 70;
+      this.moveSound.play();
+      this.moveSound.loop = false;
     }
     if (this.selectBox.y > 540) {
       this.selectBox.x = 535;
@@ -159,6 +223,8 @@ ArcticMadness.scene.NewHighscore.prototype.m_handleSelectBoxInput =
   function () {
     var gamepad = this.gamepads.get(0);
     if (gamepad.justPressed(0)) {
+      this.chooseSound.play();
+      this.chooseSound.loop = false;
 
       if (this.selectBox.x == 325 && this.selectBox.y == 400) {
         this.updateListName("q ");
@@ -258,12 +324,12 @@ ArcticMadness.scene.NewHighscore.prototype.m_removeLetter = function () {
         this.ListNameText = new rune.text.BitmapField(this.ListName, "thefont");
         this.ListNameText.autoSize = true;
         this.ListNameText.x = 430;
-        this.ListNameText.y = 275;
+        this.ListNameText.y = 300;
         this.ListNameText.scaleX = 4;
         this.ListNameText.scaleY = 4;
         this.stage.addChild(this.ListNameText);
       }
-    } //Rensar inte allt? 
+    } 
   }
 }
 
@@ -280,7 +346,7 @@ ArcticMadness.scene.NewHighscore.prototype.updateListName = function (letter) {
   this.ListNameText = new rune.text.BitmapField(this.ListName, "thefont");
   this.ListNameText.autoSize = true;
   this.ListNameText.x = 430;
-  this.ListNameText.y = 275;
+  this.ListNameText.y = 300;
   this.ListNameText.scaleX = 4;
   this.ListNameText.scaleY = 4;
   this.stage.addChild(this.ListNameText);
