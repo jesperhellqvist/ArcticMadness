@@ -12,8 +12,7 @@ ArcticMadness.entity.Gun = function (x, y, color, gamepad, enemies, player) {
   this.player = player;
   this.bullet = null;
   this.bullets = [];
- //console.log(this.enemies); // Just nu null
- 
+  //console.log(this.enemies); // Just nu null
 
   //--------------------------------------------------------------------------
   // Super call
@@ -44,14 +43,18 @@ ArcticMadness.entity.Gun.prototype.init = function () {
 
 ArcticMadness.entity.Gun.prototype.update = function (step) {
   rune.display.Sprite.prototype.update.call(this, step);
-  if (!this.player.isInWater && this.player.isAlive && !this.player.isAttacked && !this.player.isRepairing) {
+  if (
+    !this.player.isInWater &&
+    this.player.isAlive &&
+    !this.player.isAttacked &&
+    !this.player.isRepairing
+  ) {
     this.m_handleInputStickRight();
     this.m_handleButton7();
   }
 };
 
 ArcticMadness.entity.Gun.prototype.dispose = function () {
-
   rune.display.Sprite.prototype.dispose.call(this);
 };
 
@@ -65,48 +68,71 @@ ArcticMadness.entity.Gun.prototype.m_handleInputStickRight = function () {
   var stickRightX = this.gamepad.stickRight.x;
   var stickRightY = this.gamepad.stickRight.y;
 
-  var radian = Math.atan2(stickRightY, stickRightX);
+ var radian = Math.atan2(stickRightY, stickRightX);
   var angle = rune.util.Math.radiansToDegrees(radian);
 
   if (angle < 0) {
     angle += 360;
   }
+  var currentAnimation = this.m_getPlayerCurrentAnimation();
 
-  //Right
-  if ((angle < 45 && angle > 0 ) || (angle > 315 && angle < 360)) { // NOTERA 0 = idle
-    this.flippedX = false;
-    this.player.flippedX = false;
-    this.x = this.player.x + 26;
+  if (currentAnimation == "idle") {
+    this.x = this.player.x + 28;
     this.y = this.player.y + 20;
-    // this.player.animation.gotoAndPlay("lookside");
   }
 
-  //Down
-  if (angle > 45 && angle < 135) {
-    // this.player.animation.gotoAndPlay("lookdown");
+  if (currentAnimation == "up") {
+    this.x = this.player.x + 28;
+    this.y = this.player.y + 20;
+    
+
   }
-  //Left
-  if (angle > 135 && angle < 225) {
-    this.player.flippedX = true;
+  if (currentAnimation == "down") {
+    this.x = this.player.x + 28;
+    this.y = this.player.y + 20;
+  }
+  if (currentAnimation == "right") {
+
+    this.x = this.player.x + 28;
+    this.y = this.player.y + 20;
+    this.flippedX = false;
+  }
+  if (currentAnimation == "left") {
     this.x = this.player.x + 10;
     this.y = this.player.y + 20;
-    // this.player.animation.gotoAndPlay("lookside");
-   if (this.gamepad.stickLeftLeft) {
-    // this.player.animation.gotoAndPlay("lookside");
-  
-   }
+  }
 
-  }
-  //Up
-  if (angle > 225 && angle < 315) {
-    this.x = this.player.x + 16;
-    this.y = this.player.y + 10;
-    // this.player.animation.gotoAndPlay("lookup");
-   
-  }
+ 
+
+ 
 
   this.angle = angle;
   this.rotation = angle;
+};
+
+ArcticMadness.entity.Gun.prototype.m_getPlayerCurrentAnimation = function () {
+  
+  if (this.player.animation.current.name == "up") {
+    return "up";
+  }
+  if (this.player.animation.current.name == "down") {
+    return "down";
+  }
+  if (
+    this.player.animation.current.name == "walk" &&
+    this.player.flippedX == false
+  ) {
+    return "right";
+  }
+  if (
+    this.player.animation.current.name == "walk" &&
+    this.player.flippedX == true
+  ) {
+    return "left";
+  }
+  else {
+    return "idle";
+  }
 };
 
 // This method handles the shoot button.
@@ -119,7 +145,7 @@ ArcticMadness.entity.Gun.prototype.m_handleButton7 = function () {
 
 // This method handles the shoot. It creates a bullet and adds it to the stage.
 ArcticMadness.entity.Gun.prototype.m_handleShoot = function (angle) {
- this.bullet = new ArcticMadness.entity.Bullet(
+  this.bullet = new ArcticMadness.entity.Bullet(
     this.x,
     this.y,
     this.color,
@@ -128,7 +154,10 @@ ArcticMadness.entity.Gun.prototype.m_handleShoot = function (angle) {
   );
   this.bullets.push(this.bullet);
   this.stage.addChild(this.bullet);
-  this.shootSound = this.application.sounds.sound.get("shoot", unique = false);
+  this.shootSound = this.application.sounds.sound.get(
+    "shoot",
+    (unique = false)
+  );
   this.shootSound.play();
   this.shootSound.loop = false;
 };

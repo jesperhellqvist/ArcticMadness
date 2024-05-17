@@ -96,7 +96,6 @@ ArcticMadness.entity.Player.prototype.update = function (step) {
   if (!this.isInWater && this.isAlive && !this.isAttacked && !this.isRepairing) {
     //this.m_handleInput(this.controls);
     this.m_handleInputGamepad();
-    this.m_setGunPosition();
     this.m_handleHitBox();
   }
 
@@ -191,6 +190,7 @@ ArcticMadness.entity.Player.prototype.m_handleInputGamepad = function () {
     this.x += speed;
     this.velocity.x += velocityChange;
     this.flippedX = false;
+    this.gun.flippedX = false;
     this.animation.gotoAndPlay("walk");
   }
 
@@ -231,23 +231,6 @@ ArcticMadness.entity.Player.prototype.m_createGun = function (enemies) {
   this.stage.addChild(this.gun);
 };
 
-ArcticMadness.entity.Player.prototype.m_setGunPosition = function () {
-  this.gun.x = this.x + 26;
-  this.gun.y = this.y + 20;
-
-  if (this.gamepad.stickRightLeft) {
-    this.gun.x = this.x + 10;
-    this.gun.y = this.y + 20;
-  }
-  if (this.gamepad.stickRightRight) {
-    this.gun.x = this.x + 26;
-    this.gun.y = this.y + 20;
-  }
-  if (this.gamepad.stickRightUp) {
-    this.gun.x = this.x + 26;
-    this.gun.y = this.y + 10;
-  }
-};
 
 ArcticMadness.entity.Player.prototype.m_setPhysics = function () {
   this.velocity.drag.x = 0.04;

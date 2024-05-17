@@ -11,6 +11,7 @@ ArcticMadness.entity.Enemy = function (x, y, players, map, game) {
   this.map = map; // Reference to the map object.
   this.game = game; // Reference to the game object.
   this.isInWater = false;
+  this.isAlive = true;
 
   //--------------------------------------------------------------------------
   // Super call
@@ -39,10 +40,11 @@ ArcticMadness.entity.Enemy.prototype.constructor = ArcticMadness.entity.Enemy;
 
 ArcticMadness.entity.Enemy.prototype.init = function () {
   rune.display.Sprite.prototype.init.call(this);
-  this.animation.create("water", [6,7], 6, true);
+  this.animation.create("water", [6, 7], 6, true);
   this.animation.create("walk", [0, 1, 2, 3], 5, true);
   this.animation.create("attack", [4], 1, true);
- 
+  this.animation.create("dead", [10, 11, 12, 13], 5, false);
+
   this.m_setHitbox();
 };
 
@@ -50,8 +52,10 @@ ArcticMadness.entity.Enemy.prototype.init = function () {
 
 ArcticMadness.entity.Enemy.prototype.update = function (step) {
   rune.display.Sprite.prototype.update.call(this, step);
+  if (this.isAlive) {
+    this.m_followPlayer();
+  }
 
-  this.m_followPlayer();
   for (var i = 0; i < this.players.length; i++) {
     var player = this.players[i];
     if (player.isAlive && !player.isInWater) {
@@ -64,6 +68,22 @@ ArcticMadness.entity.Enemy.prototype.update = function (step) {
 
 ArcticMadness.entity.Enemy.prototype.dispose = function () {
   rune.display.Sprite.prototype.dispose.call(this);
+};
+
+ArcticMadness.entity.Enemy.prototype.killenemy = function () {
+  
+  this.isAlive = false;
+  this.animation.gotoAndPlay("dead");
+  this.game.timers
+    .create({
+      duration: 1000,
+      scope: this,
+      onComplete: function () {
+        this.game.stage.removeChild(this, true);
+        
+      },
+    })
+    .start();
 };
 
 //------------------------------------------------------------------------------
@@ -125,13 +145,15 @@ ArcticMadness.entity.Enemy.prototype.m_followPlayer = function () {
 ArcticMadness.entity.Enemy.prototype.m_checkPlayerCollision = function (
   player
 ) {
-  if (this.hitTestObject(player)) {
-    player.isAttacked = true;
-    player.health -= 1;
-    player.gun.alpha = 0;
-    this.animation.gotoAndPlay("attack");
-    player.animation.gotoAndPlay("dragy");
-    this.m_getNearestWater(player.x, player.y, player);
+  if (this.isAlive) {
+    if (this.hitTestObject(player)) {
+      player.isAttacked = true;
+      player.health -= 1;
+      player.gun.alpha = 0;
+      this.animation.gotoAndPlay("attack");
+      player.animation.gotoAndPlay("dragy");
+      this.m_getNearestWater(player.x, player.y, player);
+    }
   }
 };
 
