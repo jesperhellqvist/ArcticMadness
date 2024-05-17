@@ -44,10 +44,11 @@ ArcticMadness.data.Requests.prototype.constructor = ArcticMadness.data.Requests;
 ArcticMadness.data.Requests.prototype.m_construct = function() {
     rune.resource.Requests.prototype.m_construct.call(this);
     this.add("Ice_map_64x64", "./../asset/bgs_menus/Ice_map_64x64.png");
-	this.add("controller_bg", "./../asset/bgs_menus/controller_bg.png");
 	this.add("gameover_bg", "./../asset/bgs_menus/gameover_bg.png");
 	this.add("highscores_bg", "./../asset/bgs_menus/highscores_bg.png");
 	this.add("how_to", "./../asset/bgs_menus/how_to.png");
+	this.add("howto_bg", "./../asset/bgs_menus/howto_bg.png");
+	this.add("howto_bg2", "./../asset/bgs_menus/howto_bg2.png");
 	this.add("join_graphics", "./../asset/bgs_menus/join_graphics.png");
 	this.add("menu_bg", "./../asset/bgs_menus/menu_bg.png");
 	this.add("newhighscore_bg", "./../asset/bgs_menus/newhighscore_bg.png");
@@ -66,6 +67,7 @@ ArcticMadness.data.Requests.prototype.m_construct = function() {
 	this.add("fish", "./../asset/textures/fish.png");
 	this.add("gun_directions2", "./../asset/textures/gun_directions2.png");
 	this.add("highscorebar", "./../asset/textures/highscorebar.png");
+	this.add("howtoanimation", "./../asset/textures/howtoanimation.png");
 	this.add("keyboard", "./../asset/textures/keyboard.png");
 	this.add("penguin_texture_64x64", "./../asset/textures/penguin_texture_64x64.png");
 	this.add("selected", "./../asset/textures/selected.png");

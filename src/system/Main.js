@@ -25,7 +25,7 @@ ArcticMadness.system.Main = function() {
         developer: "com.mathiaselvforsen",
         app: "ArcticMadness",
         build: "0.0.0",
-        scene: ArcticMadness.scene.Menu,
+        scene: ArcticMadness.scene.HowtoPlay,
         resources: ArcticMadness.data.Requests,
         useGamepads:true,
         useKeyboard:true,

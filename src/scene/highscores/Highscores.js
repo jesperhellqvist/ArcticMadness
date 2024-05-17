@@ -52,7 +52,7 @@ ArcticMadness.scene.Highscores.prototype.init = function () {
     this.init_hs2();
     this.init_hs3();
     this.init_hs4();
-    this.m_createcontroller();
+    this.m_createUI();
 
 }
 //Back to main Menu
@@ -64,11 +64,6 @@ ArcticMadness.scene.Highscores.prototype.update = function (step) {
 
         ]);
     }
-
-
-    // this.m_emitter.y = this.headerGraphics.centerY;
-    // this.m_emitter.x = this.headerGraphics.centerX;
-    // this.m_emitter.emit(1);
 }
 
 ArcticMadness.scene.Highscores.prototype.dispose = function () {
@@ -186,7 +181,7 @@ ArcticMadness.scene.Highscores.prototype.init_hs4 = function () {
 };
 
 //Method to initialize the controller graphics
-ArcticMadness.scene.Highscores.prototype.m_createcontroller = function () {
+ArcticMadness.scene.Highscores.prototype.m_createUI = function () {
     this.backToMenu = new rune.display.Sprite(30, 20, 220, 220, "how_to");
     this.backToMenu.animation.create("button", [14, 15], 4, true);
     this.backToMenu.animation.gotoAndPlay("button");

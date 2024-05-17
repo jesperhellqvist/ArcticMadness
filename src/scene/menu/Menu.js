@@ -56,6 +56,7 @@ ArcticMadness.scene.Menu.prototype.init = function () {
   this.m_initMenu();
   this.m_highscoreList();
   this.m_initSound();
+
 };
 
 /**
@@ -106,6 +107,7 @@ ArcticMadness.scene.Menu.prototype.dispose = function () {
   this.stage.removeChild(this.divingPenguin);
   this.stage.removeChild(this.background);
   this.stage.removeChild(this.controller_bg);
+  this.stage.removeChild(this.hs1);
   this.stage.removeChild(this.highscore_bg);
   rune.scene.Scene.prototype.dispose.call(this);
 };
@@ -120,11 +122,11 @@ ArcticMadness.scene.Menu.prototype.createDivingTween = function () {
       target: this.divingPenguin,
       scope: this,
       duration: 550,
-      onUpdate : function () {
+      onUpdate: function () {
         this.splashEffect = this.application.sounds.sound.get("Splash");
         this.splashEffect.play();
         this.splashEffect.loop = false;
-        
+
       },
       onDispose: function (divingPenguin) {
         this.divingTweenActive = false;
@@ -194,20 +196,38 @@ ArcticMadness.scene.Menu.prototype.m_initMenu = function () {
 };
 
 ArcticMadness.scene.Menu.prototype.m_highscoreList = function () {
-  this.highscoreList = new rune.ui.VTList("thefont");
-  this.highscoreList.add("highscores");
+  this.highscoreX = 850;
+  this.highscoreY = 300;
 
-  //make this a slideshow of all highscores, 1-4 players
-  for (var i = 0; i < 5; i++) {
-    var score = this.application.highscores.get(i, 0);
-    console.log(score);
-    this.highscoreList.add(score.name + " " + score.score);
-  }
-  this.highscoreList.x = 850;
-  this.highscoreList.y = 280;
-  this.highscoreList.scaleX = 2;
-  this.highscoreList.scaleY = 2;
-  this.stage.addChild(this.highscoreList);
+
+  this.hs1 = new ArcticMadness.entity.HighscoreList("$ PLAYER", 0, this, 100, 100, 850, 200);
+  this.hs1.x = this.highscoreX;
+  this.hs1.y = this.highscoreY;
+  this.stage.addChild(this.hs1);
+
+ // use the other to create a loop with the highscores, problems removing the old ones
+  this.hs2 = new ArcticMadness.entity.HighscoreList("% PLAYERS", 1, this, 300, 100, 850, 200);
+  this.hs2.x = this.highscoreX;
+  this.hs2.y = this.highscoreY;
+ 
+ 
+
+  this.hs3 = new ArcticMadness.entity.HighscoreList("& PLAYERS", 2, this, 500, 100, 850, 200);
+  this.hs3.x = this.highscoreX;
+  this.hs3.y = this.highscoreY;
+
+
+ 
+
+  this.hs4 = new ArcticMadness.entity.HighscoreList("' PLAYERS", 3, this, 700, 100, 850, 200);
+  this.hs4.x = this.highscoreX;
+  this.hs4.y = this.highscoreY;
+
+
+  
+
+  
+
 };
 
 ArcticMadness.scene.Menu.prototype.m_initSound = function () {
@@ -233,7 +253,7 @@ ArcticMadness.scene.Menu.prototype.selectOption = function (option) {
         new ArcticMadness.scene.Highscores(),
       ]);
       break;
-      case "CREDITS":
+    case "CREDITS":
       console.log("CREDITS, visa ljudskapare, samt mig o jepa")
       break;
   }
