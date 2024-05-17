@@ -172,64 +172,50 @@ ArcticMadness.entity.Player.prototype.m_handleInput = function (controls) {
 };
 
 ArcticMadness.entity.Player.prototype.m_handleInputGamepad = function () {
-  
+  var stickLeftX = this.gamepad.stickLeft.x;
+  var stickLeftY = this.gamepad.stickLeft.y;
 
-  if (this.gamepad.stickLeftLeft && this.gamepad.stickLeftUp || this.gamepad.stickLeftLeft && this.gamepad.stickLeftDown || this.gamepad.stickLeftRight && this.gamepad.stickLeftUp || this.gamepad.stickLeftRight && this.gamepad.stickLeftDown) {
-    this.diagonalMovement = true;
+    // If the joystick is in its original position, don't move the player
+    if (stickLeftX === 0 && stickLeftY === 0) {
+      return;
+    }
+
+  var radian = Math.atan2(stickLeftY, stickLeftX);
+  var angle = (rune.util.Math.radiansToDegrees(radian) + 360) % 360;
+
+  var speed = this.diagonalMovement ? 3 / Math.sqrt(2) : 3;
+  var velocityChange = this.diagonalMovement ? 0.15 / Math.sqrt(2) : 0.15;
+
+  //Right
+  if ((angle < 45 && angle >= 0 ) || (angle > 315 && angle < 360)) {
+    this.x += speed;
+    this.velocity.x += velocityChange;
+    this.flippedX = false;
+    this.animation.gotoAndPlay("walk");
   }
 
-  var speed = this.diagonalMovement ? 3 / Math.sqrt(2) : 3; // Normalisera hastigheten för diagonala rörelser
-  var velocityChange = this.diagonalMovement ? 0.15 / Math.sqrt(2) : 0.15; // Normalisera velocityn för diagonala rörelser
-
-  if (this.gamepad.stickLeftLeft) {
-    if (this.x <= 0) {
-      this.x = 0;
-    } else {
-      this.x -= speed;
-      this.velocity.x -= velocityChange;
-      this.flippedX = true;
-      this.diagonalMovement = false;
-      this.animation.gotoAndPlay("walk");
-      if(this.gamepad.stickRightRight){
-        this.flippedX = false;
-      }
-    }
+  //Down
+  if (angle > 45 && angle < 135) {
+    this.y += speed;
+    this.velocity.y += velocityChange;
+    this.flippedX = false;
+    this.animation.gotoAndPlay("down");
   }
 
-  if (this.gamepad.stickLeftRight) {
-    if (this.x >= 1250) {
-      this.x = 1250;
-    } else {
-      this.x += speed;
-      this.velocity.x += velocityChange;
-      this.flippedX = false;
-      this.diagonalMovement = false;
-      this.animation.gotoAndPlay("walk");
-    }
+  //Left
+  if (angle > 135 && angle < 225) {
+    this.x -= speed;
+    this.velocity.x -= velocityChange;
+    this.flippedX = true;
+    this.animation.gotoAndPlay("walk");
   }
 
-  if (this.gamepad.stickLeftUp) {
-    if (this.y <= 0) {
-      this.y = 0;
-    } else {
-      this.y -= speed;
-      this.velocity.y -= velocityChange;
-      this.flippedX = false;
-      this.diagonalMovement = false;
-      this.animation.gotoAndPlay("up");
-    }
-  }
-
-  if (this.gamepad.stickLeftDown) {
-    if (this.y >= 700) {
-      this.y = 700;
-    } else {
-      this.y += speed;
-      this.velocity.y += velocityChange;
-      this.flippedX = false;
-      this.diagonalMovement = false;
-      this.animation.gotoAndPlay("down");
-    }
+  //Up
+  if (angle > 225 && angle < 315) {
+    this.y -= speed;
+    this.velocity.y -= velocityChange;
+    this.flippedX = false;
+    this.animation.gotoAndPlay("up");
   }
 };
 
