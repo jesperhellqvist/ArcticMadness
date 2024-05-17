@@ -2,7 +2,7 @@
 // Constructor scope
 //--------------------------------
 
-ArcticMadness.scene.NewHighscore = function (score, numberOfPlayers, bestScore) {
+ArcticMadness.scene.NewHighscore = function (score, numberOfPlayers, bestScore,menuSound) {
   this.score = score;
   this.numberOfPlayers = numberOfPlayers;
   this.bestScore = bestScore;
@@ -11,6 +11,7 @@ ArcticMadness.scene.NewHighscore = function (score, numberOfPlayers, bestScore) 
   this.ListName = "";
   this.ListNameText = null;
   this.titleText = null;
+  this.menuSound = menuSound;
 
 
 
@@ -47,6 +48,7 @@ ArcticMadness.scene.NewHighscore.prototype.init = function () {
   this.m_createScoreText();
   this.m_initVisualKeyboard();
   this.m_initSelectBox();
+  this.menuSound.fade(1,3000);
 };
 
 ArcticMadness.scene.NewHighscore.prototype.update = function (step) {
