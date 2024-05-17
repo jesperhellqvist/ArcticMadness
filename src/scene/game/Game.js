@@ -27,7 +27,8 @@ ArcticMadness.scene.Game = function (numberOfPlayers, menuSound, gamepads) {
   this.liveScore = null;
   this.bonusContainer = null;
   this.duration = 45000;
-  this.highscoreList = this.numberOfPlayers - 1;
+  this.highscoreList = this.numberOfPlayers-1;
+  
 
   //--------------------------------------------------------------------------
   // Super call
@@ -125,13 +126,15 @@ ArcticMadness.scene.Game.prototype.m_timerCountdown = function () {
 
 ArcticMadness.scene.Game.prototype.m_music = function () {
   this.gameMusic = this.application.sounds.master.get("music_bg");
-  this.gameMusic.volume = 0;
-  this.gameMusic.fade(1, 3000);
+  this.gameMusic.volume= 0;
+  this.gameMusic.fade(1,3000);
   this.gameMusic.play();
   this.gameMusic.loop = true;
+
 };
 
 ArcticMadness.scene.Game.prototype.m_initPlayers = function () {
+
   for (var i = 0; i < this.numberOfPlayers; i++) {
     this.player = new ArcticMadness.entity.Player(
       700,
@@ -174,6 +177,7 @@ ArcticMadness.scene.Game.prototype.m_initMap = function () {
   this.map.resetMap();
 };
 
+
 ArcticMadness.scene.Game.prototype.tweenWater = function (player, playerTile) {
   player.falling = true;
   this.tweens.create({
@@ -182,12 +186,14 @@ ArcticMadness.scene.Game.prototype.tweenWater = function (player, playerTile) {
     duration: 550,
     onUpdate: function (player) {
       player.animation.gotoAndPlay("falling");
+      console.log("falling");
       this.drownSoundEffect = this.application.sounds.sound.get("splash");
       this.drownSoundEffect.play();
       this.drownSoundEffect.loop = false;
     },
     onDispose: function (player) {
       player.isInWater = true;
+      
       player.velocity.x = 0;
       player.velocity.y = 0;
       if (player.isInWater && player.falling) {
@@ -235,14 +241,14 @@ ArcticMadness.scene.Game.prototype.revivePlayer = function (player) {
  */
 ArcticMadness.scene.Game.prototype.dispose = function () {
   console.log("dispose");
-  for (var i = 0; i < this.players.length; i++) {
+  for(var i = 0; i < this.players.length; i++) {
     this.stage.removeChild(this.players[i], true);
-  }
+  };
   this.stage.removeChild(this.timerText, true);
   this.stage.removeChild(this.liveScore, true);
   this.stage.removeChild(this.map, true);
   this.stage.removeChild(this.enemies, true);
-
+ 
   rune.scene.Scene.prototype.dispose.call(this);
 };
 
@@ -265,9 +271,9 @@ ArcticMadness.scene.Game.prototype.m_checkBulletHitEnemy = function (bullet) {
   for (var i = 0; i < this.enemies.enemies.length; i++) {
     if (bullet.hitTestObject(this.enemies.enemies[i])) {
       bullet.dispose();
-        this.enemies.enemies[i].killenemy();
-        this.enemies.enemies.splice(i, 1);
-        this.updateScore(10);
+      this.enemies.enemies[i].killenemy();
+      this.enemies.enemies.splice(i, 1);
+      this.updateScore(10);
     }
   }
 };
@@ -424,33 +430,20 @@ ArcticMadness.scene.Game.prototype.m_checkIfPlayersAreDead = function () {
 };
 
 ArcticMadness.scene.Game.prototype.m_checkIfNewHighscore = function () {
-  console.log(this.numberOfPlayers - 1);
+  console.log(this.numberOfPlayers -1);
   console.log(this.application.highscores);
 
-  if (
-    this.application.highscores.test(
-      this.liveScore.score,
-      this.numberOfPlayers - 1
-    ) != -1
-  ) {
+  if (this.application.highscores.test(this.liveScore.score, this.numberOfPlayers - 1) != -1) {
     var bestScore = false;
-    if (
-      this.liveScore.score >
-      this.application.highscores.get(0, this.numberOfPlayers - 1).score
-    ) {
+    if(this.liveScore.score > this.application.highscores.get(0, this.numberOfPlayers - 1).score) {
       bestScore = true;
     }
     this.application.scenes.load([
-      new ArcticMadness.scene.NewHighscore(
-        this.liveScore.score,
-        this.numberOfPlayers,
-        bestScore,
-        this.menuSound
-      ),
+      new ArcticMadness.scene.NewHighscore(this.liveScore.score, this.numberOfPlayers, bestScore, this.menuSound),
     ]);
   } else {
     this.application.scenes.load([
-      new ArcticMadness.scene.GameOver(this.liveScore.score, this.menuSound),
+      new ArcticMadness.scene.GameOver(this.liveScore.score,this.menuSound),
     ]);
   }
 };
