@@ -20,7 +20,6 @@ npx google-closure-compiler \
 --js "./../../src/entity/Enemy.js" \
 --js "./../../src/entity/Enemies.js" \
 --js "./../../src/entity/Player.js" \
---js "./../../src/entity/Players.js" \
 --js "./../../src/map/Map.js" \
 --js "./../../src/scene/game/Game.js" \
 --js "./../../src/scene/joinGame/JoinGame.js" \
