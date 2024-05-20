@@ -23,6 +23,7 @@ ArcticMadness.scene.JoinGame = function (menuSound) {
   this.player2 = null;
   this.player3 = null;
   this.player4 = null;
+  this.countDown = null;
   this.gameStartTimer = null;
   this.connectedGamepads = [];
   this.menuSound = menuSound;
@@ -243,8 +244,10 @@ ArcticMadness.scene.JoinGame.prototype.m_startGameTimer = function () {
     this.gameStartTimer = null;
   }
 
+  this.m_initCountDown();
+
   this.gameStartTimer = this.timers.create({
-    duration: 5000,
+    duration: 10000,
     onComplete: function () {
       this.menuSound.fade(0,3000);
       this.application.scenes.load([
@@ -254,7 +257,22 @@ ArcticMadness.scene.JoinGame.prototype.m_startGameTimer = function () {
           this.connectedGamepads
         ),
       ]);
+      
+
     },
     scope: this,
   });
+};
+
+ArcticMadness.scene.JoinGame.prototype.m_initCountDown = function () {
+
+  if (this.countDown !== null) {
+    this.stage.removeChild(this.countDown, true);
+    this.countDown = null;
+  }
+ 
+  this.countDown = new ArcticMadness.entity.CountDown(this);
+  this.stage.addChild(this.countDown);
+  this.countDown.playCountDown10();
+
 };
