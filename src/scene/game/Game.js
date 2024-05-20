@@ -371,7 +371,7 @@ ArcticMadness.scene.Game.prototype.m_addPlayersToStage = function () {
 ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
   this.lastScoreUpdate = 0;
   this.waveTimer = this.timers.create({
-    duration: 4500,
+    duration: 45000,
     scope: this,
     onComplete: function () {
       this.currentWave++;
@@ -414,7 +414,7 @@ ArcticMadness.scene.Game.prototype.m_showWaveText = function (wave) {
 
   this.timers
     .create({
-      duration: 10000,
+      duration: 8000,
       scope: this,
       onComplete: function () {
         this.bonusContainer.dispose(); //remove bonuscontainer
