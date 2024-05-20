@@ -66,9 +66,105 @@ ArcticMadness.scene.Game.prototype.init = function () {
   this.m_initPlayers();
   this.m_initEnemies();
   this.m_initMap();
-
   this.m_startWaveTimer();
-  //this.stage.addChild(this.player);
+};
+
+/**
+ * This method is automatically executed once per "tick". The method is used for
+ * calculations such as application logic.
+ *
+ * @param {number} step Fixed time step.
+ *
+ * @returns {undefined}
+ */
+ArcticMadness.scene.Game.prototype.update = function (step) {
+  rune.scene.Scene.prototype.update.call(this, step);
+  this.m_checkBullet();
+  this.map.update(step);
+  this.enemies.update(step);
+  this.m_checkIfPlayersAreDead();
+};
+
+/**
+ * This method is automatically called once just before the scene ends. Use
+ * the method to reset references and remove objects that no longer need to
+ * exist when the scene is destroyed. The process is performed in order to
+ * avoid memory leaks.
+ *
+ * @returns {undefined}
+ */
+ArcticMadness.scene.Game.prototype.dispose = function () {
+  for(var i = 0; i < this.players.length; i++) {
+    this.stage.removeChild(this.players[i], true);
+  };
+  this.stage.removeChild(this.timerText, true);
+  this.stage.removeChild(this.liveScore, true);
+  this.stage.removeChild(this.map, true);
+  this.stage.removeChild(this.enemies, true);
+ 
+  rune.scene.Scene.prototype.dispose.call(this);
+};
+
+//------------------------------------------------------------------------------
+// Public prototype methods
+//------------------------------------------------------------------------------
+
+ArcticMadness.scene.Game.prototype.tweenWater = function (player, playerTile) {
+  player.falling = true;
+  this.tweens.create({
+    target: player,
+    scope: this,
+    duration: 550,
+    onUpdate: function (player) {
+      player.animation.gotoAndPlay("falling");
+      console.log("falling");
+      this.drownSoundEffect = this.application.sounds.sound.get("splash");
+      this.drownSoundEffect.play();
+      this.drownSoundEffect.loop = false;
+    },
+    onDispose: function (player) {
+      player.isInWater = true;
+      
+      player.velocity.x = 0;
+      player.velocity.y = 0;
+      if (player.isInWater && player.falling) {
+        player.animation.gotoAndPlay("drown");
+      }
+    },
+    args: {
+      x: playerTile.x,
+      y: playerTile.y,
+    },
+  });
+};
+
+ArcticMadness.scene.Game.prototype.resetPlayer = function (player) {
+  var nearestIceTileIndex = this.map.getNearestIceTileIndex(player);
+  var nearestIceTile = this.map.tileLayer.getTileAt(nearestIceTileIndex);
+
+  player.isInWater = false;
+  player.isRevivable = false;
+  player.isAlive = true;
+  player.isAttacked = false;
+  player.falling = false;
+  player.inWaterTile = null;
+  player.revivingTileSet = false;
+  player.health = 250; // Or whatever the max health is
+  player.x = nearestIceTile.x;
+  player.y = nearestIceTile.y;
+  player.gun.alpha = 1;
+  player.flicker.start();
+  player.animation.gotoAndPlay("idle");
+};
+
+ArcticMadness.scene.Game.prototype.revivePlayer = function (player) {
+  this.map.removeReviveTile(player);
+  this.resetPlayer(player);
+};
+
+ArcticMadness.scene.Game.prototype.updateScore = function (score) {
+  this.liveScore.score += score;
+  this.liveScore.updateScoreText();
 };
 
 //------------------------------------------------------------------------------
@@ -94,21 +190,7 @@ ArcticMadness.scene.Game.prototype.m_initWaveText = function () {
   this.stage.addChild(this.timerText);
 };
 
-/**
- * This method is automatically executed once per "tick". The method is used for
- * calculations such as application logic.
- *
- * @param {number} step Fixed time step.
- *
- * @returns {undefined}
- */
-ArcticMadness.scene.Game.prototype.update = function (step) {
-  rune.scene.Scene.prototype.update.call(this, step);
-  this.m_checkBullet();
-  this.map.update(step);
-  this.enemies.update(step);
-  this.m_checkIfPlayersAreDead();
-};
+
 ArcticMadness.scene.Game.prototype.m_timerCountdown = function () {
   this.timerText = new rune.text.BitmapField(
     "wave " + this.currentWave + Math.floor(this.duration / 1000),
@@ -177,81 +259,6 @@ ArcticMadness.scene.Game.prototype.m_initMap = function () {
   this.map.resetMap();
 };
 
-
-ArcticMadness.scene.Game.prototype.tweenWater = function (player, playerTile) {
-  player.falling = true;
-  this.tweens.create({
-    target: player,
-    scope: this,
-    duration: 550,
-    onUpdate: function (player) {
-      player.animation.gotoAndPlay("falling");
-      console.log("falling");
-      this.drownSoundEffect = this.application.sounds.sound.get("splash");
-      this.drownSoundEffect.play();
-      this.drownSoundEffect.loop = false;
-    },
-    onDispose: function (player) {
-      player.isInWater = true;
-      
-      player.velocity.x = 0;
-      player.velocity.y = 0;
-      if (player.isInWater && player.falling) {
-        player.animation.gotoAndPlay("drown");
-      }
-    },
-    args: {
-      x: playerTile.x,
-      y: playerTile.y,
-    },
-  });
-};
-
-ArcticMadness.scene.Game.prototype.resetPlayer = function (player) {
-  var nearestIceTileIndex = this.map.getNearestIceTileIndex(player);
-  var nearestIceTile = this.map.tileLayer.getTileAt(nearestIceTileIndex);
-
-  player.isInWater = false;
-  player.isRevivable = false;
-  player.isAlive = true;
-  player.isAttacked = false;
-  player.falling = false;
-  player.inWaterTile = null;
-  player.revivingTileSet = false;
-  player.health = 250; // Or whatever the max health is
-  player.x = nearestIceTile.x;
-  player.y = nearestIceTile.y;
-  player.gun.alpha = 1;
-  player.flicker.start();
-  player.animation.gotoAndPlay("idle");
-};
-
-ArcticMadness.scene.Game.prototype.revivePlayer = function (player) {
-  this.map.removeReviveTile(player);
-  this.resetPlayer(player);
-};
-
-/**
- * This method is automatically called once just before the scene ends. Use
- * the method to reset references and remove objects that no longer need to
- * exist when the scene is destroyed. The process is performed in order to
- * avoid memory leaks.
- *
- * @returns {undefined}
- */
-ArcticMadness.scene.Game.prototype.dispose = function () {
-  console.log("dispose");
-  for(var i = 0; i < this.players.length; i++) {
-    this.stage.removeChild(this.players[i], true);
-  };
-  this.stage.removeChild(this.timerText, true);
-  this.stage.removeChild(this.liveScore, true);
-  this.stage.removeChild(this.map, true);
-  this.stage.removeChild(this.enemies, true);
- 
-  rune.scene.Scene.prototype.dispose.call(this);
-};
-
 //------------------------------------------------------------------------------
 // Private prototype methods
 //------------------------------------------------------------------------------
@@ -276,11 +283,6 @@ ArcticMadness.scene.Game.prototype.m_checkBulletHitEnemy = function (bullet) {
       this.updateScore(10);
     }
   }
-};
-
-ArcticMadness.scene.Game.prototype.updateScore = function (score) {
-  this.liveScore.score += score;
-  this.liveScore.updateScoreText();
 };
 
 ArcticMadness.scene.Game.prototype.m_addPlayersToStage = function () {
