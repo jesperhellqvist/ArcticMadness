@@ -95,14 +95,14 @@ ArcticMadness.scene.Game.prototype.update = function (step) {
  * @returns {undefined}
  */
 ArcticMadness.scene.Game.prototype.dispose = function () {
-  for(var i = 0; i < this.players.length; i++) {
+  for (var i = 0; i < this.players.length; i++) {
     this.stage.removeChild(this.players[i], true);
   };
   this.stage.removeChild(this.timerText, true);
   this.stage.removeChild(this.liveScore, true);
   this.stage.removeChild(this.map, true);
   this.stage.removeChild(this.enemies, true);
- 
+
   rune.scene.Scene.prototype.dispose.call(this);
 };
 
@@ -125,7 +125,7 @@ ArcticMadness.scene.Game.prototype.tweenWater = function (player, playerTile) {
     },
     onDispose: function (player) {
       player.isInWater = true;
-      
+
       player.velocity.x = 0;
       player.velocity.y = 0;
       if (player.isInWater && player.falling) {
@@ -276,7 +276,7 @@ ArcticMadness.scene.Game.prototype.tweenWater = function (player, playerTile) {
     },
     onDispose: function (player) {
       player.isInWater = true;
-      
+
       player.velocity.x = 0;
       player.velocity.y = 0;
       if (player.isInWater && player.falling) {
@@ -324,14 +324,14 @@ ArcticMadness.scene.Game.prototype.revivePlayer = function (player) {
  */
 ArcticMadness.scene.Game.prototype.dispose = function () {
   console.log("dispose");
-  for(var i = 0; i < this.players.length; i++) {
+  for (var i = 0; i < this.players.length; i++) {
     this.stage.removeChild(this.players[i], true);
   };
   this.stage.removeChild(this.timerText, true);
   this.stage.removeChild(this.liveScore, true);
   this.stage.removeChild(this.map, true);
   this.stage.removeChild(this.enemies, true);
- 
+
   rune.scene.Scene.prototype.dispose.call(this);
 };
 
@@ -381,10 +381,10 @@ ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
       this.map.stopWave();
       this.map.reviveAllPlayers();
       this.waveCompleteSoundEffect =
-      this.application.sounds.sound.get("wavecomplete");
+        this.application.sounds.sound.get("wavecomplete");
       this.waveCompleteSoundEffect.play();
       this.waveCompleteSoundEffect.loop = false;
-      this.m_showWaveText(this.currentWave-1);
+      this.m_showWaveText(this.currentWave - 1);
     },
     onUpdate: function () {
       if (
@@ -414,13 +414,12 @@ ArcticMadness.scene.Game.prototype.m_showWaveText = function (wave) {
 
   this.timers
     .create({
-      duration: 8000,
+      duration: 6000,
       scope: this,
       onComplete: function () {
         this.bonusContainer.dispose(); //remove bonuscontainer
         this.map.repairedWaveScore = 0;
         this.enemyScore = 0;
-
         this.m_countDown(wave);
       },
     })
@@ -434,54 +433,23 @@ ArcticMadness.scene.Game.prototype.m_updateWaveTimerText = function () {
 };
 
 ArcticMadness.scene.Game.prototype.m_countDown = function (wave) {
-  var createText = function (textString) {
-    var text = new rune.text.BitmapField(textString, "thefont");
-    text.center = this.application.screen.center;
-    text.autoSize = true;
-    text.scaleX = 4;
-    text.scaleY = 4;
-    return text;
-  }.bind(this);
+  if (this.countDown !== null) {
+    this.stage.removeChild(this.countDown, true);
+    this.countDown = null;
+  }
 
-  var text = createText("3");
-  this.stage.addChild(text);
-
-  this.timers
-    .create({
-      duration: 1000,
-      scope: this,
-      onComplete: function () {
-        this.stage.removeChild(text, true);
-        text = createText("2");
-        this.stage.addChild(text);
-
-        this.timers
-          .create({
-            duration: 1000,
-            scope: this,
-            onComplete: function () {
-              this.stage.removeChild(text, true);
-              text = createText("1");
-              this.stage.addChild(text);
-
-              this.timers
-                .create({
-                  duration: 1000,
-                  scope: this,
-                  onComplete: function () {
-                    this.stage.removeChild(text, true);
-                    this.m_startWaveTimer();
-                    this.m_startNextWave(wave);
-                    // this.stage.BonusContainer.removeChild(this.bonusContainer,true); remove bonuscontainer
-                  },
-                })
-                .start();
-            },
-          })
-          .start();
-      },
-    })
-    .start();
+  this.countDown = new ArcticMadness.entity.CountDown(this);
+  this.stage.addChild(this.countDown);
+  this.countDown.playCountDown3();
+  this.timers.create({
+    duration: 3000,
+    scope: this,
+    onComplete: function () {
+      this.m_startWaveTimer();
+      this.m_startNextWave(wave);
+      this.stage.removeChild(this.countDown, true);
+    },
+  }).start();
 };
 
 ArcticMadness.scene.Game.prototype.m_startNextWave = function () {

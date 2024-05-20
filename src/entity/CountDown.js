@@ -104,8 +104,8 @@ ArcticMadness.entity.CountDown.prototype.playCountDown10 = function () {
  */
 
 ArcticMadness.entity.CountDown.prototype.m_setPosition = function () {
-  this.x = this.application.screen.width / 2;
-  this.y = this.application.screen.height / 2;
-  this.scaleX = 4;
-  this.scaleY = 4;
+this.autosize = true;
+this.scaleX = 4;
+this.scaleY = 4;
+this.center = this.application.screen.center;
 };
