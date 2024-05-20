@@ -6,6 +6,7 @@ ArcticMadness.entity.Enemies = function (game, players) {
   this.game = game;
   this.enemies = [];
   this.newEnemyTimer = null;
+  this.durations = [2000, 1600, 1400, 1200, 1000, 800, 600];
   this.players = players; // Array of player objects
 
   //--------------------------------------------------------------------------
@@ -42,7 +43,7 @@ ArcticMadness.entity.Enemies.prototype.constructor =
 
 ArcticMadness.entity.Enemies.prototype.init = function () {
   rune.display.DisplayGroup.prototype.init.call(this);
-  this.startNewEnemyTimer();
+  this.startNewEnemyTimer(0);
 };
 
 /**
@@ -93,18 +94,23 @@ ArcticMadness.entity.Enemies.prototype.disposeEnemies = function () {
 
 //------------------------------------------------------------------------------
 
-ArcticMadness.entity.Enemies.prototype.startNewEnemyTimer = function () {
-  this.newEnemyTimer = this.game.timers.create(
-    {
-      duration: 800,
-      onTick: function () {
-        this.m_createEnemy();
+ArcticMadness.entity.Enemies.prototype.startNewEnemyTimer = function (currentWave) {
+  if (currentWave >= 7) {
+    currentWave = 6;
+  }
+  if(currentWave < 7) {
+    this.newEnemyTimer = this.game.timers.create(
+      {
+        duration: this.durations[currentWave],
+        onTick: function () {
+          this.m_createEnemy();
+        },
+        repeat: Infinity,
+        scope: this,
       },
-      repeat: Infinity,
-      scope: this,
-    },
-    true
-  );
+      true
+    );
+  }
 };
 
 /**
