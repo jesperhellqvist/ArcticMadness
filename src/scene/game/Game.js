@@ -29,7 +29,7 @@ ArcticMadness.scene.Game = function (numberOfPlayers, menuSound, gamepads) {
   this.duration = 45000;
   this.highscoreList = this.numberOfPlayers - 1;
   this.enemyScore = 0;
-
+ 
 
   //--------------------------------------------------------------------------
   // Super call
@@ -68,6 +68,9 @@ ArcticMadness.scene.Game.prototype.init = function () {
   this.m_initEnemies();
   this.m_initMap();
   this.m_startWaveTimer();
+ console.log(this.camera);
+//  rune.camera.CameraShake.start(10000);
+
 };
 
 /**

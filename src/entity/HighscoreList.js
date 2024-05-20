@@ -64,9 +64,21 @@ ArcticMadness.entity.HighscoreList.prototype.m_createTitle = function () {
 
 ArcticMadness.entity.HighscoreList.prototype.m_createTable = function () {
   this.highscoreList = new rune.ui.VTList("thefont");
+
   for (var i = 0; i < 5; i++) {
     var score = this.application.highscores.get(i, this.tableID);
+  
+   if (i == 0 && score.score == 0){
+    score.name ="no scores";
+    score.score = "";
+    this.highscoreList.add(score.name);
+    break;
+   }
+   if(score.name == "Rune"){
+    score.name ="henke";
+   }
     this.highscoreList.add(score.name + " " + score.score);
+    
   }
   this.highscoreList.x = this.x;
   this.highscoreList.y = this.y;

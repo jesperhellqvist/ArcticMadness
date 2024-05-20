@@ -94,9 +94,19 @@ ArcticMadness.scene.GameOver.prototype.m_createScoreText = function () {
   this.scoreText.y = this.application.screen.height / 2;
   this.stage.addChild(this.scoreText);
 };
-
+// add drowning penguin
 ArcticMadness.scene.GameOver.prototype.m_createAnimations = function () {
-  this.drowningPenguin = new rune.display.Sprite(-50, 500, 64, 64, "64_penguin_nogun");
+  this.drowningPenguin = new rune.display.Sprite(200, 500, 64, 64, "penguin_texture_64x64");
+  this.drowningPenguin.animation.create("drowning", [30,31], 8, true);
+  this.drowningPenguin.scaleX = 2;
+  this.drowningPenguin.scaleY = 2;
+  this.stage.addChild(this.drowningPenguin);
+  this.drowningPenguin2 = new rune.display.Sprite(920, 500, 64, 64, "penguin_texture_64x64");
+  this.drowningPenguin2.animation.create("drowning", [30,31], 8, true);
+  this.drowningPenguin2.scaleX = 2;
+  this.drowningPenguin2.scaleY = 2;
+  this.stage.addChild(this.drowningPenguin2);
+
 };
 
 ArcticMadness.scene.GameOver.prototype.m_createMenu = function () {
