@@ -13,9 +13,13 @@ ArcticMadness.map.Map = function (map, players, game, gamepads, enemies) {
   this.repairTimer = {};
   this.newCrackTimer = null;
   this.animationBlock = null;
+  this.crackSound = null;
+  this.helpSound = null;
   this.enemies = enemies; // Reference to the enemies object
   this.numRandamCracks = 0;
   this.repairedTilesScore = 0;
+  this.repairedWaveScore = 0;
+
 
   ArcticMadness.map.Map.prototype.init.call(this);
 };
@@ -624,7 +628,7 @@ ArcticMadness.map.Map.prototype.m_updatePlayerState = function (player) {
     player.isRevivable = true;
 
     if (alivePlayers.length === 1 && player.isInWater && player.health < 235) {
-    
+
       player.health = 0;
     } else {
       player.health -= 1;
@@ -856,6 +860,7 @@ ArcticMadness.map.Map.prototype.m_repairIce = function (
     this.completedSound.play();
     this.completedSound.loop = false;
     this.repairedTilesScore += 10;
+    this.repairedWaveScore += 10;
     this.game.updateScore(10);
   }
   // animationBlock.dispose();  fixa så att animationBlock försvinner med dispose

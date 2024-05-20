@@ -52,6 +52,7 @@ ArcticMadness.data.Requests.prototype.m_construct = function() {
 	this.add("join_graphics", "./../asset/bgs_menus/join_graphics.png");
 	this.add("menu_bg", "./../asset/bgs_menus/menu_bg.png");
 	this.add("newhighscore_bg", "./../asset/bgs_menus/newhighscore_bg.png");
+	this.add("wave_bg", "./../asset/bgs_menus/wave_bg.png");
 	this.add("map", "./../asset/map.json");
 	this.add("Shoot", "./../asset/sound/Shoot.wav");
 	this.add("Splash", "./../asset/sound/Splash.mp3");

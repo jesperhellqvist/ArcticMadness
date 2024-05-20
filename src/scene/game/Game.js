@@ -27,8 +27,9 @@ ArcticMadness.scene.Game = function (numberOfPlayers, menuSound, gamepads) {
   this.liveScore = null;
   this.bonusContainer = null;
   this.duration = 45000;
-  this.highscoreList = this.numberOfPlayers-1;
-  
+  this.highscoreList = this.numberOfPlayers - 1;
+  this.enemyScore = 0;
+
 
   //--------------------------------------------------------------------------
   // Super call
@@ -208,8 +209,8 @@ ArcticMadness.scene.Game.prototype.m_timerCountdown = function () {
 
 ArcticMadness.scene.Game.prototype.m_music = function () {
   this.gameMusic = this.application.sounds.master.get("music_bg");
-  this.gameMusic.volume= 0;
-  this.gameMusic.fade(1,3000);
+  this.gameMusic.volume = 0;
+  this.gameMusic.fade(1, 3000);
   this.gameMusic.play();
   this.gameMusic.loop = true;
 
@@ -219,7 +220,7 @@ ArcticMadness.scene.Game.prototype.m_initPlayers = function () {
 
   for (var i = 0; i < this.numberOfPlayers; i++) {
     this.player = new ArcticMadness.entity.Player(
-      540 + i *50,
+      540 + i * 50,
       360,
       "penguin_texture_64x64",
       {
@@ -259,6 +260,81 @@ ArcticMadness.scene.Game.prototype.m_initMap = function () {
   this.map.resetMap();
 };
 
+
+ArcticMadness.scene.Game.prototype.tweenWater = function (player, playerTile) {
+  player.falling = true;
+  this.tweens.create({
+    target: player,
+    scope: this,
+    duration: 550,
+    onUpdate: function (player) {
+      player.animation.gotoAndPlay("falling");
+      console.log("falling");
+      this.drownSoundEffect = this.application.sounds.sound.get("splash");
+      this.drownSoundEffect.play();
+      this.drownSoundEffect.loop = false;
+    },
+    onDispose: function (player) {
+      player.isInWater = true;
+      
+      player.velocity.x = 0;
+      player.velocity.y = 0;
+      if (player.isInWater && player.falling) {
+        player.animation.gotoAndPlay("drown");
+      }
+    },
+    args: {
+      x: playerTile.x,
+      y: playerTile.y,
+    },
+  });
+};
+
+ArcticMadness.scene.Game.prototype.resetPlayer = function (player) {
+  var nearestIceTileIndex = this.map.getNearestIceTileIndex(player);
+  var nearestIceTile = this.map.tileLayer.getTileAt(nearestIceTileIndex);
+
+  player.isInWater = false;
+  player.isRevivable = false;
+  player.isAlive = true;
+  player.isAttacked = false;
+  player.falling = false;
+  player.inWaterTile = null;
+  player.revivingTileSet = false;
+  player.health = 250; // Or whatever the max health is
+  player.x = nearestIceTile.x;
+  player.y = nearestIceTile.y;
+  player.gun.alpha = 1;
+  player.flicker.start();
+  player.animation.gotoAndPlay("idle");
+};
+
+ArcticMadness.scene.Game.prototype.revivePlayer = function (player) {
+  this.map.removeReviveTile(player);
+  this.resetPlayer(player);
+};
+
+/**
+ * This method is automatically called once just before the scene ends. Use
+ * the method to reset references and remove objects that no longer need to
+ * exist when the scene is destroyed. The process is performed in order to
+ * avoid memory leaks.
+ *
+ * @returns {undefined}
+ */
+ArcticMadness.scene.Game.prototype.dispose = function () {
+  console.log("dispose");
+  for(var i = 0; i < this.players.length; i++) {
+    this.stage.removeChild(this.players[i], true);
+  };
+  this.stage.removeChild(this.timerText, true);
+  this.stage.removeChild(this.liveScore, true);
+  this.stage.removeChild(this.map, true);
+  this.stage.removeChild(this.enemies, true);
+ 
+  rune.scene.Scene.prototype.dispose.call(this);
+};
+
 //------------------------------------------------------------------------------
 // Private prototype methods
 //------------------------------------------------------------------------------
@@ -280,6 +356,7 @@ ArcticMadness.scene.Game.prototype.m_checkBulletHitEnemy = function (bullet) {
       bullet.dispose();
       this.enemies.enemies[i].killenemy();
       this.enemies.enemies.splice(i, 1);
+      this.enemyScore += 10;
       this.updateScore(10);
     }
   }
@@ -294,7 +371,7 @@ ArcticMadness.scene.Game.prototype.m_addPlayersToStage = function () {
 ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
   this.lastScoreUpdate = 0;
   this.waveTimer = this.timers.create({
-    duration: 45000,
+    duration: 4500,
     scope: this,
     onComplete: function () {
       this.currentWave++;
@@ -304,10 +381,10 @@ ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
       this.map.stopWave();
       this.map.reviveAllPlayers();
       this.waveCompleteSoundEffect =
-        this.application.sounds.sound.get("wavecomplete");
+      this.application.sounds.sound.get("wavecomplete");
       this.waveCompleteSoundEffect.play();
       this.waveCompleteSoundEffect.loop = false;
-      this.m_showWaveText(this.currentWave);
+      this.m_showWaveText(this.currentWave-1);
     },
     onUpdate: function () {
       if (
@@ -330,21 +407,26 @@ ArcticMadness.scene.Game.prototype.m_stopWaveTimer = function () {
 
 ArcticMadness.scene.Game.prototype.m_showWaveText = function (wave) {
   this.bonusContainer = new ArcticMadness.entity.BonusContainer(this);
-
   this.bonusContainer.updateWavesCompleted(wave);
-  this.bonusContainer.updateScore(this.map.repairedTilesScore);
+  this.bonusContainer.updateEnemyScore(this.enemyScore);
+  this.bonusContainer.updateScore(this.map.repairedWaveScore);
+  this.bonusContainer.updateTotalScore(this.enemyScore, this.map.repairedWaveScore);
 
   this.timers
     .create({
-      duration: 3000,
+      duration: 10000,
       scope: this,
       onComplete: function () {
         this.bonusContainer.dispose(); //remove bonuscontainer
+        this.map.repairedWaveScore = 0;
+        this.enemyScore = 0;
+
         this.m_countDown(wave);
       },
     })
     .start();
 };
+
 
 ArcticMadness.scene.Game.prototype.m_updateWaveTimerText = function () {
   this.timerText.text = "wave " + this.currentWave + " " + this.duration / 1000;
@@ -432,12 +514,12 @@ ArcticMadness.scene.Game.prototype.m_checkIfPlayersAreDead = function () {
 };
 
 ArcticMadness.scene.Game.prototype.m_checkIfNewHighscore = function () {
-  console.log(this.numberOfPlayers -1);
+  console.log(this.numberOfPlayers - 1);
   console.log(this.application.highscores);
 
   if (this.application.highscores.test(this.liveScore.score, this.numberOfPlayers - 1) != -1) {
     var bestScore = false;
-    if(this.liveScore.score > this.application.highscores.get(0, this.numberOfPlayers - 1).score) {
+    if (this.liveScore.score > this.application.highscores.get(0, this.numberOfPlayers - 1).score) {
       bestScore = true;
     }
     this.application.scenes.load([
@@ -445,7 +527,7 @@ ArcticMadness.scene.Game.prototype.m_checkIfNewHighscore = function () {
     ]);
   } else {
     this.application.scenes.load([
-      new ArcticMadness.scene.GameOver(this.liveScore.score,this.menuSound),
+      new ArcticMadness.scene.GameOver(this.liveScore.score, this.menuSound),
     ]);
   }
 };
