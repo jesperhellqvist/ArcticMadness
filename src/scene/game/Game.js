@@ -403,8 +403,8 @@ ArcticMadness.scene.Game.prototype.m_countDown = function (wave) {
 };
 
 ArcticMadness.scene.Game.prototype.m_startNextWave = function () {
-  this.enemies.startNewEnemyTimer();
-  this.map.crackRandomTile(this.currentWave);
+  this.enemies.startNewEnemyTimer(this.currentWave);
+  this.map.callCrackRandomTile(this.currentWave);
   this.map.setCrackTimer(this.currentWave);
 };
 

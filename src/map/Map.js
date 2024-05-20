@@ -27,7 +27,7 @@ ArcticMadness.map.Map = function (map, players, game, gamepads, enemies) {
 // This is the init method, which is called when the object is created.
 
 ArcticMadness.map.Map.prototype.init = function () {
-  this.crackRandomTile();
+  this.m_crackRandomTile();
   this.setCrackTimer();
 };
 
@@ -195,7 +195,7 @@ ArcticMadness.map.Map.prototype.setCrackTimer = function (currentWave) {
     {
       duration: 2000,
       onTick: function () {
-        this.crackRandomTile();
+        this.m_crackRandomTile();
         this.setCrackTimer();
       },
       scope: this,
@@ -204,17 +204,22 @@ ArcticMadness.map.Map.prototype.setCrackTimer = function (currentWave) {
   );
 };
 
+ArcticMadness.map.Map.prototype.callCrackRandomTile = function (currentWave) {
+  console.log(currentWave);
+  currentWave *= 2;
+
+  for (var i = 0; i < currentWave; i++) {
+    this.m_crackRandomTile();
+  }
+};
+
 /**
  * This method changes a random ice tile to a crack tile.
  * @returns {undefined}
  */
 
-ArcticMadness.map.Map.prototype.crackRandomTile = function (currentWave) {
+ArcticMadness.map.Map.prototype.m_crackRandomTile = function () {
   var iceTiles = [];
-  if (currentWave != undefined) {
-    this.numRandamCracks = currentWave;
-    this.m_callCrackRandomTile(this.numRandamCracks);
-  }
 
   // Find all tiles with with ice
   for (var i = 0; i < this.tiles.length; i++) {
@@ -246,14 +251,6 @@ ArcticMadness.map.Map.prototype.crackRandomTile = function (currentWave) {
       },
       randomIndex
     ); // Create a timer for this tile
-  }
-};
-
-ArcticMadness.map.Map.prototype.m_callCrackRandomTile = function (currentWave) {
-  currentWave *= 2;
-  console.log(currentWave);
-  for (var i = 0; i < currentWave; i++) {
-    this.crackRandomTile();
   }
 };
 
@@ -624,7 +621,6 @@ ArcticMadness.map.Map.prototype.m_updatePlayerState = function (player) {
     player.isRevivable = true;
 
     if (alivePlayers.length === 1 && player.isInWater && player.health < 235) {
-    
       player.health = 0;
     } else {
       player.health -= 1;
