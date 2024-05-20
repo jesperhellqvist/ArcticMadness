@@ -125,16 +125,16 @@ ArcticMadness.entity.BonusContainer.prototype.m_createTotalScoreText = function 
 };
 
 ArcticMadness.entity.BonusContainer.prototype.updateScore = function (score) {
-  this.score= score/5;
+  this.score= score/10;
   
-  this.repairedScore.text = this.score.toString()+ " X 5";
+  this.repairedScore.text = this.score.toString()+ " X 10";
 };
 
 ArcticMadness.entity.BonusContainer.prototype.updateEnemyScore = function (
   score
 ) {
-  this.score = score/10;
-  this.enemyScore.text = this.score.toString()+" X 10";
+  this.score = score/5;
+  this.enemyScore.text = this.score.toString()+" X 5";
 }
 
 ArcticMadness.entity.BonusContainer.prototype.updateWavesCompleted = function (
