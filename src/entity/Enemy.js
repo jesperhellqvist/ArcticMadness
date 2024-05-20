@@ -74,6 +74,9 @@ ArcticMadness.entity.Enemy.prototype.killenemy = function () {
   
   this.isAlive = false;
   this.animation.gotoAndPlay("dead");
+  this.hitSound = this.application.sounds.sound.get("sealhit");
+  this.hitSound.play();
+  this.hitSound.loop= false;
   this.game.timers
     .create({
       duration: 1000,

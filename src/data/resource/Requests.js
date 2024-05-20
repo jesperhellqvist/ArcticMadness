@@ -62,6 +62,7 @@ ArcticMadness.data.Requests.prototype.m_construct = function() {
 	this.add("music_bg", "./../asset/sound/music_bg.mp3");
 	this.add("repaircomplete", "./../asset/sound/repaircomplete.mp3");
 	this.add("saved", "./../asset/sound/saved.wav");
+	this.add("sealhit", "./../asset/sound/sealhit.mp3");
 	this.add("wavecomplete", "./../asset/sound/wavecomplete.wav");
 	this.add("64_enemy_lepardseal", "./../asset/textures/64_enemy_lepardseal.png");
 	this.add("64_penguin_nogun", "./../asset/textures/64_penguin_nogun.png");
