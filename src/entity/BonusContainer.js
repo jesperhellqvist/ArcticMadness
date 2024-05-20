@@ -92,10 +92,10 @@ ArcticMadness.entity.BonusContainer.prototype.m_createRepairedScoreText =
     this.repairedScore.autosize = true;
     this.repairedScore.width = 200;
     this.repairedScore.height = 50;
-    this.repairedScore.scaleX = 2;
-    this.repairedScore.scaleY = 2;
-    this.repairedScore.x= 800;
-    this.repairedScore.y = 400;
+    this.repairedScore.scaleX = 1.5;
+    this.repairedScore.scaleY = 1.5;
+    this.repairedScore.x= 750;
+    this.repairedScore.y = 405;
     this.game.stage.addChild(this.repairedScore);
   };
 
@@ -105,9 +105,9 @@ ArcticMadness.entity.BonusContainer.prototype.m_createEnemyScoreText =
     this.enemyScore.autosize = true;
     this.enemyScore.width = 200;
     this.enemyScore.height = 50;
-    this.enemyScore.scaleX = 2;
-    this.enemyScore.scaleY = 2;
-    this.enemyScore.x= 800;
+    this.enemyScore.scaleX = 1.5;
+    this.enemyScore.scaleY = 1.5;
+    this.enemyScore.x= 750;
     this.enemyScore.y = 325;
     this.game.stage.addChild(this.enemyScore);
   };
@@ -125,13 +125,16 @@ ArcticMadness.entity.BonusContainer.prototype.m_createTotalScoreText = function 
 };
 
 ArcticMadness.entity.BonusContainer.prototype.updateScore = function (score) {
-  this.repairedScore.text = score.toString();
+  this.score= score/5;
+  
+  this.repairedScore.text = this.score.toString()+ " X 5";
 };
 
 ArcticMadness.entity.BonusContainer.prototype.updateEnemyScore = function (
   score
 ) {
-  this.enemyScore.text = score.toString();
+  this.score = score/10;
+  this.enemyScore.text = this.score.toString()+" X 10";
 }
 
 ArcticMadness.entity.BonusContainer.prototype.updateWavesCompleted = function (

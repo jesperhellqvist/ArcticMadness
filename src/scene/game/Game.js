@@ -356,8 +356,8 @@ ArcticMadness.scene.Game.prototype.m_checkBulletHitEnemy = function (bullet) {
       bullet.dispose();
       this.enemies.enemies[i].killenemy();
       this.enemies.enemies.splice(i, 1);
-      this.enemyScore += 10;
-      this.updateScore(10);
+      this.enemyScore += 5;
+      this.updateScore(5);
     }
   }
 };
