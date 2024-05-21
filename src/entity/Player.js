@@ -175,8 +175,6 @@ ArcticMadness.entity.Player.prototype.m_setPhysics = function () {
 };
 
 ArcticMadness.entity.Player.prototype.m_handleHitBox = function () {
-  // if (this.hitTestObject(this.enemy)) {
-  // }
 this.hitbox.set(16, 8, 32, 46);
    this.hitbox.debug = false;
    

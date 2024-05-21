@@ -30,10 +30,10 @@ ArcticMadness.scene.Game = function (numberOfPlayers, menuSound, gamepads) {
   this.highscoreList = this.numberOfPlayers - 1;
   this.enemyScore = 0;
   this.colors = [
-    { r: 255, g: 0, b: 0 },
-    { r: 0, g: 255, b: 0 },
-    { r: 0, g: 0, b: 255 },
-    { r: 0, g: 255, b: 255 },
+    { r: 133, g:144, b: 255 }, // Player 1 orignal Blue
+    { r: 244, g: 40, b: 45 }, // Player 2 Red
+    { r: 16, g: 152, b: 86 }, // Player 3 Green
+    { r: 255, g: 250, b: 5 }, // Player 4 Yellow
   ];
 
   //--------------------------------------------------------------------------

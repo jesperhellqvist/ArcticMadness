@@ -12,6 +12,7 @@ ArcticMadness.entity.Gun = function (x, y, color, gamepad, enemies, player) {
   this.player = player;
   this.bullet = null;
   this.bullets = [];
+  this.stickRightActive = false;
   //console.log(this.enemies); // Just nu null
 
   //--------------------------------------------------------------------------
@@ -65,15 +66,6 @@ ArcticMadness.entity.Gun.prototype.dispose = function () {
 // This method creates the gun object and adds it to the stage.
 
 ArcticMadness.entity.Gun.prototype.m_handleInputStickRight = function () {
-  var stickRightX = this.gamepad.stickRight.x;
-  var stickRightY = this.gamepad.stickRight.y;
-
- var radian = Math.atan2(stickRightY, stickRightX);
-  var angle = rune.util.Math.radiansToDegrees(radian);
-
-  if (angle < 0) {
-    angle += 360;
-  }
   var currentAnimation = this.m_getPlayerCurrentAnimation();
 
   if (currentAnimation == "idle") {
@@ -84,15 +76,12 @@ ArcticMadness.entity.Gun.prototype.m_handleInputStickRight = function () {
   if (currentAnimation == "up") {
     this.x = this.player.x + 28;
     this.y = this.player.y + 20;
-    
-
   }
   if (currentAnimation == "down") {
     this.x = this.player.x + 28;
     this.y = this.player.y + 20;
   }
   if (currentAnimation == "right") {
-
     this.x = this.player.x + 28;
     this.y = this.player.y + 20;
     this.flippedX = false;
@@ -102,16 +91,27 @@ ArcticMadness.entity.Gun.prototype.m_handleInputStickRight = function () {
     this.y = this.player.y + 20;
   }
 
- 
+  if (this.gamepad.stickRight.x != 0 || this.gamepad.stickRight.y != 0) {
+    this.stickRightActive = true;
 
- 
+    var stickRightX = this.gamepad.stickRight.x;
+    var stickRightY = this.gamepad.stickRight.y;
 
-  this.angle = angle;
-  this.rotation = angle;
+    var radian = Math.atan2(stickRightY, stickRightX);
+    var angle = rune.util.Math.radiansToDegrees(radian);
+
+    if (angle < 0) {
+      angle += 360;
+    }
+
+    this.angle = angle;
+    this.rotation = angle;
+  } else {
+    this.stickRightActive = false;
+  }
 };
 
 ArcticMadness.entity.Gun.prototype.m_getPlayerCurrentAnimation = function () {
-  
   if (this.player.animation.current.name == "up") {
     return "up";
   }
@@ -129,8 +129,7 @@ ArcticMadness.entity.Gun.prototype.m_getPlayerCurrentAnimation = function () {
     this.player.flippedX == true
   ) {
     return "left";
-  }
-  else {
+  } else {
     return "idle";
   }
 };
