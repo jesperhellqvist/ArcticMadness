@@ -30,7 +30,7 @@ ArcticMadness.scene.Game = function (numberOfPlayers, menuSound, gamepads) {
   this.highscoreList = this.numberOfPlayers - 1;
   this.enemyScore = 0;
   this.colors = [
-    { r: 133, g:144, b: 255 }, // Player 1 orignal Blue
+    { r: 133, g: 144, b: 255 }, // Player 1 orignal Blue
     { r: 244, g: 40, b: 45 }, // Player 2 Red
     { r: 16, g: 152, b: 86 }, // Player 3 Green
     { r: 255, g: 250, b: 5 }, // Player 4 Yellow
@@ -144,7 +144,10 @@ ArcticMadness.scene.Game.prototype.tweenWater = function (player, playerTile) {
   });
 };
 
-ArcticMadness.scene.Game.prototype.resetPlayer = function (player) {
+ArcticMadness.scene.Game.prototype.resetPlayer = function (
+  player,
+  fromWaveComplete
+) {
   var nearestIceTileIndex = this.map.getNearestIceTileIndex(player);
   var nearestIceTile = this.map.tileLayer.getTileAt(nearestIceTileIndex);
 
@@ -156,16 +159,27 @@ ArcticMadness.scene.Game.prototype.resetPlayer = function (player) {
   player.inWaterTile = null;
   player.revivingTileSet = false;
   player.health = 250; // Or whatever the max health is
-  player.x = nearestIceTile.x;
-  player.y = nearestIceTile.y;
+  // player.x = nearestIceTile.x;
+  // player.y = nearestIceTile.y;
   player.gun.alpha = 1;
   player.flicker.start();
   player.animation.gotoAndPlay("idle");
+
+  if (fromWaveComplete) {
+    player.x = 540 + player.id * 50;
+    player.y = 50;
+  } else {
+    player.x = nearestIceTile.x;
+    player.y = nearestIceTile.y;
+  }
 };
 
-ArcticMadness.scene.Game.prototype.revivePlayer = function (player) {
+ArcticMadness.scene.Game.prototype.revivePlayer = function (
+  player,
+  fromWaveComplete
+) {
   this.map.removeReviveTile(player);
-  this.resetPlayer(player);
+  this.resetPlayer(player, fromWaveComplete);
 };
 
 ArcticMadness.scene.Game.prototype.updateScore = function (score) {
@@ -231,7 +245,7 @@ ArcticMadness.scene.Game.prototype.m_initPlayers = function () {
         b: this.colors[i].b,
       },
       this.gamepads.get(this.gamepadsFromJoin[i]),
-      0
+      i
     );
     this.players.push(this.player);
     this.gamepadsConected.push(this.gamepads.get(0));
@@ -283,7 +297,10 @@ ArcticMadness.scene.Game.prototype.tweenWater = function (player, playerTile) {
   });
 };
 
-ArcticMadness.scene.Game.prototype.resetPlayer = function (player) {
+ArcticMadness.scene.Game.prototype.resetPlayer = function (
+  player,
+  fromWaveComplete
+) {
   var nearestIceTileIndex = this.map.getNearestIceTileIndex(player);
   var nearestIceTile = this.map.tileLayer.getTileAt(nearestIceTileIndex);
 
@@ -295,16 +312,31 @@ ArcticMadness.scene.Game.prototype.resetPlayer = function (player) {
   player.inWaterTile = null;
   player.revivingTileSet = false;
   player.health = 250; // Or whatever the max health is
-  player.x = nearestIceTile.x;
-  player.y = nearestIceTile.y;
   player.gun.alpha = 1;
   player.flicker.start();
   player.animation.gotoAndPlay("idle");
+
+  if (fromWaveComplete) {
+    player.x = 540 + player.id * 50;
+    player.y = 100;
+  } else {
+    player.x = nearestIceTile.x;
+    player.y = nearestIceTile.y;
+  }
 };
 
-ArcticMadness.scene.Game.prototype.revivePlayer = function (player) {
+ArcticMadness.scene.Game.prototype.revivePlayer = function (
+  player,
+  fromWaveComplete
+) {
   this.map.removeReviveTile(player);
-  this.resetPlayer(player);
+  this.resetPlayer(player, fromWaveComplete);
+};
+
+ArcticMadness.scene.Game.prototype.reviveAllPlayers = function () {
+  for (var i = 0; i < this.players.length; i++) {
+    this.revivePlayer(this.players[i], true);
+  }
 };
 
 /**
@@ -355,7 +387,6 @@ ArcticMadness.scene.Game.prototype.m_checkBulletHitEnemy = function (bullet) {
   }
 };
 
-
 ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
   this.lastScoreUpdate = 0;
   this.waveTimer = this.timers.create({
@@ -367,7 +398,7 @@ ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
       this.m_updateWaveTimerText();
       this.map.resetMap();
       this.map.stopWave();
-      this.map.reviveAllPlayers();
+      this.reviveAllPlayers();
       this.waveCompleteSoundEffect =
         this.application.sounds.sound.get("wavecomplete");
       this.waveCompleteSoundEffect.play();

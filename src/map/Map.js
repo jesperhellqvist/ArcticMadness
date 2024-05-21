@@ -296,9 +296,7 @@ ArcticMadness.map.Map.prototype.stopWave = function () {
   this.m_stopNewEnemyTimer();
 };
 
-ArcticMadness.map.Map.prototype.reviveAllPlayers = function () {
-  this.m_reviveAllPlayers();
-};
+
 
 //------------------------------------------------------------------------------
 // Public methods related to the enemies
@@ -523,7 +521,6 @@ ArcticMadness.map.Map.prototype.m_createAnimationBlock = function (
   player.animationBlock = new rune.tilemap.Block(this.map, tileValue);
   player.animationBlock.x = playerTile.x;
   player.animationBlock.y = playerTile.y;
-  console.log(tileValue);
   var animationFrames = [];
   for (var i = tileValue - 1; i >= 31; i--) {
     animationFrames.push(i);
@@ -959,18 +956,6 @@ ArcticMadness.map.Map.prototype.m_createTimer = function (
 // Private utility methods related to the game, waves and enemies
 //------------------------------------------------------------------------------
 
-/**
- * This method revives all players.
- * @returns {undefined}
- * @private
- */
-
-ArcticMadness.map.Map.prototype.m_reviveAllPlayers = function () {
-  for (var i = 0; i < this.players.length; i++) {
-    var player = this.players[i];
-    this.game.revivePlayer(player);
-  }
-};
 
 /**
  * This method disposes all enemies.
