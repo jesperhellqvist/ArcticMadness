@@ -27,6 +27,10 @@ ArcticMadness.scene.Menu = function () {
   this.hs2 = null;
   this.hs3 = null;
   this.hs4 = null;
+  this.highscoreX = 0;
+  this.highscoreY = 0;
+  this.currentIndex = 0;
+  this.highscores = null;
 
   rune.scene.Scene.call(this);
 };
@@ -201,31 +205,30 @@ ArcticMadness.scene.Menu.prototype.m_initMenu = function () {
 ArcticMadness.scene.Menu.prototype.m_highscoreList = function () {
   this.highscoreX = 850;
   this.highscoreY = 300;
-  this.i = 0;
   this.highscores = [
     this.hs1 = new ArcticMadness.entity.HighscoreList("$ PLAYER", 0, this, 100, 100, 850, 200),
     this.hs2 = new ArcticMadness.entity.HighscoreList("% PLAYERS", 1, this, 300, 100, 850, 200),
     this.hs3 = new ArcticMadness.entity.HighscoreList("& PLAYERS", 2, this, 500, 100, 850, 200),
     this.hs4 = new ArcticMadness.entity.HighscoreList("' PLAYERS", 3, this, 700, 100, 850, 200),
   ];
-  this.highscores[this.i].x = this.highscoreX;
-  this.highscores[this.i].y = this.highscoreY;
-  this.stage.addChild(this.highscores[this.i]);
+  this.highscores[this.currentIndex].x = this.highscoreX;
+  this.highscores[this.currentIndex].y = this.highscoreY;
+  this.stage.addChild(this.highscores[this.currentIndex]);
 
   this.highscoreSlide = this.timers.create({
     duration: 3000,
     repeat: Infinity,
     scope: this,
     onTick: function () {
-      this.stage.removeChild(this.highscores[this.i].highscoreList);
-      this.stage.removeChild(this.highscores[this.i].text);
-      this.i++;
-      if (this.i > 3) {
-        this.i = 0;
+      this.stage.removeChild(this.highscores[this.currentIndex].highscoreList);
+      this.stage.removeChild(this.highscores[this.currentIndex].text);
+      this.currentIndex++;
+      if (this.currentIndex > 3) {
+        this.currentIndex = 0;
       }
-      this.highscores[this.i].x = this.highscoreX;
-      this.highscores[this.i].y = this.highscoreY;
-      this.stage.addChild(this.highscores[this.i]);
+      this.highscores[this.currentIndex].x = this.highscoreX;
+      this.highscores[this.currentIndex].y = this.highscoreY;
+      this.stage.addChild(this.highscores[this.currentIndex]);
     },
   });
 

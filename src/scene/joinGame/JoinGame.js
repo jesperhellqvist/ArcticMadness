@@ -27,10 +27,10 @@ ArcticMadness.scene.JoinGame = function (menuSound) {
   this.gameStartTimer = null;
   this.connectedGamepads = [];
   this.colors = [
-    { r: 255, g: 0, b: 0 }, // Red
-    { r: 0, g: 255, b: 0 }, // Green
-    { r: 0, g: 0, b: 255 }, // Blue
-    { r: 255, g: 255, b: 0 }, // Yellow
+    { r: 133, g:144, b: 255 }, // orignal blue
+    { r: 16, g: 152, b: 86 }, // Green
+    { r: 244, g: 40, b: 45 }, // red
+    { r: 255, g: 250, b: 5 }, // Yellow
   ];
   this.menuSound = menuSound;
   rune.scene.Scene.call(this);
