@@ -44,6 +44,8 @@ ArcticMadness.scene.Highscores.prototype.constructor =
 
 ArcticMadness.scene.Highscores.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
+    this.cameras.getCameraAt(0).fade.opacity = 1;
+    this.cameras.getCameraAt(0).fade.in(300);
     this.m_createBackground();
     this.m_createHeader();
     this.m_createParticleTimer();
@@ -59,12 +61,16 @@ ArcticMadness.scene.Highscores.prototype.init = function () {
 ArcticMadness.scene.Highscores.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
     if (this.gamepads.get(0).justPressed(1)) {
-        this.application.scenes.load([
-            new ArcticMadness.scene.Menu(),
-
-        ]);
-    }
+        
+        this.cameras.getCameraAt(0).fade.out(300, function() {
+            this.application.scenes.load([
+              new ArcticMadness.scene.Menu(),
+            ]);
+          }, this);
+    } 
 }
+
+
 
 ArcticMadness.scene.Highscores.prototype.dispose = function () {
     this.stage.removeChild(this.backToMenu, true);

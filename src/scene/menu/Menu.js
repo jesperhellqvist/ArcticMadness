@@ -52,6 +52,8 @@ ArcticMadness.scene.Menu.prototype.constructor = ArcticMadness.scene.Menu;
 
 ArcticMadness.scene.Menu.prototype.init = function () {
   rune.scene.Scene.prototype.init.call(this);
+  this.cameras.getCameraAt(0).fade.opacity = 1;
+  this.cameras.getCameraAt(0).fade.in(300);
   this.moveSound = this.application.sounds.sound.get("shoot");
   this.chooseSound = this.application.sounds.sound.get("repaircomplete");
   this.menuSound = this.application.sounds.master.get("lobby");
@@ -185,10 +187,11 @@ ArcticMadness.scene.Menu.prototype.m_initAnimations = function () {
 //Method to initialize the menu
 ArcticMadness.scene.Menu.prototype.m_initMenu = function () {
   this.menu = new rune.ui.VTMenu({
+    pointer: ArcticMadness.entity.Pointer,
     resource: "thefont",
     duration: 1000,
     frequency: 100,
-  });
+  });  
   this.menu.add("START GAME");
   this.menu.add("HOW TO PLAY");
   this.menu.add("HIGHSCORE");
@@ -242,19 +245,26 @@ ArcticMadness.scene.Menu.prototype.m_initSound = function () {
 ArcticMadness.scene.Menu.prototype.selectOption = function (option) {
   switch (option.text) {
     case "START GAME":
-      this.application.scenes.load([
-        new ArcticMadness.scene.JoinGame(this.menuSound),
-      ]);
+      this.cameras.getCameraAt(0).fade.out(800, function() {
+        this.application.scenes.load([
+          new ArcticMadness.scene.JoinGame(this.menuSound),
+        ]);
+      }, this);
+
       break;
     case "HOW TO PLAY":
-      this.application.scenes.load([
-        new ArcticMadness.scene.HowtoPlay(),
-      ]);
+      this.cameras.getCameraAt(0).fade.out(300, function() {
+        this.application.scenes.load([
+          new ArcticMadness.scene.HowtoPlay(),
+        ]);
+      }, this);
       break;
     case "HIGHSCORE":
-      this.application.scenes.load([
-        new ArcticMadness.scene.Highscores(),
-      ]);
+    this.cameras.getCameraAt(0).fade.out(300, function() {
+        this.application.scenes.load([
+          new ArcticMadness.scene.Highscores(),
+        ]);
+      }, this);
       break;
     case "CREDITS":
       console.log("CREDITS, visa ljudskapare, samt mig o jepa")

@@ -2,7 +2,7 @@
 // Constructor scope
 //--------------------------------
 
-ArcticMadness.scene.GameOver = function (score,menuSound) {
+ArcticMadness.scene.GameOver = function (score, menuSound) {
   this.score = score;
   this.menuSound = menuSound;
   this.gameover_bg = null;
@@ -11,7 +11,7 @@ ArcticMadness.scene.GameOver = function (score,menuSound) {
   this.gameoverMenu = null;
   this.drowningPenguin = null;
   this.drowningPenguin2 = null;
-  
+
   //--------------------------------------------------------------------------
   // Super call
   //--------------------------------------------------------------------------
@@ -42,30 +42,30 @@ ArcticMadness.scene.GameOver.prototype.init = function () {
   this.m_createScoreText();
   this.m_createMenu();
   this.m_createAnimations();
-  this.menuSound.fade(1,3000);
-  
+  this.menuSound.fade(1, 3000);
+
 };
 
 ArcticMadness.scene.GameOver.prototype.update = function (step) {
   rune.scene.Scene.prototype.update.call(this, step);
-      if (this.gamepads.get(0).justPressed(12)) {
-          // this.moveSound.play();
-          // this.moveSound.loop = false;
-          if (this.gameoverMenu.up()) {
-          }
-      }
+  if (this.gamepads.get(0).justPressed(12)) {
+    // this.moveSound.play();
+    // this.moveSound.loop = false;
+    if (this.gameoverMenu.up()) {
+    }
+  }
 
-      if (this.gamepads.get(0).justPressed(13)) {
-          // this.moveSound.play();
-          // this.moveSound.loop = false;
-          if (this.gameoverMenu.down()) {
-          }
-      }
+  if (this.gamepads.get(0).justPressed(13)) {
+    // this.moveSound.play();
+    // this.moveSound.loop = false;
+    if (this.gameoverMenu.down()) {
+    }
+  }
 
-      if (this.gamepads.get(0).justPressed(0)) {
-          this.gameoverMenu.select();
-      }
-  
+  if (this.gamepads.get(0).justPressed(0)) {
+    this.gameoverMenu.select();
+  }
+
 
   if (this.keyboard.pressed("ENTER")) {
     this.application.scenes.load([new ArcticMadness.scene.Menu()]);
@@ -108,12 +108,12 @@ ArcticMadness.scene.GameOver.prototype.m_createScoreText = function () {
 // add drowning penguin
 ArcticMadness.scene.GameOver.prototype.m_createAnimations = function () {
   this.drowningPenguin = new rune.display.Sprite(200, 500, 64, 64, "penguin_texture_64x64");
-  this.drowningPenguin.animation.create("drowning", [30,31], 8, true);
+  this.drowningPenguin.animation.create("drowning", [30, 31], 8, true);
   this.drowningPenguin.scaleX = 2;
   this.drowningPenguin.scaleY = 2;
   this.stage.addChild(this.drowningPenguin);
   this.drowningPenguin2 = new rune.display.Sprite(920, 500, 64, 64, "penguin_texture_64x64");
-  this.drowningPenguin2.animation.create("drowning", [30,31], 8, true);
+  this.drowningPenguin2.animation.create("drowning", [30, 31], 8, true);
   this.drowningPenguin2.scaleX = 2;
   this.drowningPenguin2.scaleY = 2;
   this.stage.addChild(this.drowningPenguin2);
@@ -144,10 +144,18 @@ ArcticMadness.scene.GameOver.prototype.m_createMenu = function () {
 ArcticMadness.scene.GameOver.prototype.selectOption = function (option) {
   switch (option.text) {
     case "PLAY AGAIN":
-      this.application.scenes.load([new ArcticMadness.scene.JoinGame(this.menuSound)]);
+      this.cameras.getCameraAt(0).fade.out(300, function () {
+        this.application.scenes.load([
+          new ArcticMadness.scene.JoinGame(this.menuSound)]);
+      }, this);
+
       break;
     case "MAIN MENU":
-      this.application.scenes.load([new ArcticMadness.scene.Menu()]);
+      this.cameras.getCameraAt(0).fade.out(300, function () {
+        this.application.scenes.load([
+          new ArcticMadness.scene.Menu(),
+        ]);
+      }, this);
       break;
   }
 };

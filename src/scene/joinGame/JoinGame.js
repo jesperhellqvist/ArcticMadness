@@ -27,7 +27,7 @@ ArcticMadness.scene.JoinGame = function (menuSound) {
   this.gameStartTimer = null;
   this.connectedGamepads = [];
   this.colors = [
-    { r: 133, g:144, b: 255 }, // Player 1 orignal Blue
+    { r: 133, g: 144, b: 255 }, // Player 1 orignal Blue
     { r: 244, g: 40, b: 45 }, // Player 2 Red
     { r: 16, g: 152, b: 86 }, // Player 3 Green
     { r: 255, g: 250, b: 5 }, // Player 4 Yellow
@@ -56,6 +56,8 @@ ArcticMadness.scene.JoinGame.prototype.constructor =
 
 ArcticMadness.scene.JoinGame.prototype.init = function () {
   rune.scene.Scene.prototype.init.call(this);
+  this.cameras.getCameraAt(0).fade.opacity = 1;
+  this.cameras.getCameraAt(0).fade.in(1000);
   this.m_initBackground();
   this.m_initAnimations();
 };
