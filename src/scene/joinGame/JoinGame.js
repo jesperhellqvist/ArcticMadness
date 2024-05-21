@@ -133,16 +133,9 @@ ArcticMadness.scene.JoinGame.prototype.m_playerJoinGame = function () {
       180,
       "penguin_texture_64x64",
       {
-        r: Math.floor(Math.random() * 255),
-        g: Math.floor(Math.random() * 255),
-        b: Math.floor(Math.random() * 255),
-      },
-      {
-        left: "A",
-        right: "D",
-        up: "W",
-        down: "S",
-        shoot: "SPACE",
+        r: 255,
+        g: 0,
+        b: 0,
       },
       this.gamepads.get(0),
       0
@@ -162,16 +155,9 @@ ArcticMadness.scene.JoinGame.prototype.m_playerJoinGame = function () {
       180,
       "penguin_texture_64x64",
       {
-        r: Math.floor(Math.random() * 255),
-        g: Math.floor(Math.random() * 255),
-        b: Math.floor(Math.random() * 255),
-      },
-      {
-        left: "LEFT",
-        right: "RIGHT",
-        up: "UP",
-        down: "DOWN",
-        shoot: "ENTER",
+        r: 0,
+        g: 255,
+        b: 0,
       },
       this.gamepads.get(1),
       1
@@ -190,16 +176,9 @@ ArcticMadness.scene.JoinGame.prototype.m_playerJoinGame = function () {
       540,
       "penguin_texture_64x64",
       {
-        r: Math.floor(Math.random() * 255),
-        g: Math.floor(Math.random() * 255),
-        b: Math.floor(Math.random() * 255),
-      },
-      {
-        left: "F",
-        right: "H",
-        up: "T",
-        down: "G",
-        shoot: "R",
+        r: 0,
+        g: 0,
+        b: 255,
       },
       this.gamepads.get(2),
       2
@@ -218,16 +197,9 @@ ArcticMadness.scene.JoinGame.prototype.m_playerJoinGame = function () {
       540,
       "penguin_texture_64x64",
       {
-        r: Math.floor(Math.random() * 255),
-        g: Math.floor(Math.random() * 255),
-        b: Math.floor(Math.random() * 255),
-      },
-      {
-        left: "J",
-        right: "L",
-        up: "I",
-        down: "K",
-        shoot: "O",
+        r: 0,
+        g: 255,
+        b: 255,
       },
       this.gamepads.get(3),
       3
@@ -249,7 +221,7 @@ ArcticMadness.scene.JoinGame.prototype.m_startGameTimer = function () {
   this.gameStartTimer = this.timers.create({
     duration: 10000,
     onComplete: function () {
-      this.menuSound.fade(0,3000);
+      this.menuSound.fade(0, 3000);
       this.application.scenes.load([
         new ArcticMadness.scene.Game(
           this.connectedGamepads.length,
@@ -257,22 +229,18 @@ ArcticMadness.scene.JoinGame.prototype.m_startGameTimer = function () {
           this.connectedGamepads
         ),
       ]);
-      
-
     },
     scope: this,
   });
 };
 
 ArcticMadness.scene.JoinGame.prototype.m_initCountDown = function () {
-
   if (this.countDown !== null) {
     this.stage.removeChild(this.countDown, true);
     this.countDown = null;
   }
- 
+
   this.countDown = new ArcticMadness.entity.CountDown(this);
   this.stage.addChild(this.countDown);
   this.countDown.playCountDown10();
-
 };
