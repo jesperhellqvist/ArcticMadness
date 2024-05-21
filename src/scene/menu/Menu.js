@@ -223,8 +223,8 @@ ArcticMadness.scene.Menu.prototype.m_highscoreList = function () {
     repeat: Infinity,
     scope: this,
     onTick: function () {
-      this.stage.removeChild(this.highscores[this.currentIndex].highscoreList);
-      this.stage.removeChild(this.highscores[this.currentIndex].text);
+      this.stage.removeChild(this.highscores[this.currentIndex].highscoreList, true);
+      this.stage.removeChild(this.highscores[this.currentIndex].text, true);
       this.currentIndex++;
       if (this.currentIndex > 3) {
         this.currentIndex = 0;
@@ -236,6 +236,8 @@ ArcticMadness.scene.Menu.prototype.m_highscoreList = function () {
   });
 
 };
+
+
 ArcticMadness.scene.Menu.prototype.m_initSound = function () {
   this.menuSound.play();
   this.menuSound.loop = true;

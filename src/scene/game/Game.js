@@ -434,6 +434,9 @@ ArcticMadness.scene.Game.prototype.m_showWaveText = function (wave) {
     this.enemyScore,
     this.map.repairedWaveScore
   );
+  for (var i = 0; i < this.players.length; i++) {
+    this.players[i].moveable = false;
+  }
 
   this.timers
     .create({
@@ -443,6 +446,9 @@ ArcticMadness.scene.Game.prototype.m_showWaveText = function (wave) {
         this.bonusContainer.dispose(); //remove bonuscontainer
         this.map.repairedWaveScore = 0;
         this.enemyScore = 0;
+        for (var i = 0; i < this.players.length; i++) {
+          this.players[i].moveable = true;
+        }
         this.m_countDown(wave);
       },
     })
@@ -484,13 +490,16 @@ ArcticMadness.scene.Game.prototype.m_startNextWave = function () {
 
 ArcticMadness.scene.Game.prototype.m_checkIfPlayersAreDead = function () {
   var allPlayersDead = true;
+  var allPlayersInWater = true;
   for (var i = 0; i < this.players.length; i++) {
     if (this.players[i].isAlive === true) {
       allPlayersDead = false;
-      break;
+    }
+    if (!this.players[i].isInWater) {
+      allPlayersInWater = false;
     }
   }
-  if (allPlayersDead) {
+  if (allPlayersDead || allPlayersInWater) {
     this.gameMusic.fade();
     this.m_stopWaveTimer();
     this.timers
@@ -506,9 +515,6 @@ ArcticMadness.scene.Game.prototype.m_checkIfPlayersAreDead = function () {
 };
 
 ArcticMadness.scene.Game.prototype.m_checkIfNewHighscore = function () {
-  console.log(this.numberOfPlayers - 1);
-  console.log(this.application.highscores);
-
   if (
     this.application.highscores.test(
       this.liveScore.score,

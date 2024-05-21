@@ -23,6 +23,7 @@ ArcticMadness.entity.Player = function (
   this.isAlive = true; // Player is alive
   this.isAttacked = false; // Player is attacked
   this.diagonalMovement = false;
+  this.moveable = true;
   this.falling = false;
   this.id = id; // Player id
   this.animationBlock = null;
@@ -89,7 +90,7 @@ ArcticMadness.entity.Player.prototype.init = function () {
 ArcticMadness.entity.Player.prototype.update = function (step) {
   rune.display.Sprite.prototype.update.call(this, step);
 
-  if (!this.isInWater && this.isAlive && !this.isAttacked && !this.isRepairing) {
+  if (!this.isInWater && this.isAlive && !this.isAttacked && !this.isRepairing && this.moveable) {
     this.m_handleInputGamepad();
     this.m_handleHitBox();
   }

@@ -20,7 +20,6 @@ ArcticMadness.map.Map = function (map, players, game, gamepads, enemies) {
   this.repairedTilesScore = 0;
   this.repairedWaveScore = 0;
 
-
   ArcticMadness.map.Map.prototype.init.call(this);
 };
 
@@ -209,7 +208,6 @@ ArcticMadness.map.Map.prototype.setCrackTimer = function (currentWave) {
 };
 
 ArcticMadness.map.Map.prototype.callCrackRandomTile = function (currentWave) {
-  console.log(currentWave);
   currentWave *= 2;
 
   for (var i = 0; i < currentWave; i++) {
@@ -295,8 +293,6 @@ ArcticMadness.map.Map.prototype.stopWave = function () {
   this.m_stopNewCrackTimer();
   this.m_stopNewEnemyTimer();
 };
-
-
 
 //------------------------------------------------------------------------------
 // Public methods related to the enemies
@@ -452,14 +448,14 @@ ArcticMadness.map.Map.prototype.m_createCracksAround = function (index) {
   var coreTile = this.tileLayer.getTileAt(index);
 
   var offsets = [
-    { x: 0, y: -32 }, // Above
-    { x: 0, y: 96 }, // Below
-    { x: -32, y: 0 }, // Left
-    { x: 96, y: 0 }, // Right
-    { x: -32, y: -32 }, // Above left
-    { x: 96, y: -32 }, // Above right
-    { x: -32, y: 96 }, // Below left
-    { x: 96, y: 96 }, // Below right
+    { x: 0, y: -32, direction: 25 }, // Above
+    { x: 0, y: 96, direction: 29 }, // Below
+    { x: -32, y: 0, direction: 31 }, // Left
+    { x: 96, y: 0, direction: 27 }, // Right
+    { x: -32, y: -32, direction: 32 }, // Above left
+    { x: 96, y: -32, direction: 26 }, // Above righ
+    { x: -32, y: 96, direction: 30 }, // Below left
+    { x: 96, y: 96, direction: 28 }, // Below right
   ];
 
   // Shuffle the offsets array
@@ -477,6 +473,7 @@ ArcticMadness.map.Map.prototype.m_createCracksAround = function (index) {
     var tileValue = this.tileLayer.getTileValueAt(tileIndex);
 
     if (
+      // If the tile is ice
       tileValue === 1 ||
       tileValue === 2 ||
       tileValue === 3 ||
@@ -486,7 +483,7 @@ ArcticMadness.map.Map.prototype.m_createCracksAround = function (index) {
       tileValue === 7 ||
       tileValue === 8
     ) {
-      this.tileLayer.setTileValueAt(tileIndex, 33);
+      this.tileLayer.setTileValueAt(tileIndex, offset.direction);
       this.m_createTimer(
         2000,
         (function (index) {
@@ -622,7 +619,6 @@ ArcticMadness.map.Map.prototype.m_updatePlayerState = function (player) {
     player.isRevivable = true;
 
     if (alivePlayers.length === 1 && player.isInWater && player.health < 235) {
-
       player.health = 0;
     } else {
       player.health -= 1;
@@ -839,6 +835,15 @@ ArcticMadness.map.Map.prototype.m_repairIce = function (
   delete this.tileTimers[playerTileIndex];
 
   if (
+    tileValue === 25 ||
+    tileValue === 26 ||
+    tileValue === 27 ||
+    tileValue === 28 ||
+    tileValue === 29 ||
+    tileValue === 30 ||
+    tileValue === 31 ||
+    tileValue === 31 ||
+    tileValue === 32 ||
     tileValue === 33 ||
     tileValue === 34 ||
     tileValue === 35 ||
@@ -955,7 +960,6 @@ ArcticMadness.map.Map.prototype.m_createTimer = function (
 //------------------------------------------------------------------------------
 // Private utility methods related to the game, waves and enemies
 //------------------------------------------------------------------------------
-
 
 /**
  * This method disposes all enemies.

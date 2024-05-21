@@ -151,11 +151,13 @@ ArcticMadness.entity.Enemy.prototype.m_checkPlayerCollision = function (
   if (this.isAlive) {
     if (this.hitTestObject(player)) {
       player.isAttacked = true;
-      player.health -= 1;
       player.gun.alpha = 0;
       this.animation.gotoAndPlay("attack");
       player.animation.gotoAndPlay("dragy");
       this.m_getNearestWater(player.x, player.y, player);
+    }else{
+      player.isAttacked = false;
+      player.gun.alpha = 1;
     }
   }
 };
