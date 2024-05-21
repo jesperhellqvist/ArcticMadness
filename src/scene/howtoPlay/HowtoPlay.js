@@ -68,7 +68,7 @@ ArcticMadness.scene.HowtoPlay.prototype.m_createBackground = function () {
         this.application.screen.width,
         this.application.screen.height,
 
-        "howto_bg2",
+        "howto_bg2"
     );
     this.stage.addChild(this.howto_bg);
 }
