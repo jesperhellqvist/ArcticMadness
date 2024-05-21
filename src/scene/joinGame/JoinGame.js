@@ -27,10 +27,10 @@ ArcticMadness.scene.JoinGame = function (menuSound) {
   this.gameStartTimer = null;
   this.connectedGamepads = [];
   this.colors = [
-    { r: 255, g: 0, b: 0 },    // Red
-    { r: 0, g: 255, b: 0 },    // Green
-    { r: 0, g: 0, b: 255 },    // Blue
-    { r: 255, g: 255, b: 0 },  // Yellow
+    { r: 255, g: 0, b: 0 }, // Red
+    { r: 0, g: 255, b: 0 }, // Green
+    { r: 0, g: 0, b: 255 }, // Blue
+    { r: 255, g: 255, b: 0 }, // Yellow
   ];
   this.menuSound = menuSound;
   rune.scene.Scene.call(this);
@@ -76,6 +76,9 @@ ArcticMadness.scene.JoinGame.prototype.dispose = function () {
   this.stage.removeChild(this.player2, true);
   this.stage.removeChild(this.player3, true);
   this.stage.removeChild(this.player4, true);
+  this.colors = null;
+  this.connectedGamepads = null;
+  this.menuSound = null;
   rune.scene.Scene.prototype.dispose.call(this);
 };
 
@@ -84,7 +87,7 @@ ArcticMadness.scene.JoinGame.prototype.dispose = function () {
 //------------------------------------------------------------------------------
 
 ArcticMadness.scene.JoinGame.prototype.m_initBackground = function () {
-  this.background = new rune.display.Sprite(0, 0, 640, 360, "join_graphics");
+  this.background1 = new rune.display.Sprite(0, 0, 640, 360, "join_graphics");
 
   this.background2 = new rune.display.Sprite(640, 0, 640, 360, "join_graphics");
 
@@ -100,15 +103,15 @@ ArcticMadness.scene.JoinGame.prototype.m_initBackground = function () {
 
   this.howTo = new rune.display.Sprite(30, 20, 220, 220, "how_to");
 
-  this.stage.addChild(this.background);
+  this.stage.addChild(this.background1);
   this.stage.addChild(this.background2);
   this.stage.addChild(this.background3);
   this.stage.addChild(this.background4);
 };
 
 ArcticMadness.scene.JoinGame.prototype.m_initAnimations = function () {
-  this.background.animation.create("play", [0, 1], 4, true);
-  this.background.animation.gotoAndPlay("play");
+  this.background1.animation.create("play", [0, 1], 4, true);
+  this.background1.animation.gotoAndPlay("play");
   this.background2.animation.create("play", [0, 1], 4, true);
   this.background2.animation.gotoAndPlay("play");
   this.background3.animation.create("play", [0, 1], 4, true);
@@ -116,7 +119,7 @@ ArcticMadness.scene.JoinGame.prototype.m_initAnimations = function () {
   this.background4.animation.create("play", [0, 1], 4, true);
   this.background4.animation.gotoAndPlay("play");
 
-  this.background.animation.create("ice", [2], 4, false);
+  this.background1.animation.create("ice", [2], 4, false);
   this.background2.animation.create("ice", [2], 4, false);
   this.background3.animation.create("ice", [2], 4, false);
   this.background4.animation.create("ice", [2], 4, false);
@@ -129,81 +132,35 @@ ArcticMadness.scene.JoinGame.prototype.m_initAnimations = function () {
 };
 
 ArcticMadness.scene.JoinGame.prototype.m_playerJoinGame = function () {
-  if (
-    this.gamepads.get(0).justPressed(0) &&
-    this.connectedGamepads.indexOf(0) === -1
-  ) {
+  var positions = [
+    { x: 320, y: 180 },
+    { x: 930, y: 180 },
+    { x: 320, y: 540 },
+    { x: 930, y: 540 },
+  ];
 
-    this.connectedGamepads.push(0);
-    var color = this.colors[this.connectedGamepads.length - 1];
-    this.player = new ArcticMadness.entity.Player(
-      320,
-      180,
-      "penguin_texture_64x64",
-      color
-      ,
-      this.gamepads.get(0),
-      0
-    );
-    this.stage.addChild(this.player);
-    this.m_startGameTimer();
-    this.background.animation.gotoAndStop("ice");
-    this.stage.addChild(this.howTo);
-  }
-  if (
-    this.gamepads.get(1).justPressed(0) &&
-    this.connectedGamepads.indexOf(1) === -1
-  ) {
-    this.connectedGamepads.push(1);
-    var color = this.colors[this.connectedGamepads.length - 1];
-    this.player2 = new ArcticMadness.entity.Player(
-      930,
-      180,
-      "penguin_texture_64x64",
-      color
-    ,
-      this.gamepads.get(1),
-      1
-    );
-    this.stage.addChild(this.player2);
-    this.m_startGameTimer();
-    this.background2.animation.gotoAndStop("ice");
-  }
-  if (
-    this.gamepads.get(2).justPressed(0) &&
-    this.connectedGamepads.indexOf(2) === -1
-  ) {
-    this.connectedGamepads.push(2);
-    var color = this.colors[this.connectedGamepads.length - 1];
-    this.player3 = new ArcticMadness.entity.Player(
-      320,
-      540,
-      "penguin_texture_64x64",
-      color,
-      this.gamepads.get(2),
-      2
-    );
-    this.stage.addChild(this.player3);
-    this.m_startGameTimer();
-    this.background3.animation.gotoAndStop("ice");
-  }
-  if (
-    this.gamepads.get(3).justPressed(0) &&
-    this.connectedGamepads.indexOf(3) === -1
-  ) {
-    this.connectedGamepads.push(3);
-    var color = this.colors[this.connectedGamepads.length - 1];
-    this.player4 = new ArcticMadness.entity.Player(
-      930,
-      540,
-      "penguin_texture_64x64",
-      color,
-      this.gamepads.get(3),
-      3
-    );
-    this.stage.addChild(this.player4);
-    this.m_startGameTimer();
-    this.background4.animation.gotoAndStop("ice");
+  for (var i = 0; i < 4; i++) {
+    if (
+      this.gamepads.get(i).justPressed(0) &&
+      this.connectedGamepads.indexOf(i) === -1
+    ) {
+      this.connectedGamepads.push(i);
+      var color = this.colors[this.connectedGamepads.length - 1];
+      var player = new ArcticMadness.entity.Player(
+        positions[i].x,
+        positions[i].y,
+        "penguin_texture_64x64",
+        color,
+        this.gamepads.get(i),
+        i
+      );
+      this.stage.addChild(player);
+      this.m_startGameTimer();
+      this["background" + (i + 1)].animation.gotoAndStop("ice");
+      if (i === 0) {
+        this.stage.addChild(this.howTo);
+      }
+    }
   }
 };
 

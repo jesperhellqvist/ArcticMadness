@@ -73,9 +73,6 @@ ArcticMadness.scene.Game.prototype.init = function () {
   this.m_initEnemies();
   this.m_initMap();
   this.m_startWaveTimer();
- console.log(this.camera);
-//  rune.camera.CameraShake.start(10000);
-
 };
 
 /**
