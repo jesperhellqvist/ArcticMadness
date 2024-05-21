@@ -2,18 +2,17 @@
 // Constructor scope
 //--------------------------------
 
-ArcticMadness.entity.Gun = function (x, y, color, gamepad, enemies, player) {
+ArcticMadness.entity.Gun = function (x, y, color, gamepad, player) {
   this.x = x;
   this.y = y;
   this.color = color;
   this.gamepad = gamepad;
   this.angle = 0;
-  this.enemies = enemies;
   this.player = player;
   this.bullet = null;
   this.bullets = [];
   this.stickRightActive = false;
-  //console.log(this.enemies); // Just nu null
+
 
   //--------------------------------------------------------------------------
   // Super call
@@ -148,8 +147,7 @@ ArcticMadness.entity.Gun.prototype.m_handleShoot = function (angle) {
     this.x,
     this.y,
     this.color,
-    angle,
-    this.enemies
+    angle
   );
   this.bullets.push(this.bullet);
   this.stage.addChild(this.bullet);

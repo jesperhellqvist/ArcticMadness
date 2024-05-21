@@ -15,7 +15,6 @@ ArcticMadness.entity.Player = function (
   this.y = y; // Player y position
   this.angle = 0; // Player angle
   this.gamepad = gamepad; // Player gamepad
-  this.enemies = null; // Player enemy
   this.color = color; // Player color
   this.gun = null; // Reference to the gun object
   this.isInWater = false; // Player is in water
@@ -30,9 +29,6 @@ ArcticMadness.entity.Player = function (
   this.inWaterTile = null; // Index of the tile the player is in
   this.isRevivable = false; // Player is revivable
   this.revivingTileSet = false; 
-  //console.log(this.enemies); // Just nu null
-
-  //this.topSpeed = 3; // Player top speed
 
   //--------------------------------------------------------------------------
   // Super call
@@ -83,7 +79,7 @@ ArcticMadness.entity.Player.prototype.init = function () {
   //Attacked animation, injured
   this.animation.create("dragy", [45, 46], 4, true);
   this.animation.create("dragx", [47, 48], 4, true);
-  this.m_createGun(this.enemies);
+  this.m_createGun();
   this.m_setPhysics();
 };
 
@@ -155,13 +151,12 @@ ArcticMadness.entity.Player.prototype.m_handleInputGamepad = function () {
   }
 };
 
-ArcticMadness.entity.Player.prototype.m_createGun = function (enemies) {
+ArcticMadness.entity.Player.prototype.m_createGun = function () {
   this.gun = new ArcticMadness.entity.Gun(
     this.x,
     this.y,
     this.color,
     this.gamepad,
-    enemies,
     this
   );
   this.stage.addChild(this.gun);

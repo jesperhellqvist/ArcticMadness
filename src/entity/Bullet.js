@@ -2,12 +2,11 @@
 // Constructor scope
 //--------------------------------
 
-ArcticMadness.entity.Bullet = function (x, y, color, angle, enemies) {
+ArcticMadness.entity.Bullet = function (x, y, color, angle) {
   this.x = x;
   this.y = y;
   this.color = color;
   this.angle = angle;
-  this.enemies = enemies;
 
   //--------------------------------------------------------------------------
   // Super call
@@ -32,29 +31,57 @@ ArcticMadness.entity.Bullet.prototype.constructor = ArcticMadness.entity.Bullet;
 // Override public prototype methods (ENGINE)
 //------------------------------------------------------------------------------
 
+/**
+ * This method is automatically executed once after the scene is instantiated.
+ * The method is used to create objects to be used within the scene.
+ *
+ * @returns {undefined}
+ */
+
 ArcticMadness.entity.Bullet.prototype.init = function () {
   rune.display.Sprite.prototype.init.call(this);
   this.texture.replaceColor(
-    new rune.color.Color24(133,144,255),
-    new rune.color.Color24(this.color.r,this.color.g,this.color.b)
+    new rune.color.Color24(133, 144, 255),
+    new rune.color.Color24(this.color.r, this.color.g, this.color.b)
   );
-  this.animation.create("idle", [0,1], 3, true);
+  this.animation.create("idle", [0, 1], 3, true);
   this.m_setPhysics();
 };
+
+/**
+ * This method is used to update the object.
+ *
+ * @returns {undefined}
+ */
 
 ArcticMadness.entity.Bullet.prototype.update = function (step) {
   rune.display.Sprite.prototype.update.call(this, step);
   this.m_shoot(this.angle);
 };
 
+/**
+ * This method is used to dispose the object.
+ *
+ * @returns {undefined}
+ */
+
 ArcticMadness.entity.Bullet.prototype.dispose = function (bullet) {
-  if(bullet != null){
+  if (bullet != null) {
     this.stage.removeChild(bullet, true);
   }
-  
-  console.log("Bullet disposed");
   rune.display.Sprite.prototype.dispose.call(this);
 };
+
+//------------------------------------------------------------------------------
+// Private prototype methods
+//------------------------------------------------------------------------------
+
+/**
+ * Fire the bullet in the given angle.
+ *
+ * @param {number} angle The angle of the bullet.
+ * @returns {undefined}
+ */
 
 ArcticMadness.entity.Bullet.prototype.m_shoot = function (angle) {
   var radian = rune.util.Math.degreesToRadians(angle);
@@ -66,14 +93,13 @@ ArcticMadness.entity.Bullet.prototype.m_shoot = function (angle) {
   this.velocity.y = rune.util.Math.sin(radian) * speed;
 };
 
-//------------------------------------------------------------------------------
-// Private methods
-//------------------------------------------------------------------------------
-
-// Function to set the physics of the bullet
+/**
+ * Set the physics of the bullet.
+ *
+ * @returns {undefined}
+ */
 
 ArcticMadness.entity.Bullet.prototype.m_setPhysics = function () {
   this.velocity.drag.x = 0.05;
   this.velocity.drag.y = 0.05;
 };
-
