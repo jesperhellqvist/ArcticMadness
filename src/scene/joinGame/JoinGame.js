@@ -26,6 +26,12 @@ ArcticMadness.scene.JoinGame = function (menuSound) {
   this.countDown = null;
   this.gameStartTimer = null;
   this.connectedGamepads = [];
+  this.colors = [
+    { r: 255, g: 0, b: 0 },    // Red
+    { r: 0, g: 255, b: 0 },    // Green
+    { r: 0, g: 0, b: 255 },    // Blue
+    { r: 255, g: 255, b: 0 },  // Yellow
+  ];
   this.menuSound = menuSound;
   rune.scene.Scene.call(this);
 };
@@ -127,16 +133,15 @@ ArcticMadness.scene.JoinGame.prototype.m_playerJoinGame = function () {
     this.gamepads.get(0).justPressed(0) &&
     this.connectedGamepads.indexOf(0) === -1
   ) {
+
     this.connectedGamepads.push(0);
+    var color = this.colors[this.connectedGamepads.length - 1];
     this.player = new ArcticMadness.entity.Player(
       320,
       180,
       "penguin_texture_64x64",
-      {
-        r: 255,
-        g: 0,
-        b: 0,
-      },
+      color
+      ,
       this.gamepads.get(0),
       0
     );
@@ -150,15 +155,13 @@ ArcticMadness.scene.JoinGame.prototype.m_playerJoinGame = function () {
     this.connectedGamepads.indexOf(1) === -1
   ) {
     this.connectedGamepads.push(1);
+    var color = this.colors[this.connectedGamepads.length - 1];
     this.player2 = new ArcticMadness.entity.Player(
       930,
       180,
       "penguin_texture_64x64",
-      {
-        r: 0,
-        g: 255,
-        b: 0,
-      },
+      color
+    ,
       this.gamepads.get(1),
       1
     );
@@ -171,15 +174,12 @@ ArcticMadness.scene.JoinGame.prototype.m_playerJoinGame = function () {
     this.connectedGamepads.indexOf(2) === -1
   ) {
     this.connectedGamepads.push(2);
+    var color = this.colors[this.connectedGamepads.length - 1];
     this.player3 = new ArcticMadness.entity.Player(
       320,
       540,
       "penguin_texture_64x64",
-      {
-        r: 0,
-        g: 0,
-        b: 255,
-      },
+      color,
       this.gamepads.get(2),
       2
     );
@@ -192,15 +192,12 @@ ArcticMadness.scene.JoinGame.prototype.m_playerJoinGame = function () {
     this.connectedGamepads.indexOf(3) === -1
   ) {
     this.connectedGamepads.push(3);
+    var color = this.colors[this.connectedGamepads.length - 1];
     this.player4 = new ArcticMadness.entity.Player(
       930,
       540,
       "penguin_texture_64x64",
-      {
-        r: 0,
-        g: 255,
-        b: 255,
-      },
+      color,
       this.gamepads.get(3),
       3
     );
