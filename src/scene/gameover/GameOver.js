@@ -4,8 +4,13 @@
 
 ArcticMadness.scene.GameOver = function (score,menuSound) {
   this.score = score;
-  this.gameOverText = null;
   this.menuSound = menuSound;
+  this.gameover_bg = null;
+  this.gameOverText = null;
+  this.scoreText = null;
+  this.gameoverMenu = null;
+  this.drowningPenguin = null;
+  this.drowningPenguin2 = null;
   
   //--------------------------------------------------------------------------
   // Super call
@@ -68,6 +73,12 @@ ArcticMadness.scene.GameOver.prototype.update = function (step) {
 };
 
 ArcticMadness.scene.GameOver.prototype.dispose = function () {
+  this.stage.removeChild(this.drowningPenguin2, true);
+  this.stage.removeChild(this.drowningPenguin, true);
+  this.stage.removeChild(this.gameoverMenu, true);
+  this.stage.removeChild(this.scoreText, true);
+  this.stage.removeChild(this.gameover_bg, true);
+
   rune.scene.Scene.prototype.dispose.call(this);
 };
 

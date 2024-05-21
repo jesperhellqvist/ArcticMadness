@@ -102,12 +102,15 @@ ArcticMadness.scene.Menu.prototype.update = function (step) {
 //Kolla igenom så dessa inte är har "gamla" metoder som inte används, och är flyttade till ny scene
 ArcticMadness.scene.Menu.prototype.dispose = function () {
   console.log("dispose");
-  this.stage.removeChild(this.menu);
-  this.stage.removeChild(this.highscoreText);
-  this.stage.removeChild(this.divingPenguin);
-  this.stage.removeChild(this.background);
-  this.stage.removeChild(this.controller_bg);
-  this.stage.removeChild(this.hs1);
+  this.stage.removeChild(this.menu, true);
+  this.stage.removeChild(this.highscoreText, true);
+  this.stage.removeChild(this.divingPenguin, true);
+  this.stage.removeChild(this.background, true);
+  this.stage.removeChild(this.controller_bg, true);
+  this.stage.removeChild(this.hs1, true);
+  this.stage.removeChild(this.hs2, true);
+  this.stage.removeChild(this.hs3, true);
+  this.stage.removeChild(this.hs4, true);
   this.stage.removeChild(this.highscore_bg);
   rune.scene.Scene.prototype.dispose.call(this);
 };
@@ -198,38 +201,35 @@ ArcticMadness.scene.Menu.prototype.m_initMenu = function () {
 ArcticMadness.scene.Menu.prototype.m_highscoreList = function () {
   this.highscoreX = 850;
   this.highscoreY = 300;
+  this.i = 0;
+  this.highscores = [
+    this.hs1 = new ArcticMadness.entity.HighscoreList("$ PLAYER", 0, this, 100, 100, 850, 200),
+    this.hs2 = new ArcticMadness.entity.HighscoreList("% PLAYERS", 1, this, 300, 100, 850, 200),
+    this.hs3 = new ArcticMadness.entity.HighscoreList("& PLAYERS", 2, this, 500, 100, 850, 200),
+    this.hs4 = new ArcticMadness.entity.HighscoreList("' PLAYERS", 3, this, 700, 100, 850, 200),
+  ];
+  this.highscores[this.i].x = this.highscoreX;
+  this.highscores[this.i].y = this.highscoreY;
+  this.stage.addChild(this.highscores[this.i]);
 
-
-  this.hs1 = new ArcticMadness.entity.HighscoreList("$ PLAYER", 0, this, 100, 100, 850, 200);
-  this.hs1.x = this.highscoreX;
-  this.hs1.y = this.highscoreY;
-  this.stage.addChild(this.hs1);
-
- // use the other to create a loop with the highscores, problems removing the old ones
-  this.hs2 = new ArcticMadness.entity.HighscoreList("% PLAYERS", 1, this, 300, 100, 850, 200);
-  this.hs2.x = this.highscoreX;
-  this.hs2.y = this.highscoreY;
- 
- 
-
-  this.hs3 = new ArcticMadness.entity.HighscoreList("& PLAYERS", 2, this, 500, 100, 850, 200);
-  this.hs3.x = this.highscoreX;
-  this.hs3.y = this.highscoreY;
-
-
- 
-
-  this.hs4 = new ArcticMadness.entity.HighscoreList("' PLAYERS", 3, this, 700, 100, 850, 200);
-  this.hs4.x = this.highscoreX;
-  this.hs4.y = this.highscoreY;
-
-
-  
-
-  
+  this.highscoreSlide = this.timers.create({
+    duration: 3000,
+    repeat: Infinity,
+    scope: this,
+    onTick: function () {
+      this.stage.removeChild(this.highscores[this.i].highscoreList);
+      this.stage.removeChild(this.highscores[this.i].text);
+      this.i++;
+      if (this.i > 3) {
+        this.i = 0;
+      }
+      this.highscores[this.i].x = this.highscoreX;
+      this.highscores[this.i].y = this.highscoreY;
+      this.stage.addChild(this.highscores[this.i]);
+    },
+  });
 
 };
-
 ArcticMadness.scene.Menu.prototype.m_initSound = function () {
   this.menuSound.play();
   this.menuSound.loop = true;
