@@ -97,9 +97,9 @@ ArcticMadness.entity.Enemy.prototype.killenemy = function () {
 
 ArcticMadness.entity.Enemy.prototype.m_followPlayer = function () {
   var centerX = this.application.screen.width / 2;
-  var centerY = this.application.screen.width / 2;
+  var centerY = this.application.screen.height / 2;
   var closestPlayer = this.m_getClosestPlayer();
-  var proximityThreshold = 2;
+  var proximityThreshold = 2; 
 
   if (closestPlayer) {
     if (closestPlayer.isInWater) {
@@ -170,25 +170,25 @@ ArcticMadness.entity.Enemy.prototype.m_getNearestWater = function (
   var topLeft = this.application.screen.width / 2;
   var bottomLeft = this.application.screen.height / 2;
 
-  if (x < topLeft && y < bottomLeft) {
+  if (x <= topLeft && y <= bottomLeft) {
     player.x -= 1;
     player.y -= 4;
     this.x -= 1;
     this.y -= 4;
   }
-  if (x < topLeft && y > bottomLeft) {
+  if (x <= topLeft && y >= bottomLeft) {
     player.x -= 1;
     player.y += 4;
     this.x -= 1;
     this.y += 4;
   }
-  if (x > topLeft && y < bottomLeft) {
+  if (x >= topLeft && y <= bottomLeft) {
     player.x += 1;
     player.y -= 4;
     this.x += 1;
     this.y -= 4;
   }
-  if (x > topLeft && y > bottomLeft) {
+  if (x >= topLeft && y >= bottomLeft) {
     player.x += 1;
     player.y += 4;
     this.x += 1;
@@ -207,13 +207,24 @@ ArcticMadness.entity.Enemy.prototype.m_getClosestPlayer = function () {
 
   for (var i = 0; i < this.players.length; i++) {
     var player = this.players[i];
-    var dx = player.x - this.x;
-    var dy = player.y - this.y;
-    var distance = Math.sqrt(dx * dx + dy * dy);
+    var distance = Math.sqrt(Math.pow(this.x - player.x, 2) + Math.pow(this.y - player.y, 2));
 
-    if (distance < closestDistance) {
-      closestDistance = distance;
+    if (distance < closestDistance && !player.isInWater) {
       closestPlayer = player;
+      closestDistance = distance;
+    }
+  }
+
+  // If no player is out of water, just get the closest one regardless of whether they are in water or not
+  if (closestPlayer === null) {
+    for (var i = 0; i < this.players.length; i++) {
+      var player = this.players[i];
+      var distance = Math.sqrt(Math.pow(this.x - player.x, 2) + Math.pow(this.y - player.y, 2));
+
+      if (distance < closestDistance) {
+        closestPlayer = player;
+        closestDistance = distance;
+      }
     }
   }
 
