@@ -736,9 +736,6 @@ ArcticMadness.map.Map.prototype.m_killPlayer = function (player) {
       scope: this,
     })
     .start();
-
-  console.log("Player died");
-  //this.game.gameOver();
 };
 
 /**

@@ -235,9 +235,8 @@ ArcticMadness.scene.Game.prototype.m_initPlayers = function () {
     );
     this.players.push(this.player);
     this.gamepadsConected.push(this.gamepads.get(0));
+    this.stage.addChild(this.players[i]);
   }
-
-  this.m_addPlayersToStage();
 };
 
 ArcticMadness.scene.Game.prototype.m_initEnemies = function () {
@@ -356,11 +355,6 @@ ArcticMadness.scene.Game.prototype.m_checkBulletHitEnemy = function (bullet) {
   }
 };
 
-ArcticMadness.scene.Game.prototype.m_addPlayersToStage = function () {
-  for (var i = 0; i < this.players.length; i++) {
-    this.stage.addChild(this.players[i]);
-  }
-};
 
 ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
   this.lastScoreUpdate = 0;
