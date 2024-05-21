@@ -66,20 +66,28 @@ ArcticMadness.entity.HighscoreList.prototype.m_createTable = function () {
   this.highscoreList = new rune.ui.VTList("thefont");
   this.highscoreList.align = rune.ui.VTList.ALIGN_LEFT;
   this.highscoreList.padding = 10;
+
   for (var i = 0; i < 5; i++) {
     var score = this.application.highscores.get(i, this.tableID);
+    this.listItem = score.name + score.score;
+    var space = "";
+    while ((this.listItem + space).length < 11) {
+      space += " ";
+    }  
+    if (score.name == "Rune") {
+      score.name = "henke";
+    }
+    if (i == 0 && score.score == 0) {
+      score.name = "no scores";
+      score.score = "";
+      this.highscoreList.add(this.listItem);
+      break;
+    }
   
-   if (i == 0 && score.score == 0){
-    score.name ="no scores";
-    score.score = "";
-    this.highscoreList.add(score.name);
-    break;
-   }
-   if(score.name == "Rune"){
-    score.name ="henke";
-   }
-    this.highscoreList.add(score.name + " " + score.score);
-    
+
+
+    this.highscoreList.add(score.name + space + score.score);
+
   }
   this.highscoreList.x = this.x;
   this.highscoreList.y = this.y;
