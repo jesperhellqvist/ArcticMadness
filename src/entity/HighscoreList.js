@@ -64,6 +64,7 @@ ArcticMadness.entity.HighscoreList.prototype.m_createTitle = function () {
 
 ArcticMadness.entity.HighscoreList.prototype.m_createTable = function () {
   this.highscoreList = new rune.ui.VTList("thefont");
+  this.highscoreList.align = rune.ui.VTList.ALIGN_LEFT;
   this.highscoreList.padding = 10;
   for (var i = 0; i < 5; i++) {
     var score = this.application.highscores.get(i, this.tableID);

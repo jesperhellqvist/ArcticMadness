@@ -12,6 +12,7 @@ npx google-closure-compiler \
 --js "./../../src/entity/CountDown.js" \
 --js "./../../src/entity/Particle.js" \
 --js "./../../src/entity/HighscoreList.js" \
+--js "./../../src/entity/Pointer.js" \
 --js "./../../src/scene/gameover/NewHighscore.js" \
 --js "./../../src/scene/gameover/GameOver.js" \
 --js "./../../src/entity/LiveScore.js" \

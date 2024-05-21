@@ -309,8 +309,11 @@ ArcticMadness.scene.NewHighscore.prototype.m_handleSelectBoxInput =
       }
       if (this.selectBox.x == 535 && this.selectBox.y == 610) {
         this.m_addHighscore(this.ListName.replace(/\s/g, ''));
-        this.application.scenes.load([new ArcticMadness.scene.Menu()]);
-      }
+        this.cameras.getCameraAt(0).fade.out(300, function () {
+          this.application.scenes.load([
+            new ArcticMadness.scene.Menu(),
+          ]);
+        }, this);      }
     };
   };
 

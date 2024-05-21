@@ -363,6 +363,7 @@ ArcticMadness.scene.Game.prototype.m_addPlayersToStage = function () {
 };
 
 ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
+  this.cameras.getCameraAt(0).shake.start(1500,5,5, true);
   this.lastScoreUpdate = 0;
   this.waveTimer = this.timers.create({
     duration: 45000,
