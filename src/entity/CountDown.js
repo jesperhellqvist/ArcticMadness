@@ -11,9 +11,8 @@
  * Count down object.
  */
 
-ArcticMadness.entity.CountDown = function (context) {
-  this.context = context; // The context of the game
-
+ArcticMadness.entity.CountDown = function () {
+  
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
@@ -68,7 +67,6 @@ ArcticMadness.entity.CountDown.prototype.update = function (step) {
  */
 
 ArcticMadness.entity.CountDown.prototype.dispose = function () {
-  this.context = null;
   rune.display.Sprite.prototype.dispose.call(this);
 };
 
@@ -101,6 +99,7 @@ ArcticMadness.entity.CountDown.prototype.playCountDown10 = function () {
 /**
  * Sets the position of the count down.
  * @returns {undefined}
+ * @private
  */
 
 ArcticMadness.entity.CountDown.prototype.m_setPosition = function () {

@@ -2,12 +2,24 @@
 // Constructor scope
 //--------------------------------
 
+/**
+ * Creates a new instance of the Enemy class.
+ * @constructor
+ * @param {number} x The x position of the enemy.
+ * @param {number} y The y position of the enemy.
+ * @param {Array} players The players array.
+ * @param {ArcticMadness.map.Map} map The map object.
+ * @param {ArcticMadness.scene.Game} game The game object.
+ * @returns {undefined}
+ * @extends {rune.display.Sprite}
+ * @class
+ * @public
+ */
+
 ArcticMadness.entity.Enemy = function (x, y, players, map, game) {
   this.x = x;
   this.y = y;
   this.players = players; // Reference to the player object.
-  // this.playerPositionX = this.player.x;
-  // this.playerPositionY = this.player.y;
   this.map = map; // Reference to the map object.
   this.game = game; // Reference to the game object.
   this.isInWater = false;
@@ -36,19 +48,28 @@ ArcticMadness.entity.Enemy.prototype.constructor = ArcticMadness.entity.Enemy;
 // Override public prototype methods (ENGINE)
 //------------------------------------------------------------------------------
 
-// This is the init method, which is called when the object is created.
+/**
+ * This method is automatically executed once after the scene is instantiated.
+ *
+ * @returns {undefined}
+ */
 
 ArcticMadness.entity.Enemy.prototype.init = function () {
   rune.display.Sprite.prototype.init.call(this);
   this.animation.create("water", [6, 7], 6, true);
   this.animation.create("walk", [0, 1, 2, 3], 5, true);
   this.animation.create("attack", [4], 1, true);
-  this.animation.create("dead", [8,9,10, 11], 5, false);
+  this.animation.create("dead", [8, 9, 10, 11], 5, false);
 
   this.m_setHitbox();
 };
 
-// This is the update method, which is called every frame.
+/**
+ * This method runs every frame and is used to update game logic about the enemy.
+ *
+ * @param {number} step The time between the frames.
+ * @returns {undefined}
+ */
 
 ArcticMadness.entity.Enemy.prototype.update = function (step) {
   rune.display.Sprite.prototype.update.call(this, step);
@@ -64,26 +85,42 @@ ArcticMadness.entity.Enemy.prototype.update = function (step) {
   }
 };
 
-// This is the dispose method, which is called when the object is removed.
+/**
+ * This method disposes the enemy object.
+ *
+ * @returns {undefined}
+ */
 
 ArcticMadness.entity.Enemy.prototype.dispose = function () {
+  console.log("dispose enemy");
+  this.game = null;
+  this.map = null;
+  this.players = null;
   rune.display.Sprite.prototype.dispose.call(this);
 };
 
+//------------------------------------------------------------------------------
+// Public prototype methods
+//------------------------------------------------------------------------------
+
+/**
+ * This method kills the enemy object and removes it from the stage.
+ *
+ * @returns {undefined}
+ */
+
 ArcticMadness.entity.Enemy.prototype.killenemy = function () {
-  
   this.isAlive = false;
   this.animation.gotoAndPlay("dead");
   this.hitSound = this.application.sounds.sound.get("sealhit");
   this.hitSound.play();
-  this.hitSound.loop= false;
+  this.hitSound.loop = false;
   this.game.timers
     .create({
       duration: 1000,
       scope: this,
       onComplete: function () {
         this.game.stage.removeChild(this, true);
-        
       },
     })
     .start();
@@ -93,15 +130,21 @@ ArcticMadness.entity.Enemy.prototype.killenemy = function () {
 // Private prototype methods
 //------------------------------------------------------------------------------
 
-// This method makes the enemy follow the player.
+/**
+ * This method makes the enemy follow the player.
+ * The enemy will follow the player if the player is not in water.
+ * If the player is in water, the enemy will move towards the center of the screen.
+ *
+ * @returns {undefined}
+ */
 
 ArcticMadness.entity.Enemy.prototype.m_followPlayer = function () {
   var centerX = this.application.screen.width / 2;
   var centerY = this.application.screen.height / 2;
   var closestPlayer = this.m_getClosestPlayer();
-  var proximityThreshold = 2; 
+  var proximityThreshold = 2;
 
-  if (closestPlayer) {
+  if (closestPlayer !== null) {
     if (closestPlayer.isInWater) {
       if (Math.abs(this.x - centerX) > proximityThreshold) {
         if (this.x < centerX) {
@@ -143,7 +186,14 @@ ArcticMadness.entity.Enemy.prototype.m_followPlayer = function () {
   }
 };
 
-// This method checks for collision with the player.
+/**
+ * This method checks if the enemy is colliding with the player.
+ * If the enemy is colliding with the player, the player is attacked.
+ * The enemy will then move the player towards the nearest water tile.
+ *
+ * @param {ArcticMadness.entity.Player} player The player object.
+ * @returns {undefined}
+ */
 
 ArcticMadness.entity.Enemy.prototype.m_checkPlayerCollision = function (
   player
@@ -155,14 +205,22 @@ ArcticMadness.entity.Enemy.prototype.m_checkPlayerCollision = function (
       this.animation.gotoAndPlay("attack");
       player.animation.gotoAndPlay("dragy");
       this.m_getNearestWater(player.x, player.y, player);
-    }else{
+    } else {
       player.isAttacked = false;
       player.gun.alpha = 1;
     }
   }
 };
 
-// This method gets the nearest water tile.
+/**
+ * This method moves the player and the enemy towards the nearest edge of the screen towards water.
+ * The method is used when the player is attacked by the enemy.
+ *
+ * @param {number} x The x-coordinate of the player.
+ * @param {number} y The y-coordinate of the player.
+ * @param {ArcticMadness.entity.Player} player The player object.
+ * @returns {undefined}
+ */
 
 ArcticMadness.entity.Enemy.prototype.m_getNearestWater = function (
   x,
@@ -198,10 +256,22 @@ ArcticMadness.entity.Enemy.prototype.m_getNearestWater = function (
   }
 };
 
+/**
+ * This method sets the hitbox of the enemy object.
+ *
+ * @returns {undefined}
+ */
+
 ArcticMadness.entity.Enemy.prototype.m_setHitbox = function () {
   this.hitbox.set(0, 16, 64, 28);
-  this.hitbox.debug = false;
 };
+
+/**
+ * This method gets the closest player to the enemy.
+ * The method will return the closest player that is not in water.
+ *
+ * @returns {ArcticMadness.entity.Player} The closest player object.
+ */
 
 ArcticMadness.entity.Enemy.prototype.m_getClosestPlayer = function () {
   var closestPlayer = null;
@@ -209,24 +279,13 @@ ArcticMadness.entity.Enemy.prototype.m_getClosestPlayer = function () {
 
   for (var i = 0; i < this.players.length; i++) {
     var player = this.players[i];
-    var distance = Math.sqrt(Math.pow(this.x - player.x, 2) + Math.pow(this.y - player.y, 2));
+    var distance = Math.sqrt(
+      Math.pow(this.x - player.x, 2) + Math.pow(this.y - player.y, 2)
+    );
 
     if (distance < closestDistance && !player.isInWater) {
       closestPlayer = player;
       closestDistance = distance;
-    }
-  }
-
-  // If no player is out of water, just get the closest one regardless of whether they are in water or not
-  if (closestPlayer === null) {
-    for (var i = 0; i < this.players.length; i++) {
-      var player = this.players[i];
-      var distance = Math.sqrt(Math.pow(this.x - player.x, 2) + Math.pow(this.y - player.y, 2));
-
-      if (distance < closestDistance) {
-        closestPlayer = player;
-        closestDistance = distance;
-      }
     }
   }
 

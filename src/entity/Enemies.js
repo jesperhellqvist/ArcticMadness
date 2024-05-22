@@ -2,6 +2,17 @@
 // Constructor scope
 //--------------------------------
 
+/**
+ * Creates a new instance of the Enemies class.
+ * @constructor
+ * @param {ArcticMadness.scene.Game} game The game object.
+ * @param {Array} players The players array.
+ * @returns {undefined}
+ * @extends {rune.display.DisplayGroup}
+ * @class
+ * @public
+ */
+
 ArcticMadness.entity.Enemies = function (game, players) {
   this.game = game;
   this.enemies = [];
@@ -17,7 +28,7 @@ ArcticMadness.entity.Enemies = function (game, players) {
    * Calls the constructor method of the super class.
    */
   rune.display.DisplayGroup.call(this);
-  this.init();
+  this.init(); // varför körs inte init automatiskt?
 };
 
 //------------------------------------------------------------------------------
@@ -35,8 +46,7 @@ ArcticMadness.entity.Enemies.prototype.constructor =
 //------------------------------------------------------------------------------
 
 /**
- * This method is automatically executed once after the scene is instantiated.
- * The method is used to create objects to be used within the scene.
+ * This method initializes the enemies object.
  *
  * @returns {undefined}
  */
@@ -47,9 +57,9 @@ ArcticMadness.entity.Enemies.prototype.init = function () {
 };
 
 /**
- * This method is automatically executed once after the scene is instantiated.
- * The method is used to create objects to be used within the scene.
+ * Updates the enemies.
  *
+ * @param {number} step The step time.
  * @returns {undefined}
  */
 
@@ -75,8 +85,14 @@ ArcticMadness.entity.Enemies.prototype.update = function (step) {
  */
 
 ArcticMadness.entity.Enemies.prototype.dispose = function () {
+  console.log("Enemies dispose");
+  this.players = null;
+  this.durations = null;
+  this.newEnemyTimer = null;
+  this.enemies = null;
+  this.game = null;
+
   rune.display.DisplayGroup.prototype.dispose.call(this);
-  this.disposeEnemies();
 };
 
 /**
@@ -92,13 +108,20 @@ ArcticMadness.entity.Enemies.prototype.disposeEnemies = function () {
   this.enemies = [];
 };
 
-//------------------------------------------------------------------------------
+/**
+ * Starts the new enemy timer.
+ *
+ * @param {number} currentWave The current wave.
+ * @returns {undefined}
+ */
 
-ArcticMadness.entity.Enemies.prototype.startNewEnemyTimer = function (currentWave) {
+ArcticMadness.entity.Enemies.prototype.startNewEnemyTimer = function (
+  currentWave
+) {
   if (currentWave >= 7) {
     currentWave = 6;
   }
-  if(currentWave < 7) {
+  if (currentWave < 7) {
     this.newEnemyTimer = this.game.timers.create(
       {
         duration: this.durations[currentWave],
@@ -114,7 +137,7 @@ ArcticMadness.entity.Enemies.prototype.startNewEnemyTimer = function (currentWav
 };
 
 /**
- * Creates the enemies.
+ * Creates the enemies. The enemies are spawned on a random water tiles.
  *
  * @returns {undefined}
  */
@@ -136,7 +159,7 @@ ArcticMadness.entity.Enemies.prototype.m_createEnemy = function () {
 };
 
 /**
- * Updates the enemies.
+ * Checks if the player is alive. If all players are dead, the new enemy timer is stopped.
  *
  * @returns {undefined}
  */
@@ -151,7 +174,6 @@ ArcticMadness.entity.Enemies.prototype.m_checkIfPlayerAlive = function () {
   }
 
   if (allPlayersInWater && this.newEnemyTimer != null) {
-    console.log("Game over");
     this.newEnemyTimer.stop();
     this.newEnemyTimer = null;
   }

@@ -2,14 +2,23 @@
 // Constructor scope
 //--------------------------------
 
-ArcticMadness.entity.Player = function (
-  x,
-  y,
-  penguin,
-  color,
-  gamepad,
-  id
-) {
+/**
+ * Creates a new instance of the Player class.
+ *
+ * @constructor
+ * @param {number} x The x position of the player.
+ * @param {number} y The y position of the player.
+ * @param {string} penguin The penguin texture.
+ * @param {Object} color The color of the player.
+ * @param {Object} gamepad The gamepad object.
+ * @param {number} id The player id.
+ * @returns {undefined}
+ * @extends {rune.display.Sprite}
+ * @class
+ * @public
+ */
+
+ArcticMadness.entity.Player = function (x, y, penguin, color, gamepad, id) {
   this.health = 250; // Player health
   this.x = x; // Player x position
   this.y = y; // Player y position
@@ -25,10 +34,10 @@ ArcticMadness.entity.Player = function (
   this.moveable = true;
   this.falling = false;
   this.id = id; // Player id
-  this.animationBlock = null;
+  this.animationBlock = null; // Player animation block objekt
   this.inWaterTile = null; // Index of the tile the player is in
   this.isRevivable = false; // Player is revivable
-  this.revivingTileSet = false; 
+  this.revivingTileSet = false;
 
   //--------------------------------------------------------------------------
   // Super call
@@ -53,6 +62,12 @@ ArcticMadness.entity.Player.prototype.constructor = ArcticMadness.entity.Player;
 // Override public prototype methods (ENGINE)
 //--------------------------------------------------------------------------
 
+/**
+ * This method initializes the player object.
+ *
+ * @returns {undefined}
+ */
+
 ArcticMadness.entity.Player.prototype.init = function () {
   rune.display.Sprite.prototype.init.call(this);
   this.texture.replaceColor(
@@ -75,7 +90,12 @@ ArcticMadness.entity.Player.prototype.init = function () {
   //Water animations
   this.animation.create("falling", [25, 26, 27, 28, 29], 9, true);
   this.animation.create("drown", [30, 31], 8, true);
-  this.animation.create("death", [31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 40, 41, 42, 43], 8, false);
+  this.animation.create(
+    "death",
+    [31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 40, 41, 42, 43],
+    8,
+    false
+  );
   //Attacked animation, injured
   this.animation.create("dragy", [45, 46], 4, true);
   this.animation.create("dragx", [47, 48], 4, true);
@@ -83,17 +103,41 @@ ArcticMadness.entity.Player.prototype.init = function () {
   this.m_setPhysics();
 };
 
+/**
+ * This method runs every frame and is used to update game logic about the player.
+ *
+ * @param {number} step The time between frames.
+ * @returns {undefined}
+ */
+
 ArcticMadness.entity.Player.prototype.update = function (step) {
   rune.display.Sprite.prototype.update.call(this, step);
 
-  if (!this.isInWater && this.isAlive && !this.isAttacked && !this.isRepairing && this.moveable) {
+  if (
+    !this.isInWater &&
+    this.isAlive &&
+    !this.isAttacked &&
+    !this.isRepairing &&
+    this.moveable
+  ) {
     this.m_handleInputGamepad();
     this.m_handleHitBox();
   }
 };
 
+/**
+ * This method disposes the player object.
+ *
+ * @returns {undefined}
+ */
 
 ArcticMadness.entity.Player.prototype.dispose = function () {
+  this.animationBlock = null;
+  this.color = null;
+  this.gamepad = null;
+  if (this.stage) {
+    this.stage.removeChild(this.gun, true);
+  }
   rune.display.Sprite.prototype.dispose.call(this);
 };
 
@@ -101,15 +145,20 @@ ArcticMadness.entity.Player.prototype.dispose = function () {
 // Private methods
 //--------------------------------------------------------------------------
 
+/**
+ * This method handles the player input from the gamepad.
+ *
+ * @returns {undefined}
+ */
 
 ArcticMadness.entity.Player.prototype.m_handleInputGamepad = function () {
   var stickLeftX = this.gamepad.stickLeft.x;
   var stickLeftY = this.gamepad.stickLeft.y;
 
-    // If the joystick is in its original position, don't move the player
-    if (stickLeftX === 0 && stickLeftY === 0) {
-      return;
-    }
+  // If the joystick is in its original position, don't move the player
+  if (stickLeftX === 0 && stickLeftY === 0) {
+    return;
+  }
 
   var radian = Math.atan2(stickLeftY, stickLeftX);
   var angle = (rune.util.Math.radiansToDegrees(radian) + 360) % 360;
@@ -118,7 +167,7 @@ ArcticMadness.entity.Player.prototype.m_handleInputGamepad = function () {
   var velocityChange = this.diagonalMovement ? 0.15 / Math.sqrt(2) : 0.15;
 
   //Right
-  if ((angle < 45 && angle >= 0 ) || (angle > 315 && angle < 360)) {
+  if ((angle < 45 && angle >= 0) || (angle > 315 && angle < 360)) {
     this.x += speed;
     this.velocity.x += velocityChange;
     this.flippedX = false;
@@ -151,6 +200,12 @@ ArcticMadness.entity.Player.prototype.m_handleInputGamepad = function () {
   }
 };
 
+/**
+ * This method creates the gun object and adds it to the stage.
+ *
+ * @returns {undefined}
+ */
+
 ArcticMadness.entity.Player.prototype.m_createGun = function () {
   this.gun = new ArcticMadness.entity.Gun(
     this.x,
@@ -162,6 +217,11 @@ ArcticMadness.entity.Player.prototype.m_createGun = function () {
   this.stage.addChild(this.gun);
 };
 
+/**
+ * This method sets the physics properties of the player.
+ *
+ * @returns {undefined}
+ */
 
 ArcticMadness.entity.Player.prototype.m_setPhysics = function () {
   this.velocity.drag.x = 0.04;
@@ -170,8 +230,12 @@ ArcticMadness.entity.Player.prototype.m_setPhysics = function () {
   this.velocity.max.x = 2.5;
 };
 
+/**
+ * This method sets the hitbox of the player.
+ *
+ * @returns {undefined}
+ */
+
 ArcticMadness.entity.Player.prototype.m_handleHitBox = function () {
-this.hitbox.set(16, 8, 32, 46);
-   this.hitbox.debug = false;
-   
+  this.hitbox.set(16, 8, 32, 46);
 };

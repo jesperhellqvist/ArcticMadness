@@ -87,7 +87,7 @@ ArcticMadness.scene.Game.prototype.update = function (step) {
   rune.scene.Scene.prototype.update.call(this, step);
   this.m_checkBullet();
   this.map.update(step);
-  this.enemies.update(step);
+  this.enemies.update(step); 
   this.m_checkIfPlayersAreDead();
 };
 
@@ -100,14 +100,21 @@ ArcticMadness.scene.Game.prototype.update = function (step) {
  * @returns {undefined}
  */
 ArcticMadness.scene.Game.prototype.dispose = function () {
-  for (var i = 0; i < this.players.length; i++) {
-    this.stage.removeChild(this.players[i], true);
-  }
+  
+  
+
+   
   this.stage.removeChild(this.timerText, true);
   this.stage.removeChild(this.liveScore, true);
   this.stage.removeChild(this.map, true);
   this.stage.removeChild(this.enemies, true);
-
+ this.enemies.dispose(); // kolla upp detta med henrik
+ this.enemies = null;
+  console.log(this.enemies);
+console.log("dispose game scene");
+for (var i = 0; i < this.players.length; i++) {
+  this.stage.removeChild(this.players[i], true);
+}
   rune.scene.Scene.prototype.dispose.call(this);
 };
 
@@ -255,6 +262,7 @@ ArcticMadness.scene.Game.prototype.m_initPlayers = function () {
 
 ArcticMadness.scene.Game.prototype.m_initEnemies = function () {
   this.enemies = new ArcticMadness.entity.Enemies(this, this.players);
+  console.log(this.enemies);
 };
 
 ArcticMadness.scene.Game.prototype.m_initMap = function () {
@@ -348,7 +356,7 @@ ArcticMadness.scene.Game.prototype.reviveAllPlayers = function () {
  * @returns {undefined}
  */
 ArcticMadness.scene.Game.prototype.dispose = function () {
-  console.log("dispose");
+  console.log("dispose game scene");
   for (var i = 0; i < this.players.length; i++) {
     this.stage.removeChild(this.players[i], true);
   }
@@ -369,16 +377,17 @@ ArcticMadness.scene.Game.prototype.m_checkBullet = function () {
     var player = this.players[i];
     for (var j = 0; j < player.gun.bullets.length; j++) {
       if (player.gun.bullets[j] != null) {
-        this.m_checkBulletHitEnemy(player.gun.bullets[j]);
+        this.m_checkBulletHitEnemy(player.gun.bullets[j], player, j);
       }
     }
   }
 };
 
-ArcticMadness.scene.Game.prototype.m_checkBulletHitEnemy = function (bullet) {
+ArcticMadness.scene.Game.prototype.m_checkBulletHitEnemy = function (bullet, player, index) {
   for (var i = 0; i < this.enemies.enemies.length; i++) {
     if (bullet.hitTestObject(this.enemies.enemies[i])) {
-      bullet.dispose();
+      this.stage.removeChild(bullet, true);
+      player.gun.bullets.splice(index, 1);
       this.enemies.enemies[i].killenemy();
       this.enemies.enemies.splice(i, 1);
       this.enemyScore += 5;
@@ -388,7 +397,7 @@ ArcticMadness.scene.Game.prototype.m_checkBulletHitEnemy = function (bullet) {
 };
 
 ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
-  this.cameras.getCameraAt(0).shake.start(1500,5,5, true);
+  this.cameras.getCameraAt(0).shake.start(1500, 5, 5, true);
   this.lastScoreUpdate = 0;
   this.waveTimer = this.timers.create({
     duration: 45000,

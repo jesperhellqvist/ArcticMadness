@@ -65,10 +65,8 @@ ArcticMadness.entity.Bullet.prototype.update = function (step) {
  * @returns {undefined}
  */
 
-ArcticMadness.entity.Bullet.prototype.dispose = function (bullet) {
-  if (bullet != null) {
-    this.stage.removeChild(bullet, true);
-  }
+ArcticMadness.entity.Bullet.prototype.dispose = function () {
+  this.color = null;
   rune.display.Sprite.prototype.dispose.call(this);
 };
 
