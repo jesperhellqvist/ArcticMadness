@@ -362,7 +362,9 @@ ArcticMadness.scene.Game.prototype.dispose = function () {
   }
   this.stage.removeChild(this.timerText, true);
   this.stage.removeChild(this.liveScore, true);
+  this.map.dispose();
   this.stage.removeChild(this.map, true);
+  
   this.stage.removeChild(this.enemies, true);
 
   rune.scene.Scene.prototype.dispose.call(this);
