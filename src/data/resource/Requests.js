@@ -56,12 +56,16 @@ ArcticMadness.data.Requests.prototype.m_construct = function() {
 	this.add("Shoot", "./../asset/sound/Shoot.wav");
 	this.add("Splash", "./../asset/sound/Splash.mp3");
 	this.add("fastcrack", "./../asset/sound/fastcrack.mp3");
+	this.add("gameover", "./../asset/sound/gameover.mp3");
 	this.add("help", "./../asset/sound/help.wav");
 	this.add("lobby", "./../asset/sound/lobby.mp3");
 	this.add("music_bg", "./../asset/sound/music_bg.mp3");
+	this.add("newhighscore", "./../asset/sound/newhighscore.mp3");
+	this.add("quake", "./../asset/sound/quake.mp3");
 	this.add("repaircomplete", "./../asset/sound/repaircomplete.mp3");
 	this.add("saved", "./../asset/sound/saved.wav");
 	this.add("sealhit", "./../asset/sound/sealhit.mp3");
+	this.add("topfive", "./../asset/sound/topfive.mp3");
 	this.add("wavecomplete", "./../asset/sound/wavecomplete.wav");
 	this.add("64_enemy_lepardseal", "./../asset/textures/64_enemy_lepardseal.png");
 	this.add("fish", "./../asset/textures/fish.png");

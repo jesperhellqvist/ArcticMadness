@@ -51,14 +51,12 @@ ArcticMadness.scene.GameOver.prototype.update = function (step) {
   rune.scene.Scene.prototype.update.call(this, step);
   if (this.gamepads.get(0).justPressed(12)||this.gamepads.get(0).stickLeftJustUp) {
     this.moveSound.play();
-    this.moveSound.loop = false;
     if (this.gameoverMenu.up()) {
     }
   }
 
   if (this.gamepads.get(0).justPressed(13)||this.gamepads.get(0).stickLeftJustDown) {
     this.moveSound.play();
-    this.moveSound.loop = false;
     if (this.gameoverMenu.down()) {
     }
   }
@@ -66,7 +64,6 @@ ArcticMadness.scene.GameOver.prototype.update = function (step) {
   if (this.gamepads.get(0).justPressed(0)) {
     this.gameoverMenu.select();
     this.chooseSound.play();
-    this.chooseSound.loop = false;
   }
 };
 
@@ -96,7 +93,12 @@ ArcticMadness.scene.GameOver.prototype.m_createBackground = function () {
 
 ArcticMadness.scene.GameOver.prototype.m_createSounds = function () {
   this.moveSound = this.application.sounds.sound.get("shoot");
+  this.moveSound.loop = false;
   this.chooseSound = this.application.sounds.sound.get("repaircomplete");
+  this.chooseSound.loop = false;
+  this.gameOverSound = this.application.sounds.sound.get("gameover");
+  this.gameOverSound.loop=false;
+  this.gameOverSound.play();
 }
 
 ArcticMadness.scene.GameOver.prototype.m_createScoreText = function () {
