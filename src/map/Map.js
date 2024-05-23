@@ -484,14 +484,99 @@ ArcticMadness.map.Map.prototype.m_breakIce4 = function (index) {
 };
 
 /**
- * This method removes the ice at a specific tile index.
+ * This method removes the ice at a specific tile index. It also checks the surrounding tiles and sets the correct tile value.
  * @param {number} index The index of the tile to remove.
  * @returns {undefined}
  * @private
  */
 
 ArcticMadness.map.Map.prototype.m_removeIce = function (index) {
-  this.tileLayer.setTileValueAt(index, 20);
+  var coreTile = this.tileLayer.getTileAt(index);
+  var offsets = [
+    { x: 0, y: -32 }, // Above
+    { x: 0, y: 96 }, // Below
+  ];
+
+  var iceEdges = [12, 14, 15];
+  var water = [20, 24];
+
+  var randomiceEdge = iceEdges[Math.floor(Math.random() * iceEdges.length)];
+  var randomWater = water[Math.floor(Math.random() * water.length)];
+
+  var aboveTileIndex = this.tileLayer.getTileIndexOfPoint({
+    x: coreTile.x + offsets[0].x,
+    y: coreTile.y + offsets[0].y,
+  });
+  var belowTileIndex = this.tileLayer.getTileIndexOfPoint({
+    x: coreTile.x + offsets[1].x,
+    y: coreTile.y + offsets[1].y,
+  });
+
+  var aboveTileValue = this.tileLayer.getTileValueAt(aboveTileIndex);
+  var belowTileValue = this.tileLayer.getTileValueAt(belowTileIndex);
+
+  // If the tile above is ice or crack, set the core tile to 12
+  if (aboveTileValue <= 8 || (aboveTileValue >= 26 && aboveTileValue <= 38)) {
+    this.tileLayer.setTileValueAt(index, randomiceEdge);
+  }
+
+  // If the tile below is ice or crack, set the core tile to 19
+  if (belowTileValue <= 8 || (belowTileValue >= 26 && belowTileValue <= 38)) {
+    this.tileLayer.setTileValueAt(index, randomiceEdge);
+  }
+
+  // If the tile below is 12, set the core tile to 12 and the tile below to 19
+  if (belowTileValue >= 9 && belowTileValue <= 16) {
+    this.tileLayer.setTileValueAt(index, randomiceEdge);
+    this.tileLayer.setTileValueAt(belowTileIndex, randomWater);
+  }
+
+  // If the tile above is 12, set the core tile to 19
+  if (aboveTileValue >= 9 && aboveTileValue <= 16) {
+    this.tileLayer.setTileValueAt(index, randomWater);
+  }
+
+  // If the tile above is 19 and the tile below is 12, set the core tile to 19 and the tile below to 19
+  if (
+    aboveTileValue >= 17 &&
+    aboveTileValue <= 24 &&
+    belowTileValue >= 9 &&
+    belowTileValue <= 16
+  ) {
+    this.tileLayer.setTileValueAt(index, randomWater);
+    this.tileLayer.setTileValueAt(belowTileIndex, randomWater);
+  }
+
+  // If both the tile above and the tile below are 12, set the core tile and the tile below to 19
+  if (
+    aboveTileValue >= 9 &&
+    aboveTileValue <= 16 &&
+    belowTileValue >= 9 &&
+    belowTileValue <= 16
+  ) {
+    this.tileLayer.setTileValueAt(index, randomWater);
+    this.tileLayer.setTileValueAt(belowTileIndex, randomWater);
+  }
+
+  // if the tile above is 19 and the tile below is ice, set the core tile to 19
+  if (aboveTileValue >= 17 && aboveTileValue <= 24 && belowTileValue <= 8) {
+    this.tileLayer.setTileValueAt(index, randomWater);
+  }
+
+  // if the tile above is 19 and the tile below is 19, set the core tile to 19
+  if (aboveTileValue >= 17 && aboveTileValue <= 24 && belowTileValue === 19) {
+    this.tileLayer.setTileValueAt(index, randomWater);
+  }
+
+  // if the tile above is 19 and the tile below is crack, set the core tile to 19
+  if (
+    aboveTileValue >= 17 &&
+    aboveTileValue <= 24 &&
+    belowTileValue >= 26 &&
+    belowTileValue <= 38
+  ) {
+    this.tileLayer.setTileValueAt(index, randomWater);
+  }
 };
 
 /**
@@ -617,16 +702,14 @@ ArcticMadness.map.Map.prototype.m_createAnimationBlock = function (
 
 ArcticMadness.map.Map.prototype.m_initSound = function () {
   this.crackSound = this.map.application.sounds.sound.get("fastcrack");
-  this.crackSound.loop= false;
+  this.crackSound.loop = false;
   this.helpSound = this.map.application.sounds.sound.get("help");
   this.helpSound.loop = false;
   this.completedSound = this.map.application.sounds.sound.get("repaircomplete");
   this.completedSound.loop = false;
   this.revivedSound = this.map.application.sounds.sound.get("saved");
   this.revivedSound.loop = false;
-
-}
-
+};
 
 /**
  * This method checks if the player is standing on a water tile.
