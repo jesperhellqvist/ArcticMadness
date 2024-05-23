@@ -39,18 +39,17 @@ ArcticMadness.entity.LiveScore.prototype.update = function (step) {
 }
 
 ArcticMadness.entity.LiveScore.prototype.m_createScoreText = function () {
-    this.scoreText = new rune.text.BitmapField("score " + this.score, "thefont");
+    this.scoreText = new rune.text.BitmapField("SCORE; " + this.score, "thefont");
     this.scoreText.width = 200;
     this.scoreText.height = 50;
     this.scoreText.scaleX = 2;
     this.scoreText.scaleY = 2;
-    
     this.scoreText.autosize = true;
-    this.scoreText.x = 1000;
+    this.scoreText.x = 900;
     this.scoreText.y = 20;
     this.game.stage.addChild(this.scoreText);
 }
 
 ArcticMadness.entity.LiveScore.prototype.updateScoreText = function () {
-    this.scoreText.text = "score " + this.score;
+    this.scoreText.text = "SCORE; " + this.score;
 }

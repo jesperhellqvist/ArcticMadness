@@ -52,6 +52,8 @@ ArcticMadness.scene.NewHighscore.prototype.constructor =
 
 ArcticMadness.scene.NewHighscore.prototype.init = function () {
   rune.scene.Scene.prototype.init.call(this);
+  this.cameras.getCameraAt(0).fade.opacity = 1;
+  this.cameras.getCameraAt(0).fade.in(1000);
   this.m_createBackground();
   this.m_createSound();
   this.m_createNewHighscoreText();
@@ -60,6 +62,7 @@ ArcticMadness.scene.NewHighscore.prototype.init = function () {
   this.m_initSelectBox();
   this.m_createParticleTimer();
   this.m_createEmitter();
+  this.m_createCheeringSoundTimer();
   this.menuSound.fade(1, 3000);
 };
 
@@ -107,6 +110,8 @@ ArcticMadness.scene.NewHighscore.prototype.m_createSound = function () {
   this.chooseSound.loop = false;
   this.highscoreSound = this.application.sounds.sound.get("newhighscore");
   this.highscoreSound.loop = false;
+  this.yaySound = this.application.sounds.sound.get("yay");
+  this.yaySound.loop = false;
   this.topFiveSound = this.application.sounds.sound.get("topfive");
   this.topFiveSound.loop = false;
 };
@@ -117,6 +122,17 @@ ArcticMadness.scene.NewHighscore.prototype.m_createHeaderGraphics = function () 
   this.headerGraphics.animation.gotoAndPlay("lights");
   this.stage.addChild(this.headerGraphics);
 
+};
+
+ArcticMadness.scene.NewHighscore.prototype.m_createCheeringSoundTimer = function () {
+  this.cheeringSoundTimer = this.timers.create({
+    duration: 3000,
+    repeat: Infinity,
+    scope: this,
+    onTick: function () {
+      this.yaySound.play();
+    },
+  });
 };
 
 ArcticMadness.scene.NewHighscore.prototype.m_createNewHighscoreText =
