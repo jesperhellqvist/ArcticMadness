@@ -17,6 +17,7 @@
  * Game scene.
  */
 ArcticMadness.scene.Game = function (numberOfPlayers, menuSound, gamepads) {
+  this.startFadeOut = true;
   this.numberOfPlayers = numberOfPlayers;
   this.map = null;
   this.player = null;
@@ -90,7 +91,7 @@ ArcticMadness.scene.Game.prototype.update = function (step) {
   rune.scene.Scene.prototype.update.call(this, step);
   this.m_checkBullet();
   this.map.update(step);
-  this.enemies.update(step); 
+  this.enemies.update(step);
   this.m_checkIfPlayersAreDead();
 };
 
@@ -107,12 +108,12 @@ ArcticMadness.scene.Game.prototype.dispose = function () {
   this.stage.removeChild(this.liveScore, true);
   this.stage.removeChild(this.map, true);
   this.stage.removeChild(this.enemies, true);
- this.enemies.dispose(); // kolla upp detta med henrik
- this.enemies = null;
+  this.enemies.dispose(); // kolla upp detta med henrik
+  this.enemies = null;
 
-for (var i = 0; i < this.players.length; i++) {
-  this.stage.removeChild(this.players[i], true);
-}
+  for (var i = 0; i < this.players.length; i++) {
+    this.stage.removeChild(this.players[i], true);
+  }
   rune.scene.Scene.prototype.dispose.call(this);
 };
 
@@ -205,7 +206,7 @@ ArcticMadness.scene.Game.prototype.m_initSound = function () {
   this.gameMusic = this.application.sounds.master.get("music_bg");
   this.drownSoundEffect = this.application.sounds.sound.get("splash");
   this.drownSoundEffect.loop = false;
-  this.waveCompleteSoundEffect =this.application.sounds.sound.get("wavecomplete");
+  this.waveCompleteSoundEffect = this.application.sounds.sound.get("wavecomplete");
   this.waveCompleteSoundEffect.loop = false;
   this.quakeSoundEffect = this.application.sounds.sound.get("quake");
   this.quakeSoundEffect.loop = false;
@@ -416,7 +417,7 @@ ArcticMadness.scene.Game.prototype.m_showWaveText = function (wave) {
     this.map.repairedWaveScore
   );
   // in this state players are not moveable
-  for (var i = 0; i < this.players.length; i++) { 
+  for (var i = 0; i < this.players.length; i++) {
     this.players[i].moveable = false;
   }
 
@@ -519,8 +520,12 @@ ArcticMadness.scene.Game.prototype.m_checkIfNewHighscore = function () {
       ),
     ]);
   } else {
-    this.application.scenes.load([
-      new ArcticMadness.scene.GameOver(this.liveScore.score, this.menuSound),
-    ]);
-  }
+    if (this.startFadeOut == true) {
+    this.startFadeOut = false;
+    this.cameras.getCameraAt(0).fade.out(800, function () {
+      this.application.scenes.load([
+        new ArcticMadness.scene.GameOver(this.liveScore.score, this.menuSound),
+      ]);
+    }, this);
+  }}
 };

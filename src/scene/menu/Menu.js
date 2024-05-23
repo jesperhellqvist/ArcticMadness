@@ -72,14 +72,12 @@ ArcticMadness.scene.Menu.prototype.update = function (step) {
   //Controller input
   if (this.gamepads.get(0).justPressed(12)||this.gamepads.get(0).stickLeftJustUp) {
     this.moveSound.play();
-    this.moveSound.loop = false;
     if (this.menu.up()) {
     }
   }
 
   if (this.gamepads.get(0).justPressed(13)||this.gamepads.get(0).stickLeftJustDown) {
     this.moveSound.play();
-    this.moveSound.loop = false;
     if (this.menu.down()) {
     }
   }
@@ -87,7 +85,6 @@ ArcticMadness.scene.Menu.prototype.update = function (step) {
   if (this.gamepads.get(0).justPressed(0)) {
     this.menu.select();
     this.chooseSound.play();
-    this.chooseSound.loop = false;
   }
 
 
@@ -129,10 +126,7 @@ ArcticMadness.scene.Menu.prototype.createDivingTween = function () {
       scope: this,
       duration: 550,
       onUpdate: function () {
-        this.splashEffect = this.application.sounds.sound.get("Splash");
         this.splashEffect.play();
-        this.splashEffect.loop = false;
-
       },
       onDispose: function (divingPenguin) {
         this.divingTweenActive = false;
@@ -240,7 +234,11 @@ ArcticMadness.scene.Menu.prototype.m_initSound = function () {
   this.menuSound.play();
   this.menuSound.loop = true;
   this.moveSound = this.application.sounds.sound.get("shoot");
+  this.moveSound.loop = false;
   this.chooseSound = this.application.sounds.sound.get("repaircomplete");
+  this.chooseSound.loop = false;
+  this.splashEffect = this.application.sounds.sound.get("Splash");
+  this.splashEffect.loop = false;
 };
 
 //Method to select the option

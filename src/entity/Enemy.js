@@ -56,11 +56,8 @@ ArcticMadness.entity.Enemy.prototype.constructor = ArcticMadness.entity.Enemy;
 
 ArcticMadness.entity.Enemy.prototype.init = function () {
   rune.display.Sprite.prototype.init.call(this);
-  this.animation.create("water", [6, 7], 6, true);
-  this.animation.create("walk", [0, 1, 2, 3], 5, true);
-  this.animation.create("attack", [4], 1, true);
-  this.animation.create("dead", [8, 9, 10, 11], 5, false);
-
+  this.m_animations();
+  this.m_createSound();
   this.m_setHitbox();
 };
 
@@ -112,9 +109,7 @@ ArcticMadness.entity.Enemy.prototype.dispose = function () {
 ArcticMadness.entity.Enemy.prototype.killenemy = function () {
   this.isAlive = false;
   this.animation.gotoAndPlay("dead");
-  this.hitSound = this.application.sounds.sound.get("sealhit");
   this.hitSound.play();
-  this.hitSound.loop = false;
   this.game.timers
     .create({
       duration: 1000,
@@ -129,6 +124,29 @@ ArcticMadness.entity.Enemy.prototype.killenemy = function () {
 //------------------------------------------------------------------------------
 // Private prototype methods
 //------------------------------------------------------------------------------
+
+
+/**
+ * This method creates the animations for the enemy object.
+ *
+ * @returns {undefined}
+ */
+ArcticMadness.entity.Enemy.prototype.m_animations = function () {
+  this.animation.create("water", [6, 7], 6, true);
+  this.animation.create("walk", [0, 1, 2, 3], 5, true);
+  this.animation.create("attack", [4], 1, true);
+  this.animation.create("dead", [8, 9, 10, 11], 5, false);
+}
+
+/**
+ * This method creates the sound for the enemy object.
+ *
+ * @returns {undefined}
+ */
+ArcticMadness.entity.Enemy.prototype.m_createSound = function () {
+  this.hitSound = this.application.sounds.sound.get("sealhit");
+  this.hitSound.loop = false;
+}
 
 /**
  * This method makes the enemy follow the player.
