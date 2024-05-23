@@ -71,7 +71,7 @@ ArcticMadness.scene.Game.prototype.init = function () {
   this.stage.map.load("map");
   this.m_initLiveScore();
   this.m_initWaveText();
-  this.m_music();
+  this.m_initSound();
   this.m_initPlayers();
   this.m_initEnemies();
   this.m_initMap();
@@ -119,35 +119,6 @@ for (var i = 0; i < this.players.length; i++) {
 //------------------------------------------------------------------------------
 // Public prototype methods
 //------------------------------------------------------------------------------
-
-ArcticMadness.scene.Game.prototype.tweenWater = function (player, playerTile) {
-  player.falling = true;
-  this.tweens.create({
-    target: player,
-    scope: this,
-    duration: 550,
-    onUpdate: function (player) {
-      player.animation.gotoAndPlay("falling");
-      console.log("falling");
-      this.drownSoundEffect = this.application.sounds.sound.get("splash");
-      this.drownSoundEffect.play();
-      this.drownSoundEffect.loop = false;
-    },
-    onDispose: function (player) {
-      player.isInWater = true;
-
-      player.velocity.x = 0;
-      player.velocity.y = 0;
-      if (player.isInWater && player.falling) {
-        player.animation.gotoAndPlay("drown");
-      }
-    },
-    args: {
-      x: playerTile.x,
-      y: playerTile.y,
-    },
-  });
-};
 
 ArcticMadness.scene.Game.prototype.resetPlayer = function (
   player,
@@ -230,8 +201,14 @@ ArcticMadness.scene.Game.prototype.m_timerCountdown = function () {
   this.stage.addChild(this.timerText);
 };
 
-ArcticMadness.scene.Game.prototype.m_music = function () {
+ArcticMadness.scene.Game.prototype.m_initSound = function () {
   this.gameMusic = this.application.sounds.master.get("music_bg");
+  this.drownSoundEffect = this.application.sounds.sound.get("splash");
+  this.drownSoundEffect.loop = false;
+  this.waveCompleteSoundEffect =this.application.sounds.sound.get("wavecomplete");
+  this.waveCompleteSoundEffect.loop = false;
+  this.quakeSoundEffect = this.application.sounds.sound.get("quake");
+  this.quakeSoundEffect.loop = false;
   this.gameMusic.volume = 0;
   this.gameMusic.fade(1, 3000);
   this.gameMusic.play();
@@ -282,14 +259,10 @@ ArcticMadness.scene.Game.prototype.tweenWater = function (player, playerTile) {
     duration: 550,
     onUpdate: function (player) {
       player.animation.gotoAndPlay("falling");
-      console.log("falling");
-      this.drownSoundEffect = this.application.sounds.sound.get("splash");
       this.drownSoundEffect.play();
-      this.drownSoundEffect.loop = false;
     },
     onDispose: function (player) {
       player.isInWater = true;
-
       player.velocity.x = 0;
       player.velocity.y = 0;
       if (player.isInWater && player.falling) {
@@ -398,6 +371,7 @@ ArcticMadness.scene.Game.prototype.m_checkBulletHitEnemy = function (bullet, pla
 
 ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
   this.cameras.getCameraAt(0).shake.start(1500, 5, 5, true);
+  this.quakeSoundEffect.play();
   this.lastScoreUpdate = 0;
   this.waveTimer = this.timers.create({
     duration: 45000,
@@ -409,10 +383,7 @@ ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
       this.map.resetMap();
       this.map.stopWave();
       this.reviveAllPlayers();
-      this.waveCompleteSoundEffect =
-        this.application.sounds.sound.get("wavecomplete");
       this.waveCompleteSoundEffect.play();
-      this.waveCompleteSoundEffect.loop = false;
       this.m_showWaveText(this.currentWave - 1);
     },
     onUpdate: function () {

@@ -53,13 +53,13 @@ ArcticMadness.scene.NewHighscore.prototype.constructor =
 ArcticMadness.scene.NewHighscore.prototype.init = function () {
   rune.scene.Scene.prototype.init.call(this);
   this.m_createBackground();
+  this.m_createSound();
   this.m_createNewHighscoreText();
   this.m_createHeaderGraphics();
   this.m_createScoreText();
   this.m_initSelectBox();
   this.m_createParticleTimer();
   this.m_createEmitter();
-  this._createSound();
   this.menuSound.fade(1, 3000);
 };
 
@@ -100,9 +100,15 @@ ArcticMadness.scene.NewHighscore.prototype.m_createBackground = function () {
   this.stage.addChild(this.background);
 };
 
-ArcticMadness.scene.NewHighscore.prototype._createSound = function () {
+ArcticMadness.scene.NewHighscore.prototype.m_createSound = function () {
   this.moveSound = this.application.sounds.sound.get("shoot");
+  this.moveSound.loop = false;
   this.chooseSound = this.application.sounds.sound.get("repaircomplete");
+  this.chooseSound.loop = false;
+  this.highscoreSound = this.application.sounds.sound.get("newhighscore");
+  this.highscoreSound.loop = false;
+  this.topFiveSound = this.application.sounds.sound.get("topfive");
+  this.topFiveSound.loop = false;
 };
 
 ArcticMadness.scene.NewHighscore.prototype.m_createHeaderGraphics = function () {
@@ -117,8 +123,10 @@ ArcticMadness.scene.NewHighscore.prototype.m_createNewHighscoreText =
   function () {
     if (this.bestScore) {
       this.titleText = "new highscore";
+      this.highscoreSound.play();
     } else {
       this.titleText = "top five";
+      this.topFiveSound.play();
     }
 
     this.newHighscoreText = new rune.text.BitmapField(
@@ -194,22 +202,22 @@ ArcticMadness.scene.NewHighscore.prototype.m_handleSelectBoxMovement =
     if (gamepad.justPressed(12)||gamepad.stickLeftJustUp && this.selectBox.y > 400) {
       this.selectBox.y -= 70;
       this.moveSound.play();
-      this.moveSound.loop = false;
+  
     }
     if (gamepad.justPressed(13)||gamepad.stickLeftJustDown && this.selectBox.y < 610) {
       this.selectBox.y += 70;
       this.moveSound.play();
-      this.moveSound.loop = false;
+
     }
     if (gamepad.justPressed(14)||gamepad.stickLeftJustLeft && this.selectBox.x > 325) {
       this.selectBox.x -= 70;
       this.moveSound.play();
-      this.moveSound.loop = false;
+     
     }
     if (gamepad.justPressed(15)||gamepad.stickLeftJustRight && this.selectBox.x < 885) {
       this.selectBox.x += 70;
       this.moveSound.play();
-      this.moveSound.loop = false;
+
     }
     if (this.selectBox.y > 540) {
       this.selectBox.x = 535;
@@ -224,8 +232,6 @@ ArcticMadness.scene.NewHighscore.prototype.m_handleSelectBoxInput =
     var gamepad = this.gamepads.get(0);
     if (gamepad.justPressed(0)) {
       this.chooseSound.play();
-      this.chooseSound.loop = false;
-
       if (this.selectBox.x == 325 && this.selectBox.y == 400) {
         this.updateListName("q ");
       }
