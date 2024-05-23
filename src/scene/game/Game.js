@@ -3,10 +3,13 @@
 //------------------------------------------------------------------------------
 
 /**
- * Creates a new object.
+ * Creates a new game scene.
  *
  * @constructor
  * @extends rune.scene.Scene
+ * @param {number} numberOfPlayers
+ * @param {rune.sound.Sound} menuSound // ?? matihas?
+ * @param {Array} gamepads
  *
  * @class
  * @classdesc
@@ -100,18 +103,13 @@ ArcticMadness.scene.Game.prototype.update = function (step) {
  * @returns {undefined}
  */
 ArcticMadness.scene.Game.prototype.dispose = function () {
-  
-  
-
-   
   this.stage.removeChild(this.timerText, true);
   this.stage.removeChild(this.liveScore, true);
   this.stage.removeChild(this.map, true);
   this.stage.removeChild(this.enemies, true);
  this.enemies.dispose(); // kolla upp detta med henrik
  this.enemies = null;
-  console.log(this.enemies);
-console.log("dispose game scene");
+
 for (var i = 0; i < this.players.length; i++) {
   this.stage.removeChild(this.players[i], true);
 }
@@ -438,6 +436,7 @@ ArcticMadness.scene.Game.prototype.m_stopWaveTimer = function () {
 
 ArcticMadness.scene.Game.prototype.m_showWaveText = function (wave) {
   this.bonusContainer = new ArcticMadness.entity.BonusContainer(this);
+  this.stage.addChild(this.bonusContainer);
   this.bonusContainer.updateWavesCompleted(wave);
   this.bonusContainer.updateEnemyScore(this.enemyScore);
   this.bonusContainer.updateScore(this.map.repairedWaveScore);
@@ -445,7 +444,8 @@ ArcticMadness.scene.Game.prototype.m_showWaveText = function (wave) {
     this.enemyScore,
     this.map.repairedWaveScore
   );
-  for (var i = 0; i < this.players.length; i++) {
+  // in this state players are not moveable
+  for (var i = 0; i < this.players.length; i++) { 
     this.players[i].moveable = false;
   }
 
@@ -454,7 +454,7 @@ ArcticMadness.scene.Game.prototype.m_showWaveText = function (wave) {
       duration: 6000,
       scope: this,
       onComplete: function () {
-        this.bonusContainer.dispose(); //remove bonuscontainer
+        this.stage.removeChild(this.bonusContainer, true);
         this.map.repairedWaveScore = 0;
         this.enemyScore = 0;
         for (var i = 0; i < this.players.length; i++) {
