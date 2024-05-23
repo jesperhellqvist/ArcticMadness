@@ -8,7 +8,6 @@
  * @param {ArcticMadness.scene.Game} game The game object.
  * @param {Array} players The players array.
  * @returns {undefined}
- * @extends {rune.display.DisplayGroup}
  * @class
  * @public
  */
@@ -20,29 +19,11 @@ ArcticMadness.entity.Enemies = function (game, players) {
   this.durations = [2000, 1600, 1400, 1200, 1000, 800, 600];
   this.players = players; // Array of player objects
 
-  //--------------------------------------------------------------------------
-  // Super call
-  //--------------------------------------------------------------------------
-
-  /**
-   * Calls the constructor method of the super class.
-   */
-  rune.display.DisplayGroup.call(this);
-  this.init(); // varför körs inte init automatiskt?
+  this.init();
 };
 
 //------------------------------------------------------------------------------
-// Inheritance
-//------------------------------------------------------------------------------
-
-ArcticMadness.entity.Enemies.prototype = Object.create(
-  rune.display.DisplayGroup.prototype
-);
-ArcticMadness.entity.Enemies.prototype.constructor =
-  ArcticMadness.entity.Enemies;
-
-//------------------------------------------------------------------------------
-// Override public prototype methods (ENGINE)
+// public prototype methods
 //------------------------------------------------------------------------------
 
 /**
@@ -52,7 +33,6 @@ ArcticMadness.entity.Enemies.prototype.constructor =
  */
 
 ArcticMadness.entity.Enemies.prototype.init = function () {
-  rune.display.DisplayGroup.prototype.init.call(this);
   this.startNewEnemyTimer(0);
 };
 
@@ -64,7 +44,6 @@ ArcticMadness.entity.Enemies.prototype.init = function () {
  */
 
 ArcticMadness.entity.Enemies.prototype.update = function (step) {
-  rune.display.DisplayGroup.prototype.update.call(this, step);
   this.m_checkIfPlayerAlive();
   if (this.enemies.length > 0) {
     for (var i = 0; i < this.enemies.length; i++) {
@@ -79,20 +58,17 @@ ArcticMadness.entity.Enemies.prototype.update = function (step) {
 };
 
 /**
- * Disposes the enemies.
+ * Disposes the enemies and set all komplex propeties to null.
  *
  * @returns {undefined}
  */
 
 ArcticMadness.entity.Enemies.prototype.dispose = function () {
-  console.log("Enemies dispose");
   this.players = null;
   this.durations = null;
   this.newEnemyTimer = null;
   this.enemies = null;
   this.game = null;
-
-  rune.display.DisplayGroup.prototype.dispose.call(this);
 };
 
 /**

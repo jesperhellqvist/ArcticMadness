@@ -49,6 +49,9 @@ ArcticMadness.entity.CountDown.prototype.init = function () {
     1,
     false
   );
+
+  this.animation.create("5-1", [21, 0, 0, 20, 0, 0, 19, 0, 0, 18, 0, 0, 17], 3, false);
+
   this.m_setPosition();
 };
 
