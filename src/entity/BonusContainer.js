@@ -93,7 +93,7 @@ ArcticMadness.entity.BonusContainer.prototype.dispose = function () {
 
 ArcticMadness.entity.BonusContainer.prototype.updateScore = function (score) {
   this.score = score / 10;
-  this.repairedScore.text = this.score.toString() + " X 10";
+  this.repairedScore.text =  "$# X " + this.score.toString() ;
 };
 
 /**
@@ -106,7 +106,7 @@ ArcticMadness.entity.BonusContainer.prototype.updateEnemyScore = function (
   score
 ) {
   this.score = score / 5;
-  this.enemyScore.text = this.score.toString() + " X 5";
+  this.enemyScore.text ="( X " + this.score.toString();
 };
 
 /**

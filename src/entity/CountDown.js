@@ -95,6 +95,15 @@ ArcticMadness.entity.CountDown.prototype.playCountDown10 = function () {
   this.animation.gotoAndPlay("10-1");
 };
 
+/**
+ * Plays the count down 5 animation.
+ * @returns {undefined}
+ */
+
+ArcticMadness.entity.CountDown.prototype.playCountDown5 = function () {
+  this.animation.gotoAndPlay("5-1",0);
+}
+
 //------------------------------------------------------------------------------
 // Private prototype methods
 //------------------------------------------------------------------------------
