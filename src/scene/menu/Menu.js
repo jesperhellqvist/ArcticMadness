@@ -112,6 +112,7 @@ ArcticMadness.scene.Menu.prototype.dispose = function () {
   this.stage.removeChild(this.hs3, true);
   this.stage.removeChild(this.hs4, true);
   this.stage.removeChild(this.highscore_bg);
+  
   rune.scene.Scene.prototype.dispose.call(this);
 };
 

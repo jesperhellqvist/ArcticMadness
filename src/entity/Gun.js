@@ -57,8 +57,8 @@ ArcticMadness.entity.Gun.prototype.constructor = ArcticMadness.entity.Gun;
 
 ArcticMadness.entity.Gun.prototype.init = function () {
   rune.display.Sprite.prototype.init.call(this);
-  //Moving animations
-  this.animation.create("gun", [3], 10, true); //Same gun, test version
+  this.m_initSound();
+  this.animation.create("gun",[3],1, true);
 };
 
 /**
@@ -98,6 +98,11 @@ ArcticMadness.entity.Gun.prototype.dispose = function () {
 //------------------------------------------------------------------------------
 // Private prototype methods
 //------------------------------------------------------------------------------
+
+ArcticMadness.entity.Gun.prototype.m_initSound = function () {
+  this.shootSound = this.application.sounds.sound.get("shoot");
+  this.shootSound.loop = false;
+}
 
 /**
  * This method handles the stick right input.
@@ -204,9 +209,8 @@ ArcticMadness.entity.Gun.prototype.m_handleShoot = function (angle) {
   );
   this.bullets.push(this.bullet);
   this.stage.addChild(this.bullet);
-  this.shootSound = this.application.sounds.sound.get("shoot");
   this.shootSound.play();
-  this.shootSound.loop = false;
+
 };
 
 /**

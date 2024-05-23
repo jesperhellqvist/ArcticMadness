@@ -46,9 +46,9 @@ ArcticMadness.map.Map = function (map, players, game, gamepads, enemies) {
  */
 
 ArcticMadness.map.Map.prototype.init = function () {
+  this.m_initSound();
   this.m_crackRandomTile();
   this.setCrackTimer();
-  this.m_initSound();
 };
 
 /**
