@@ -48,6 +48,7 @@ ArcticMadness.map.Map = function (map, players, game, gamepads, enemies) {
 ArcticMadness.map.Map.prototype.init = function () {
   this.m_crackRandomTile();
   this.setCrackTimer();
+  this.m_initSound();
 };
 
 /**
@@ -291,9 +292,7 @@ ArcticMadness.map.Map.prototype.m_crackRandomTile = function () {
   if (iceTiles.length > 0) {
     // Randomly select one of the ice tiles
     var randomIndex = iceTiles[Math.floor(Math.random() * iceTiles.length)];
-    this.crackSound = this.map.application.sounds.sound.get("fastcrack");
     this.crackSound.play();
-    this.crackSound.loop = false;
     this.tileLayer.setTileValueAt(randomIndex, 33); // Change tile value to 19 (crack)
     this.m_createTimer(
       2000,
@@ -610,6 +609,26 @@ ArcticMadness.map.Map.prototype.m_createAnimationBlock = function (
 //------------------------------------------------------------------------------
 
 /**
+ * This method handles sound related to the player
+ * @param {ArcticMadness.entity.Player} player The player object.
+ * @returns {undefined}
+ * @private
+ */
+
+ArcticMadness.map.Map.prototype.m_initSound = function () {
+  this.crackSound = this.map.application.sounds.sound.get("fastcrack");
+  this.crackSound.loop= false;
+  this.helpSound = this.map.application.sounds.sound.get("help");
+  this.helpSound.loop = false;
+  this.completedSound = this.map.application.sounds.sound.get("repaircomplete");
+  this.completedSound.loop = false;
+  this.revivedSound = this.map.application.sounds.sound.get("saved");
+  this.revivedSound.loop = false;
+
+}
+
+
+/**
  * This method checks if the player is standing on a water tile.
  * @param {ArcticMadness.entity.Player} player The player object.
  * @returns {boolean} Returns true if the player is standing on water.
@@ -687,9 +706,7 @@ ArcticMadness.map.Map.prototype.m_updatePlayerState = function (player) {
     }
 
     if (player.health == 125) {
-      this.helpSound = this.map.application.sounds.sound.get("help");
       this.helpSound.play();
-      this.helpSound.loop = false;
     }
     if (player.health <= 0) {
       this.m_killPlayer(player);
@@ -910,10 +927,7 @@ ArcticMadness.map.Map.prototype.m_repairIce = function (
     tileValue === 37
   ) {
     this.tileLayer.setTileValueAt(playerTileIndex, 1);
-    this.completedSound =
-      this.map.application.sounds.sound.get("repaircomplete");
     this.completedSound.play();
-    this.completedSound.loop = false;
     this.repairedTilesScore += 10;
     this.repairedWaveScore += 10;
     this.game.updateScore(10);
@@ -951,9 +965,7 @@ ArcticMadness.map.Map.prototype.m_reviveNearestPlayer = function (
 
   if (nearestPlayer) {
     this.game.revivePlayer(nearestPlayer);
-    this.revivedSound = this.map.application.sounds.sound.get("saved");
     this.revivedSound.play();
-    this.revivedSound.loop = false;
   }
 };
 
