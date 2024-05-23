@@ -39,6 +39,7 @@ ArcticMadness.scene.GameOver.prototype.constructor =
 ArcticMadness.scene.GameOver.prototype.init = function () {
   rune.scene.Scene.prototype.init.call(this);
   this.m_createBackground();
+  this.m_createSounds();
   this.m_createScoreText();
   this.m_createMenu();
   this.m_createAnimations();
@@ -48,27 +49,24 @@ ArcticMadness.scene.GameOver.prototype.init = function () {
 
 ArcticMadness.scene.GameOver.prototype.update = function (step) {
   rune.scene.Scene.prototype.update.call(this, step);
-  if (this.gamepads.get(0).justPressed(12)) {
-    // this.moveSound.play();
-    // this.moveSound.loop = false;
+  if (this.gamepads.get(0).justPressed(12)||this.gamepads.get(0).stickLeftJustUp) {
+    this.moveSound.play();
+    this.moveSound.loop = false;
     if (this.gameoverMenu.up()) {
     }
   }
 
-  if (this.gamepads.get(0).justPressed(13)) {
-    // this.moveSound.play();
-    // this.moveSound.loop = false;
+  if (this.gamepads.get(0).justPressed(13)||this.gamepads.get(0).stickLeftJustDown) {
+    this.moveSound.play();
+    this.moveSound.loop = false;
     if (this.gameoverMenu.down()) {
     }
   }
 
   if (this.gamepads.get(0).justPressed(0)) {
     this.gameoverMenu.select();
-  }
-
-
-  if (this.keyboard.pressed("ENTER")) {
-    this.application.scenes.load([new ArcticMadness.scene.Menu()]);
+    this.chooseSound.play();
+    this.chooseSound.loop = false;
   }
 };
 
@@ -95,6 +93,11 @@ ArcticMadness.scene.GameOver.prototype.m_createBackground = function () {
   );
   this.stage.addChild(this.gameover_bg);
 };
+
+ArcticMadness.scene.GameOver.prototype.m_createSounds = function () {
+  this.moveSound = this.application.sounds.sound.get("shoot");
+  this.chooseSound = this.application.sounds.sound.get("repaircomplete");
+}
 
 ArcticMadness.scene.GameOver.prototype.m_createScoreText = function () {
   this.scoreText = new rune.text.BitmapField("score: " + this.score, "thefont");
@@ -123,6 +126,7 @@ ArcticMadness.scene.GameOver.prototype.m_createAnimations = function () {
 ArcticMadness.scene.GameOver.prototype.m_createMenu = function () {
   this.gameoverMenu = new rune.ui.VTMenu(
     {
+      pointer: ArcticMadness.entity.Pointer,
       resource: "thefont",
       duration: 1000,
       frequency: 100

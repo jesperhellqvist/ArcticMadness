@@ -54,9 +54,6 @@ ArcticMadness.scene.Menu.prototype.init = function () {
   rune.scene.Scene.prototype.init.call(this);
   this.cameras.getCameraAt(0).fade.opacity = 1;
   this.cameras.getCameraAt(0).fade.in(300);
-  this.moveSound = this.application.sounds.sound.get("shoot");
-  this.chooseSound = this.application.sounds.sound.get("repaircomplete");
-  this.menuSound = this.application.sounds.master.get("lobby");
   this.m_initBackground();
   this.m_initAnimations();
   this.m_initMenu();
@@ -73,14 +70,14 @@ ArcticMadness.scene.Menu.prototype.update = function (step) {
   rune.scene.Scene.prototype.update.call(this, step);
 
   //Controller input
-  if (this.gamepads.get(0).justPressed(12)) {
+  if (this.gamepads.get(0).justPressed(12)||this.gamepads.get(0).stickLeftJustUp) {
     this.moveSound.play();
     this.moveSound.loop = false;
     if (this.menu.up()) {
     }
   }
 
-  if (this.gamepads.get(0).justPressed(13)) {
+  if (this.gamepads.get(0).justPressed(13)||this.gamepads.get(0).stickLeftJustDown) {
     this.moveSound.play();
     this.moveSound.loop = false;
     if (this.menu.down()) {
@@ -191,7 +188,7 @@ ArcticMadness.scene.Menu.prototype.m_initMenu = function () {
     resource: "thefont",
     duration: 1000,
     frequency: 100,
-  });  
+  });
   this.menu.add("START GAME");
   this.menu.add("HOW TO PLAY");
   this.menu.add("HIGHSCORE");
@@ -239,15 +236,18 @@ ArcticMadness.scene.Menu.prototype.m_highscoreList = function () {
 
 
 ArcticMadness.scene.Menu.prototype.m_initSound = function () {
+  this.menuSound = this.application.sounds.master.get("lobby");
   this.menuSound.play();
   this.menuSound.loop = true;
+  this.moveSound = this.application.sounds.sound.get("shoot");
+  this.chooseSound = this.application.sounds.sound.get("repaircomplete");
 };
 
 //Method to select the option
 ArcticMadness.scene.Menu.prototype.selectOption = function (option) {
   switch (option.text) {
     case "START GAME":
-      this.cameras.getCameraAt(0).fade.out(800, function() {
+      this.cameras.getCameraAt(0).fade.out(800, function () {
         this.application.scenes.load([
           new ArcticMadness.scene.JoinGame(this.menuSound),
         ]);
@@ -255,14 +255,14 @@ ArcticMadness.scene.Menu.prototype.selectOption = function (option) {
 
       break;
     case "HOW TO PLAY":
-      this.cameras.getCameraAt(0).fade.out(300, function() {
+      this.cameras.getCameraAt(0).fade.out(300, function () {
         this.application.scenes.load([
           new ArcticMadness.scene.HowtoPlay(),
         ]);
       }, this);
       break;
     case "HIGHSCORE":
-    this.cameras.getCameraAt(0).fade.out(300, function() {
+      this.cameras.getCameraAt(0).fade.out(300, function () {
         this.application.scenes.load([
           new ArcticMadness.scene.Highscores(),
         ]);
