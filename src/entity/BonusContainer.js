@@ -132,7 +132,7 @@ ArcticMadness.entity.BonusContainer.prototype.updateTotalScore = function (
   enemyScore,
   repairScore
 ) {
-  totScore = enemyScore + repairScore;
+  var totScore = enemyScore + repairScore;
   this.totalScore.text = totScore.toString();
 };
 
