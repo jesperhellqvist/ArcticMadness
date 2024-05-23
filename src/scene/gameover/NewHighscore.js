@@ -191,22 +191,22 @@ ArcticMadness.scene.NewHighscore.prototype.m_initSelectBox = function () {
 ArcticMadness.scene.NewHighscore.prototype.m_handleSelectBoxMovement =
   function () {
     var gamepad = this.gamepads.get(0);
-    if (gamepad.justPressed(12) && this.selectBox.y > 400) {
+    if (gamepad.justPressed(12)||gamepad.stickLeftJustUp && this.selectBox.y > 400) {
       this.selectBox.y -= 70;
       this.moveSound.play();
       this.moveSound.loop = false;
     }
-    if (gamepad.justPressed(13) && this.selectBox.y < 610) {
+    if (gamepad.justPressed(13)||gamepad.stickLeftJustDown && this.selectBox.y < 610) {
       this.selectBox.y += 70;
       this.moveSound.play();
       this.moveSound.loop = false;
     }
-    if (gamepad.justPressed(14) && this.selectBox.x > 325) {
+    if (gamepad.justPressed(14)||gamepad.stickLeftJustLeft && this.selectBox.x > 325) {
       this.selectBox.x -= 70;
       this.moveSound.play();
       this.moveSound.loop = false;
     }
-    if (gamepad.justPressed(15) && this.selectBox.x < 885) {
+    if (gamepad.justPressed(15)||gamepad.stickLeftJustRight && this.selectBox.x < 885) {
       this.selectBox.x += 70;
       this.moveSound.play();
       this.moveSound.loop = false;
