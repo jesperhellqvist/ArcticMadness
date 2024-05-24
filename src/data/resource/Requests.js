@@ -73,7 +73,6 @@ ArcticMadness.data.Requests.prototype.m_construct = function() {
 	this.add("64_enemy_lepardseal", "./../asset/textures/64_enemy_lepardseal.png");
 	this.add("fish", "./../asset/textures/fish.png");
 	this.add("gun", "./../asset/textures/gun.png");
-	this.add("gun_directions2", "./../asset/textures/gun_directions2.png");
 	this.add("highscorebar", "./../asset/textures/highscorebar.png");
 	this.add("howtoanimation", "./../asset/textures/howtoanimation.png");
 	this.add("penguin_texture_64x64", "./../asset/textures/penguin_texture_64x64.png");
