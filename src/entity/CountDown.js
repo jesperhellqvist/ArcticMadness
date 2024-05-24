@@ -111,7 +111,7 @@ ArcticMadness.entity.CountDown.prototype.playCountDown5 = function () {
 
 ArcticMadness.entity.CountDown.prototype.m_setPosition = function () {
 this.autosize = true;
-this.scaleX = 4;
-this.scaleY = 4;
+this.scaleX = 5;
+this.scaleY = 5;
 this.center = this.application.screen.center;
 };

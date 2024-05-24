@@ -39,7 +39,7 @@ ArcticMadness.scene.GameOver.prototype.constructor =
 ArcticMadness.scene.GameOver.prototype.init = function () {
   rune.scene.Scene.prototype.init.call(this);
   this.cameras.getCameraAt(0).fade.opacity = 1;
-  this.cameras.getCameraAt(0).fade.in(1000);
+  this.cameras.getCameraAt(0).fade.in(2000);
   this.m_createBackground();
   this.m_createSounds();
   this.m_createScoreText();

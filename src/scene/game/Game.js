@@ -444,7 +444,6 @@ ArcticMadness.scene.Game.prototype.m_showWaveText = function (wave) {
 ArcticMadness.scene.Game.prototype.m_updateWaveTimerText = function () {
   this.timerText.text = "WAVE;" + this.currentWave + " TIME;" + this.duration / 1000;
   this.duration -= 1000;
-
   if (this.duration === 5000) {
     if (this.countDown !== null) {
       this.stage.removeChild(this.countDown, true);
@@ -454,6 +453,7 @@ ArcticMadness.scene.Game.prototype.m_updateWaveTimerText = function () {
     this.countDown = new ArcticMadness.entity.CountDown(this);
     this.stage.addChild(this.countDown);
     this.countDown.playCountDown5();
+    
 
     this.timers
       .create({
@@ -507,6 +507,7 @@ ArcticMadness.scene.Game.prototype.m_checkIfPlayersAreDead = function () {
     }
   }
   if (allPlayersDead || allPlayersInWater) {
+    this.cameras.getCameraAt(0).shake.start(2000, 5, 5, true);
     this.gameMusic.fade();
     this.m_stopWaveTimer();
     this.timers
@@ -522,6 +523,7 @@ ArcticMadness.scene.Game.prototype.m_checkIfPlayersAreDead = function () {
 };
 
 ArcticMadness.scene.Game.prototype.m_checkIfNewHighscore = function () {
+
 if (
     this.application.highscores.test(
       this.liveScore.score,
@@ -537,7 +539,7 @@ if (
     }
     if (this.startFadeOut == true) {
       this.startFadeOut = false;
-      this.cameras.getCameraAt(0).fade.out(800, function () {
+      this.cameras.getCameraAt(0).fade.out(1000, function () {
         this.application.scenes.load([
           new ArcticMadness.scene.NewHighscore(
             this.liveScore.score,
@@ -551,7 +553,7 @@ if (
   } else {
     if (this.startFadeOut == true) {
       this.startFadeOut = false;
-      this.cameras.getCameraAt(0).fade.out(800, function () {
+      this.cameras.getCameraAt(0).fade.out(1000, function () {
         this.application.scenes.load([
           new ArcticMadness.scene.GameOver(this.liveScore.score, this.menuSound),
         ]);

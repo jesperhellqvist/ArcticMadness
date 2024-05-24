@@ -53,7 +53,7 @@ ArcticMadness.scene.NewHighscore.prototype.constructor =
 ArcticMadness.scene.NewHighscore.prototype.init = function () {
   rune.scene.Scene.prototype.init.call(this);
   this.cameras.getCameraAt(0).fade.opacity = 1;
-  this.cameras.getCameraAt(0).fade.in(1000);
+  this.cameras.getCameraAt(0).fade.in(2000);
   this.m_createBackground();
   this.m_createSound();
   this.m_createNewHighscoreText();
