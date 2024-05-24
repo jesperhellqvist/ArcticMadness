@@ -2,7 +2,20 @@
 // Constructor scope
 //--------------------------------
 
+/**
+ * This class represents the how to play scene.
+ * @constructor
+ * @extends {rune.scene.Scene}
+ * 
+ */
+
 ArcticMadness.scene.HowtoPlay = function () {
+    this.howto_bg = null;
+    this.pointsText = null;
+    this.descriptionText = null;
+    this.controller = null;
+    this.backToMenu = null;
+
 
     //--------------------------------------------------------------------------
     // Super call
@@ -28,6 +41,10 @@ ArcticMadness.scene.HowtoPlay.prototype.constructor =
 // Override public prototype methods (ENGINE)
 //------------------------------------------------------------------------------
 
+/**
+ * @inheritDoc
+ * @override
+ */
 
 ArcticMadness.scene.HowtoPlay.prototype.init = function () {
     rune.scene.Scene.prototype.init.call(this);
@@ -39,7 +56,12 @@ ArcticMadness.scene.HowtoPlay.prototype.init = function () {
     this.m_createDescription();
 }
 
-//Back to main Menu
+/**
+ * @inheritDoc
+ * @override
+ * @param {number} step Current step.
+ */
+
 ArcticMadness.scene.HowtoPlay.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
     if (this.gamepads.get(0).justPressed(1)) {
@@ -52,17 +74,28 @@ ArcticMadness.scene.HowtoPlay.prototype.update = function (step) {
     }
 }
 
+/**
+ * @inheritDoc
+ * @override
+ */
+
 ArcticMadness.scene.HowtoPlay.prototype.dispose = function () {
-    this.stage.removeChild(this.pointsText, true);
-    this.stage.removeChild(this.descriptionText, true);
-    this.stage.removeChild(this.controller, true);
     this.stage.removeChild(this.backToMenu, true);
+    this.stage.removeChild(this.controller, true);
+    this.stage.removeChild(this.descriptionText, true);
+    this.stage.removeChild(this.pointsText, true);
     this.stage.removeChild(this.howto_bg, true);
     rune.scene.Scene.prototype.dispose.call(this);
 }
 //------------------------------------------------------------------------------
+//Private prototype methods
+//------------------------------------------------------------------------------
 
-
+/**
+ * This method creates the background.
+ * @returns {undefined}
+ * @private
+ */
 ArcticMadness.scene.HowtoPlay.prototype.m_createBackground = function () {
     this.howto_bg = new rune.display.Graphic(
         0,
@@ -75,8 +108,12 @@ ArcticMadness.scene.HowtoPlay.prototype.m_createBackground = function () {
     this.stage.addChild(this.howto_bg);
 }
 
+/**
+ * This method creates the UI.
+ * @returns {undefined}
+ * @private
+ */
 
-//Method to initialize the controller graphics
 ArcticMadness.scene.HowtoPlay.prototype.m_createUI = function () {
     this.backToMenu = new rune.display.Sprite(50, 20, 220, 220, "how_to");
     this.backToMenu.animation.create("button", [14, 15], 4, true);
@@ -86,8 +123,11 @@ ArcticMadness.scene.HowtoPlay.prototype.m_createUI = function () {
     this.stage.addChild(this.backToMenu);
 
 }
-
-//Method to initialize the animations
+/**
+ * This method creates the control animations.
+ * @returns {undefined}
+ * @private
+ */
 ArcticMadness.scene.HowtoPlay.prototype.m_createControlAnimations = function () {
     this.controller = new rune.display.Sprite(570, 170, 800, 400, "howtoanimation");
     this.controller.animation.create("controls", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 40, 41, 42, 43],
@@ -98,7 +138,12 @@ ArcticMadness.scene.HowtoPlay.prototype.m_createControlAnimations = function () 
     this.stage.addChild(this.controller);
 }
 
-//Method to initialize the description
+/**
+ * This method creates the description.
+ * @returns {undefined}
+ * @private
+ */
+
 ArcticMadness.scene.HowtoPlay.prototype.m_createDescription = function () {
     this.descriptionText = new rune.ui.VTList("thefont");
     this.descriptionText.padding = 15;

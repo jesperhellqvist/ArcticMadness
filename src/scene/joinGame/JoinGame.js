@@ -68,7 +68,6 @@ ArcticMadness.scene.JoinGame.prototype.update = function (step) {
 };
 
 ArcticMadness.scene.JoinGame.prototype.dispose = function () {
-  console.log("dispose");
   this.stage.removeChild(this.background, true);
   this.stage.removeChild(this.background2, true);
   this.stage.removeChild(this.background3, true);

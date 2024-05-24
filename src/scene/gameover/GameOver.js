@@ -15,7 +15,6 @@ ArcticMadness.scene.GameOver = function (score, menuSound) {
   this.score = score;
   this.menuSound = menuSound;
   this.gameover_bg = null;
-  this.gameOverText = null;
   this.scoreText = null;
   this.gameoverMenu = null;
   this.drowningPenguin = null;
@@ -102,6 +101,9 @@ ArcticMadness.scene.GameOver.prototype.update = function (step) {
  */
 
 ArcticMadness.scene.GameOver.prototype.dispose = function () {
+  this.stage.removeChild(this.gameOverSound, true);
+  this.stage.removeChild(this.chooseSound, true);
+  this.stage.removeChild(this.moveSound, true);
   this.stage.removeChild(this.drowningPenguin2, true);
   this.stage.removeChild(this.drowningPenguin, true);
   this.stage.removeChild(this.gameoverMenu, true);
@@ -221,7 +223,6 @@ ArcticMadness.scene.GameOver.prototype.m_createMenu = function () {
  */
 
 ArcticMadness.scene.GameOver.prototype.selectOption = function (option) {
-  console.log(option);
   switch (option.text) {
     case "PLAY AGAIN":
       this.cameras.getCameraAt(0).fade.out(

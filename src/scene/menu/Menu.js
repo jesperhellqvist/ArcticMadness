@@ -15,23 +15,30 @@
  */
 
 ArcticMadness.scene.Menu = function () {
-  this.moveSound = null;
-  this.chooseSound = null;
-  this.menuSound = null;
+  this.background = null;
   this.menu = null;
-  this.highscoreList = null;
-  this.controller_bg = null;
   this.highscore_bg = null;
-  this.highscoreText = null;
   this.hs1 = null;
   this.hs2 = null;
   this.hs3 = null;
   this.hs4 = null;
+  this.controller_bg = null;
+  this.highscores = null;
+  this.divingPenguin = null;
+  this.moveSound = null;
+  this.menuSound = null;
+  this.chooseSound = null;
+  this.splashEffect = null;
   this.highscoreX = 0;
   this.highscoreY = 0;
   this.currentIndex = 0;
-  this.highscores = null;
+  this.divingTweenActive = false;
+  // this.highscoreList = null;  // De här kan man ta bort?
+  // this.highscoreText = null;
 
+  //--------------------------------------------------------------------------
+  // Super call
+  //--------------------------------------------------------------------------
   rune.scene.Scene.call(this);
 };
 
@@ -64,19 +71,19 @@ ArcticMadness.scene.Menu.prototype.init = function () {
 
 /**
  * @inheritDoc
+ * @override
+ * @param {number} step Current step.
  */
 
 ArcticMadness.scene.Menu.prototype.update = function (step) {
   rune.scene.Scene.prototype.update.call(this, step);
-
-  //Controller input
-  if (this.gamepads.get(0).justPressed(12)||this.gamepads.get(0).stickLeftJustUp) {
+  if (this.gamepads.get(0).justPressed(12) || this.gamepads.get(0).stickLeftJustUp) {
     this.moveSound.play();
     if (this.menu.up()) {
     }
   }
 
-  if (this.gamepads.get(0).justPressed(13)||this.gamepads.get(0).stickLeftJustDown) {
+  if (this.gamepads.get(0).justPressed(13) || this.gamepads.get(0).stickLeftJustDown) {
     this.moveSound.play();
     if (this.menu.down()) {
     }
@@ -87,38 +94,75 @@ ArcticMadness.scene.Menu.prototype.update = function (step) {
     this.chooseSound.play();
   }
 
-
-  //diving penguin animation on homescreen
   if (this.divingPenguin.y == 600 && this.divingPenguin.x == -500) {
     this.divingPenguin.y = 500;
   } else if (this.divingPenguin.x >= 600) {
     this.divingPenguin.velocity.x = 0;
-    this.createDivingTween();
+    this.m_createDivingTween();
   }
 
 };
 
+/**
+ * @inheritDoc
+ * @override
+ */
 
 //Kolla igenom så dessa inte är har "gamla" metoder som inte används, och är flyttade till ny scene
 ArcticMadness.scene.Menu.prototype.dispose = function () {
-  console.log("dispose");
-  this.stage.removeChild(this.menu, true);
-  this.stage.removeChild(this.highscoreText, true);
+  this.stage.removeChild(this.splashEffect, true);
+  this.stage.removeChild(this.chooseSound, true);
+  this.stage.removeChild(this.menuSound, true);
+  this.stage.removeChild(this.moveSound, true);
   this.stage.removeChild(this.divingPenguin, true);
-  this.stage.removeChild(this.background, true);
+  this.stage.removeChild(this.highscores, true);
   this.stage.removeChild(this.controller_bg, true);
-  this.stage.removeChild(this.hs1, true);
-  this.stage.removeChild(this.hs2, true);
-  this.stage.removeChild(this.hs3, true);
   this.stage.removeChild(this.hs4, true);
+  this.stage.removeChild(this.hs3, true);
+  this.stage.removeChild(this.hs2, true);
+  this.stage.removeChild(this.hs1, true);
   this.stage.removeChild(this.highscore_bg);
-  
+  this.stage.removeChild(this.menu, true);
+  this.stage.removeChild(this.background, true);
+
   rune.scene.Scene.prototype.dispose.call(this);
 };
 
 //------------------------------------------------------------------------------
+// Private prototype methods
+//------------------------------------------------------------------------------
 
-ArcticMadness.scene.Menu.prototype.createDivingTween = function () {
+/**
+ * This method creates the background and penguin sprite.
+ * @returns {undefined}
+ *@private
+ */
+
+ArcticMadness.scene.Menu.prototype.m_initBackground = function () {
+  this.background = new rune.display.Graphic(
+    0,
+    0,
+    this.application.screen.width,
+    this.application.screen.height,
+    "menu_bg"
+  );
+  this.stage.addChild(this.background);
+  this.divingPenguin = new rune.display.Sprite(
+    -50,
+    500,
+    64,
+    64,
+    "penguin_texture_64x64"
+  );
+  this.stage.addChild(this.divingPenguin);
+};
+
+/**
+ * This method creates the diving tween.
+ * @returns {undefined}
+ * @private
+ */
+ArcticMadness.scene.Menu.prototype.m_createDivingTween = function () {
   if (!this.divingTweenActive) {
     this.divingTweenActive = true;
     this.divingPenguin.animation.gotoAndPlay("diving", 0);
@@ -143,27 +187,11 @@ ArcticMadness.scene.Menu.prototype.createDivingTween = function () {
   }
 };
 
-ArcticMadness.scene.Menu.prototype.m_initBackground = function () {
-  this.background = new rune.display.Graphic(
-    0,
-    0,
-    this.application.screen.width,
-    this.application.screen.height,
-    "menu_bg"
-  );
-  this.stage.addChild(this.background);
-  this.divingPenguin = new rune.display.Sprite(
-    -50,
-    500,
-    64,
-    64,
-    "penguin_texture_64x64"
-  );
-  this.stage.addChild(this.divingPenguin);
-};
-
-//------------------------------------------------------------------------------
-
+/**
+ * This method creates the animations for the penguin.
+ * @returns {undefined}
+ * @private
+ */
 ArcticMadness.scene.Menu.prototype.m_initAnimations = function () {
   this.divingPenguin.animation.create("walking", [5, 6, 7, 8], 8, true);
   this.divingPenguin.animation.create("diving", [25, 26, 27, 28, 29], 9, false);
@@ -176,7 +204,12 @@ ArcticMadness.scene.Menu.prototype.m_initAnimations = function () {
   this.divingPenguin.velocity.x = 2;
 };
 
-//Method to initialize the menu
+/**
+ * This method creates the menu.
+ * @returns {undefined}
+ * @private
+ */
+
 ArcticMadness.scene.Menu.prototype.m_initMenu = function () {
   this.menu = new rune.ui.VTMenu({
     pointer: ArcticMadness.entity.Pointer,
@@ -196,6 +229,11 @@ ArcticMadness.scene.Menu.prototype.m_initMenu = function () {
   this.menu.onSelect(this.selectOption, this);
   this.stage.addChild(this.menu);
 };
+/**
+ * This method creates the highscore list.
+ * @returns {undefined}
+ * @private
+ */
 
 ArcticMadness.scene.Menu.prototype.m_highscoreList = function () {
   this.highscoreX = 850;
@@ -209,7 +247,6 @@ ArcticMadness.scene.Menu.prototype.m_highscoreList = function () {
   this.highscores[this.currentIndex].x = this.highscoreX;
   this.highscores[this.currentIndex].y = this.highscoreY;
   this.stage.addChild(this.highscores[this.currentIndex]);
-
   this.highscoreSlide = this.timers.create({
     duration: 3000,
     repeat: Infinity,
@@ -226,10 +263,13 @@ ArcticMadness.scene.Menu.prototype.m_highscoreList = function () {
       this.stage.addChild(this.highscores[this.currentIndex]);
     },
   });
-
 };
 
-
+/** 
+* This method initializes the sound.
+* @returns {undefined}
+* @private
+*/
 ArcticMadness.scene.Menu.prototype.m_initSound = function () {
   this.menuSound = this.application.sounds.master.get("lobby");
   this.menuSound.play();
@@ -242,7 +282,11 @@ ArcticMadness.scene.Menu.prototype.m_initSound = function () {
   this.splashEffect.loop = false;
 };
 
-//Method to select the option
+/**
+ * Select an option.
+ * @param {rune.ui.VTListElement} option The selected option.
+ * @return {undefined}
+ */
 ArcticMadness.scene.Menu.prototype.selectOption = function (option) {
   switch (option.text) {
     case "START GAME":

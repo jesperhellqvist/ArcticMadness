@@ -73,7 +73,7 @@ ArcticMadness.scene.NewHighscore.prototype.init = function () {
   this.m_createParticleTimer();
   this.m_createEmitter();
   this.m_createCheeringSoundTimer();
-  this.menuSound.fade(1, 3000);
+  // this.menuSound.fade(1, 3000);
 };
 
 /**
@@ -97,13 +97,20 @@ ArcticMadness.scene.NewHighscore.prototype.update = function (step) {
  */
 
 ArcticMadness.scene.NewHighscore.prototype.dispose = function () {
-  this.stage.removeChild(this.selectBox, true);
-  this.stage.removeChild(this.ListNameText, true);
-  this.stage.removeChild(this.particleTimer, true);
+  this.stage.removeChild(this.topFiveSound, true);
+  this.stage.removeChild(this.yaySound, true);
+  this.stage.removeChild(this.highscoreSound, true);
+  this.stage.removeChild(this.chooseSound, true);
+  this.stage.removeChild(this.moveSound, true);
+  this.stage.removeChild(this.cheeringSoundTimer, true);
   this.stage.removeChild(this.m_emitter, true);
-  this.stage.removeChild(this.newHighscoreText, true);
-  this.stage.removeChild(this.scoreText, true);
+  this.stage.removeChild(this.particleTimer, true);
+  this.stage.removeChild(this.titleText, true);
+  this.stage.removeChild(this.ListNameText, true);
+  this.stage.removeChild(this.selectBox, true);
   this.stage.removeChild(this.headerGraphics, true);
+  this.stage.removeChild(this.scoreText, true);
+  this.stage.removeChild(this.newHighscoreText, true);
   this.stage.removeChild(this.background, true);
   rune.scene.Scene.prototype.dispose.call(this);
 };
@@ -304,31 +311,19 @@ ArcticMadness.scene.NewHighscore.prototype.m_initSelectBox = function () {
 ArcticMadness.scene.NewHighscore.prototype.m_handleSelectBoxMovement =
   function () {
     var gamepad = this.gamepads.get(0);
-    if (
-      gamepad.justPressed(12) ||
-      (gamepad.stickLeftJustUp && this.selectBox.y > 400)
-    ) {
+    if ((gamepad.justPressed(12) || gamepad.stickLeftJustUp) && this.selectBox.y > 400) {
       this.selectBox.y -= 70;
       this.moveSound.play();
     }
-    if (
-      gamepad.justPressed(13) ||
-      (gamepad.stickLeftJustDown && this.selectBox.y < 610)
-    ) {
+    if ((gamepad.justPressed(13) || gamepad.stickLeftJustDown) && this.selectBox.y < 610) {
       this.selectBox.y += 70;
       this.moveSound.play();
     }
-    if (
-      gamepad.justPressed(14) ||
-      (gamepad.stickLeftJustLeft && this.selectBox.x > 325)
-    ) {
+    if ((gamepad.justPressed(14) || gamepad.stickLeftJustLeft) && this.selectBox.x > 325) {
       this.selectBox.x -= 70;
       this.moveSound.play();
     }
-    if (
-      gamepad.justPressed(15) ||
-      (gamepad.stickLeftJustRight && this.selectBox.x < 885)
-    ) {
+    if ((gamepad.justPressed(15) || gamepad.stickLeftJustRight) && this.selectBox.x < 885) {
       this.selectBox.x += 70;
       this.moveSound.play();
     }
@@ -432,9 +427,6 @@ ArcticMadness.scene.NewHighscore.prototype.m_handleSelectBoxInput =
       }
       if (this.selectBox.x == 885 && this.selectBox.y == 540) {
         this.updateListName("! ");
-      }
-      if (this.selectBox.x == 600 && this.selectBox.y == 610) {
-        this.m_removeLetter();
       }
       if (this.selectBox.x == 535 && this.selectBox.y == 610) {
         this.m_addHighscore(this.ListName.replace(/\s/g, ""));

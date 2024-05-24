@@ -37,7 +37,6 @@ ArcticMadness.scene.Game = function (numberOfPlayers, menuSound, gamepads) {
     { r: 16, g: 152, b: 86 }, // Player 3 Green
     { r: 255, g: 250, b: 5 }, // Player 4 Yellow
   ];
-  console.log(menuSound);
 
   //--------------------------------------------------------------------------
   // Super call

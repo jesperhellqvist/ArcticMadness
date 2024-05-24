@@ -89,6 +89,7 @@ ArcticMadness.scene.Highscores.prototype.update = function (step) {
  */
 
 ArcticMadness.scene.Highscores.prototype.dispose = function () {
+  this.stage.removeChild(this.particleTimer, true);
   this.stage.removeChild(this.backToMenu, true);
   this.stage.removeChild(this.hs4, true);
   this.stage.removeChild(this.hs3, true);
