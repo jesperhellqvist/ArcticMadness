@@ -110,6 +110,18 @@ ArcticMadness.entity.Enemy.prototype.killenemy = function () {
   this.isAlive = false;
   this.animation.gotoAndPlay("dead");
   this.hitSound.play();
+
+  // Check if the player is attacked and set the player to moveable.
+
+  for (var i = 0; i < this.players.length; i++) {
+    var player = this.players[i];
+    if (this.hitTestObject(player) && player.isAttacked) {
+      player.isAttacked = false;
+      player.moveable = true;
+      player.gun.alpha = 1;
+    }
+  }
+
   this.game.timers
     .create({
       duration: 1000,
