@@ -83,7 +83,6 @@ ArcticMadness.entity.Player.prototype.init = function () {
 
 ArcticMadness.entity.Player.prototype.update = function (step) {
   rune.display.Sprite.prototype.update.call(this, step);
-  console.log(this.isAttacked);
 
   if(this.isAttacked){
     return;

@@ -70,7 +70,7 @@ ArcticMadness.scene.Game.prototype.constructor = ArcticMadness.scene.Game;
 ArcticMadness.scene.Game.prototype.init = function () {
   rune.scene.Scene.prototype.init.call(this);
   this.stage.map.load("map");
-  this.cameras.getCameraAt(0).flash.start(2000);
+  this.cameras.getCameraAt(0).flash.start(1500);
   this.m_initLiveScore();
   this.m_initWaveText();
   this.m_initSound();
