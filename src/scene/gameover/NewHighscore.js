@@ -98,7 +98,7 @@ ArcticMadness.scene.NewHighscore.prototype.m_createBackground = function () {
     0,
     this.application.screen.width,
     this.application.screen.height,
-    "newhighscore_bg2"
+    "newhighscore_bg"
   );
   this.stage.addChild(this.background);
 };
