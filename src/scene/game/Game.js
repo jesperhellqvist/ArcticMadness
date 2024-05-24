@@ -8,7 +8,7 @@
  * @constructor
  * @extends rune.scene.Scene
  * @param {number} numberOfPlayers
- * @param {rune.sound.Sound} menuSound // ?? matihas?
+ * @param {rune.media.Sound} menuSound // ?? matihas?
  * @param {Array} gamepads
  *
  * @class
@@ -37,6 +37,7 @@ ArcticMadness.scene.Game = function (numberOfPlayers, menuSound, gamepads) {
     { r: 16, g: 152, b: 86 }, // Player 3 Green
     { r: 255, g: 250, b: 5 }, // Player 4 Yellow
   ];
+  console.log(menuSound);
 
   //--------------------------------------------------------------------------
   // Super call

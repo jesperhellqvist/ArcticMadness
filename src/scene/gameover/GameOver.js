@@ -2,6 +2,15 @@
 // Constructor scope
 //--------------------------------
 
+/**
+ * This class represents the game over scene.
+ * @constructor
+ * @extends {rune.scene.Scene}
+ * @param {number} score The score of the player.
+ * @param {rune.media.Sound} menuSound The sound of the menu.
+ * @return {undefined}
+ */
+
 ArcticMadness.scene.GameOver = function (score, menuSound) {
   this.score = score;
   this.menuSound = menuSound;
@@ -11,14 +20,14 @@ ArcticMadness.scene.GameOver = function (score, menuSound) {
   this.gameoverMenu = null;
   this.drowningPenguin = null;
   this.drowningPenguin2 = null;
+  this.moveSound = null;
+  this.chooseSound = null;
+  this.gameOverSound = null;
 
   //--------------------------------------------------------------------------
   // Super call
   //--------------------------------------------------------------------------
 
-  /**
-   * Calls the constructor method of the super class.
-   */
   rune.scene.Scene.call(this);
 };
 
@@ -36,6 +45,11 @@ ArcticMadness.scene.GameOver.prototype.constructor =
 // Override public prototype methods (ENGINE)
 //------------------------------------------------------------------------------
 
+/**
+ * @inheritDoc
+ * @override
+ */
+
 ArcticMadness.scene.GameOver.prototype.init = function () {
   rune.scene.Scene.prototype.init.call(this);
   this.cameras.getCameraAt(0).fade.opacity = 1;
@@ -46,18 +60,30 @@ ArcticMadness.scene.GameOver.prototype.init = function () {
   this.m_createMenu();
   this.m_createAnimations();
   this.menuSound.fade(1, 3000);
-
 };
+
+/**
+ * @inheritDoc
+ * @override
+ * @param {number} step
+ * @return {undefined}
+ */
 
 ArcticMadness.scene.GameOver.prototype.update = function (step) {
   rune.scene.Scene.prototype.update.call(this, step);
-  if (this.gamepads.get(0).justPressed(12)||this.gamepads.get(0).stickLeftJustUp) {
+  if (
+    this.gamepads.get(0).justPressed(12) ||
+    this.gamepads.get(0).stickLeftJustUp
+  ) {
     this.moveSound.play();
     if (this.gameoverMenu.up()) {
     }
   }
 
-  if (this.gamepads.get(0).justPressed(13)||this.gamepads.get(0).stickLeftJustDown) {
+  if (
+    this.gamepads.get(0).justPressed(13) ||
+    this.gamepads.get(0).stickLeftJustDown
+  ) {
     this.moveSound.play();
     if (this.gameoverMenu.down()) {
     }
@@ -69,13 +95,18 @@ ArcticMadness.scene.GameOver.prototype.update = function (step) {
   }
 };
 
+/**
+ * @inheritDoc
+ * @override
+ * @return {undefined}
+ */
+
 ArcticMadness.scene.GameOver.prototype.dispose = function () {
   this.stage.removeChild(this.drowningPenguin2, true);
   this.stage.removeChild(this.drowningPenguin, true);
   this.stage.removeChild(this.gameoverMenu, true);
   this.stage.removeChild(this.scoreText, true);
   this.stage.removeChild(this.gameover_bg, true);
-
   rune.scene.Scene.prototype.dispose.call(this);
 };
 
@@ -83,15 +114,26 @@ ArcticMadness.scene.GameOver.prototype.dispose = function () {
 // Privat prototype methods
 //------------------------------------------------------------------------------
 
+/**
+ * Create the background.
+ * @return {undefined}
+ */
+
 ArcticMadness.scene.GameOver.prototype.m_createBackground = function () {
   this.gameover_bg = new rune.display.Graphic(
     0,
     0,
     this.application.screen.width,
-    this.application.screen.height, "gameover_bg"
+    this.application.screen.height,
+    "gameover_bg"
   );
   this.stage.addChild(this.gameover_bg);
 };
+
+/**
+ * Create the sounds.
+ * @return {undefined}
+ */
 
 ArcticMadness.scene.GameOver.prototype.m_createSounds = function () {
   this.moveSound = this.application.sounds.sound.get("shoot");
@@ -99,9 +141,14 @@ ArcticMadness.scene.GameOver.prototype.m_createSounds = function () {
   this.chooseSound = this.application.sounds.sound.get("repaircomplete");
   this.chooseSound.loop = false;
   this.gameOverSound = this.application.sounds.sound.get("gameover");
-  this.gameOverSound.loop=false;
+  this.gameOverSound.loop = false;
   this.gameOverSound.play();
-}
+};
+
+/**
+ * Create the score text.
+ * @return {undefined}
+ */
 
 ArcticMadness.scene.GameOver.prototype.m_createScoreText = function () {
   this.scoreText = new rune.text.BitmapField("score: " + this.score, "thefont");
@@ -112,30 +159,49 @@ ArcticMadness.scene.GameOver.prototype.m_createScoreText = function () {
   this.scoreText.y = this.application.screen.height / 2;
   this.stage.addChild(this.scoreText);
 };
-// add drowning penguin
+
+/**
+ * Create the animations.
+ * @return {undefined}
+ */
+
 ArcticMadness.scene.GameOver.prototype.m_createAnimations = function () {
-  this.drowningPenguin = new rune.display.Sprite(200, 500, 64, 64, "penguin_texture_64x64");
+  this.drowningPenguin = new rune.display.Sprite(
+    200,
+    500,
+    64,
+    64,
+    "penguin_texture_64x64"
+  );
   this.drowningPenguin.animation.create("drowning", [30, 31], 8, true);
   this.drowningPenguin.scaleX = 2;
   this.drowningPenguin.scaleY = 2;
   this.stage.addChild(this.drowningPenguin);
-  this.drowningPenguin2 = new rune.display.Sprite(920, 500, 64, 64, "penguin_texture_64x64");
+  this.drowningPenguin2 = new rune.display.Sprite(
+    920,
+    500,
+    64,
+    64,
+    "penguin_texture_64x64"
+  );
   this.drowningPenguin2.animation.create("drowning", [30, 31], 8, true);
   this.drowningPenguin2.scaleX = 2;
   this.drowningPenguin2.scaleY = 2;
   this.stage.addChild(this.drowningPenguin2);
-
 };
 
+/**
+ * Create the menu.
+ * @return {undefined}
+ */
+
 ArcticMadness.scene.GameOver.prototype.m_createMenu = function () {
-  this.gameoverMenu = new rune.ui.VTMenu(
-    {
-      pointer: ArcticMadness.entity.Pointer,
-      resource: "thefont",
-      duration: 1000,
-      frequency: 100
-    }
-  );
+  this.gameoverMenu = new rune.ui.VTMenu({
+    pointer: ArcticMadness.entity.Pointer,
+    resource: "thefont",
+    duration: 1000,
+    frequency: 100,
+  });
   this.gameoverMenu.add("PLAY AGAIN");
   this.gameoverMenu.add("MAIN MENU");
   this.gameoverMenu.width = 200;
@@ -145,25 +211,38 @@ ArcticMadness.scene.GameOver.prototype.m_createMenu = function () {
   this.gameoverMenu.scaleX = 3;
   this.gameoverMenu.scaleY = 3;
   this.gameoverMenu.onSelect(this.selectOption, this);
-
   this.stage.addChild(this.gameoverMenu);
 };
 
+/**
+ * Select an option.
+ * @param {rune.ui.VTListElement} option The selected option.
+ * @return {undefined}
+ */
+
 ArcticMadness.scene.GameOver.prototype.selectOption = function (option) {
+  console.log(option);
   switch (option.text) {
     case "PLAY AGAIN":
-      this.cameras.getCameraAt(0).fade.out(300, function () {
-        this.application.scenes.load([
-          new ArcticMadness.scene.JoinGame(this.menuSound)]);
-      }, this);
+      this.cameras.getCameraAt(0).fade.out(
+        300,
+        function () {
+          this.application.scenes.load([
+            new ArcticMadness.scene.JoinGame(this.menuSound),
+          ]);
+        },
+        this
+      );
 
       break;
     case "MAIN MENU":
-      this.cameras.getCameraAt(0).fade.out(300, function () {
-        this.application.scenes.load([
-          new ArcticMadness.scene.Menu(),
-        ]);
-      }, this);
+      this.cameras.getCameraAt(0).fade.out(
+        300,
+        function () {
+          this.application.scenes.load([new ArcticMadness.scene.Menu()]);
+        },
+        this
+      );
       break;
   }
 };
