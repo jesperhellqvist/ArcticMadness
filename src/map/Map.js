@@ -93,7 +93,6 @@ ArcticMadness.map.Map.prototype.update = function (step) {
  */
 
 ArcticMadness.map.Map.prototype.dispose = function () {
-  console.log("Map dispose");
   this.enemies = null;
   this.helpSound = null;
   this.crackSound = null;
@@ -124,24 +123,7 @@ ArcticMadness.map.Map.prototype.getRandomWaterTile = function () {
   var waterTiles = [];
 
   for (var i = 0; i < this.tiles.length; i++) {
-    if (
-      this.tiles[i] === 9 ||
-      this.tiles[i] === 10 ||
-      this.tiles[i] === 11 ||
-      this.tiles[i] === 12 ||
-      this.tiles[i] === 13 ||
-      this.tiles[i] === 14 ||
-      this.tiles[i] === 15 ||
-      this.tiles[i] === 16 ||
-      this.tiles[i] === 17 ||
-      this.tiles[i] === 18 ||
-      this.tiles[i] === 19 ||
-      this.tiles[i] === 20 ||
-      this.tiles[i] === 21 ||
-      this.tiles[i] === 22 ||
-      this.tiles[i] === 23 ||
-      this.tiles[i] === 24
-    ) {
+    if (this.tiles[i] >= 9 && this.tiles[i] <= 24) {
       waterTiles.push(i);
     }
   }
@@ -208,17 +190,7 @@ ArcticMadness.map.Map.prototype.getNearestIceTileIndex = function (player) {
   // Loop through all tiles
   for (var i = 0; i < this.tileLayer.data.length; i++) {
     var tileIndex = this.tileLayer.data[i];
-    // If the tile value is 2 (ice tile)
-    if (
-      tileIndex === 1 ||
-      tileIndex === 2 ||
-      tileIndex === 3 ||
-      tileIndex === 4 ||
-      tileIndex === 5 ||
-      tileIndex === 6 ||
-      tileIndex === 7 ||
-      tileIndex === 8
-    ) {
+    if (tileIndex >= 1 && tileIndex <= 8) {
       var tile = this.tileLayer.getTileAt(i);
       var distance = this.m_getDistanceBetween(player, tile);
       // If this tile is closer than the current nearest tile
@@ -228,7 +200,6 @@ ArcticMadness.map.Map.prototype.getNearestIceTileIndex = function (player) {
       }
     }
   }
-
   return nearestTileIndex;
 };
 
@@ -275,16 +246,7 @@ ArcticMadness.map.Map.prototype.m_crackRandomTile = function () {
 
   // Find all tiles with with ice
   for (var i = 0; i < this.tiles.length; i++) {
-    if (
-      this.tiles[i] === 1 ||
-      this.tiles[i] === 2 ||
-      this.tiles[i] === 3 ||
-      this.tiles[i] === 4 ||
-      this.tiles[i] === 5 ||
-      this.tiles[i] === 6 ||
-      this.tiles[i] === 7 ||
-      this.tiles[i] === 8
-    ) {
+    if (this.tiles[i] >= 1 && this.tiles[i] <= 8) {
       iceTiles.push(i);
     }
   }
@@ -357,24 +319,7 @@ ArcticMadness.map.Map.prototype.stopWave = function () {
 
 ArcticMadness.map.Map.prototype.checkIfEnemyInWater = function (enemy) {
   var tileValue = this.tileLayer.getTileValueOf(enemy.centerX, enemy.centerY);
-  if (
-    tileValue === 9 ||
-    tileValue === 10 ||
-    tileValue === 11 ||
-    tileValue === 12 ||
-    tileValue === 13 ||
-    tileValue === 14 ||
-    tileValue === 15 ||
-    tileValue === 16 ||
-    tileValue === 17 ||
-    tileValue === 18 ||
-    tileValue === 19 ||
-    tileValue === 20 ||
-    tileValue === 21 ||
-    tileValue === 22 ||
-    tileValue === 23 ||
-    tileValue === 24
-  ) {
+  if (tileValue >= 9 && tileValue <= 24) {
     return true;
   } else {
     return false;
@@ -620,17 +565,7 @@ ArcticMadness.map.Map.prototype.m_createCracksAround = function (index) {
     });
     var tileValue = this.tileLayer.getTileValueAt(tileIndex);
 
-    if (
-      // If the tile is ice
-      tileValue === 1 ||
-      tileValue === 2 ||
-      tileValue === 3 ||
-      tileValue === 4 ||
-      tileValue === 5 ||
-      tileValue === 6 ||
-      tileValue === 7 ||
-      tileValue === 8
-    ) {
+    if (tileValue >= 1 && tileValue <= 8) {
       this.tileLayer.setTileValueAt(tileIndex, offset.direction);
       this.m_createTimer(
         2000,
@@ -837,16 +772,7 @@ ArcticMadness.map.Map.prototype.m_setReviveTile = function (player) {
       });
       if (tileIndex >= 0) {
         var tileValue = this.tileLayer.getTileValueAt(tileIndex);
-        if (
-          tileValue === 1 ||
-          tileValue === 2 ||
-          tileValue === 3 ||
-          tileValue === 4 ||
-          tileValue === 5 ||
-          tileValue === 6 ||
-          tileValue === 7 ||
-          tileValue === 8
-        ) {
+        if (tileValue >= 1 && tileValue <= 8) {
           this.tileLayer.setTileValueAt(tileIndex, 38);
           return;
         }
@@ -980,22 +906,7 @@ ArcticMadness.map.Map.prototype.m_repairIce = function (
   timer.stop();
   delete this.tileTimers[playerTileIndex];
 
-  if (
-    tileValue === 25 ||
-    tileValue === 26 ||
-    tileValue === 27 ||
-    tileValue === 28 ||
-    tileValue === 29 ||
-    tileValue === 30 ||
-    tileValue === 31 ||
-    tileValue === 31 ||
-    tileValue === 32 ||
-    tileValue === 33 ||
-    tileValue === 34 ||
-    tileValue === 35 ||
-    tileValue === 36 ||
-    tileValue === 37
-  ) {
+  if (tileValue >= 25 && tileValue <= 37) {
     this.tileLayer.setTileValueAt(playerTileIndex, 1);
     this.completedSound.play();
     this.repairedTilesScore += 10;
