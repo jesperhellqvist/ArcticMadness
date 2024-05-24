@@ -2,6 +2,21 @@
 // Constructor scope
 //--------------------------------
 
+/**
+ * Creates a new instance of the HighscoreList class.
+ * @constructor
+ * @param {string} title The title of the highscore list.
+ * @param {number} tableID The table ID.
+ * @param {ArcticMadness.scene.Menu} menu The menu object.
+ * @param {number} x The x position of the highscore list.
+ * @param {number} y The y position of the highscore list.
+ * @param {number} titleX The x position of the title.
+ * @param {number} titleY The y position of the title.
+ * @returns {undefined}
+ * @extends {rune.ui.VTList}
+ * @class
+ */
+
 ArcticMadness.entity.HighscoreList = function (
   title,
   tableID,
@@ -19,6 +34,12 @@ ArcticMadness.entity.HighscoreList = function (
   this.y = y;
   this.titleX = titleX;
   this.titleY = titleY;
+  this.text = null;
+  this.highscoreList = null;
+
+  //--------------------------------------------------------------------------
+  // Super call
+  //--------------------------------------------------------------------------
 
   rune.ui.VTList.call(this, "thefont");
 };
@@ -37,25 +58,37 @@ ArcticMadness.entity.HighscoreList.prototype.constructor =
 // Override public prototype methods (ENGINE)
 //------------------------------------------------------------------------------
 
+/**
+ * This method is automatically executed once after the scene is instantiated.
+ * @returns {undefined}
+ */
+
 ArcticMadness.entity.HighscoreList.prototype.init = function () {
   rune.ui.VTList.prototype.init.call(this);
   this.m_createTable();
   this.m_createTitle();
 };
 
-//------------------------------------------------------------------------------
-
-ArcticMadness.entity.HighscoreList.prototype.update = function (step) {
-  rune.ui.VTList.prototype.update.call(this, step);
-};
-
-//------------------------------------------------------------------------------
+/**
+ * Removes the highscore list from the stage.
+ * @returns {undefined}
+ */
 
 ArcticMadness.entity.HighscoreList.prototype.dispose = function () {
+  this.menu.stage.removeChild(this.highscoreList, true);
+  this.menu.stage.removeChild(this.text, true);
+  this.menu = null;
   rune.ui.VTList.prototype.dispose.call(this);
 };
 
 //------------------------------------------------------------------------------
+// Private prototype methods
+//------------------------------------------------------------------------------
+
+/**
+ * Creates the title of the highscore list.
+ * @returns {undefined}
+ */
 
 ArcticMadness.entity.HighscoreList.prototype.m_createTitle = function () {
   this.text = new rune.text.BitmapField(this.title, "thefont");
@@ -66,6 +99,11 @@ ArcticMadness.entity.HighscoreList.prototype.m_createTitle = function () {
   this.text.scaleY = 2;
   this.menu.stage.addChild(this.text);
 };
+
+/**
+ * Creates the highscore list.
+ * @returns {undefined}
+ */
 
 ArcticMadness.entity.HighscoreList.prototype.m_createTable = function () {
   this.highscoreList = new rune.ui.VTList("thefont");

@@ -64,6 +64,7 @@ ArcticMadness.entity.Enemies.prototype.update = function (step) {
  */
 
 ArcticMadness.entity.Enemies.prototype.dispose = function () {
+  console.log("dispose enemies");
   this.players = null;
   this.durations = null;
   this.newEnemyTimer = null;

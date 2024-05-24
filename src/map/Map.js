@@ -492,10 +492,8 @@ ArcticMadness.map.Map.prototype.m_breakIce4 = function (index) {
 
 ArcticMadness.map.Map.prototype.m_removeIce = function (index) {
   var coreTile = this.tileLayer.getTileAt(index);
-  var offsets = [
-    { x: 0, y: -32 }, // Above
-    { x: 0, y: 96 }, // Below
-  ];
+
+  // Random ice edge and water tiles
 
   var iceEdges = [12, 14, 15];
   var water = [20, 24];
@@ -503,10 +501,18 @@ ArcticMadness.map.Map.prototype.m_removeIce = function (index) {
   var randomiceEdge = iceEdges[Math.floor(Math.random() * iceEdges.length)];
   var randomWater = water[Math.floor(Math.random() * water.length)];
 
+  // Get the tile index of the tile above and below the core tile
+
+  var offsets = [
+    { x: 0, y: -32 }, // Above
+    { x: 0, y: 96 }, // Below
+  ];
+
   var aboveTileIndex = this.tileLayer.getTileIndexOfPoint({
     x: coreTile.x + offsets[0].x,
     y: coreTile.y + offsets[0].y,
   });
+
   var belowTileIndex = this.tileLayer.getTileIndexOfPoint({
     x: coreTile.x + offsets[1].x,
     y: coreTile.y + offsets[1].y,
@@ -641,11 +647,11 @@ ArcticMadness.map.Map.prototype.m_createCracksAround = function (index) {
 
 /**
  * This method creates an animation block for the repair process.
- * @param {object} player The player object.
+ * @param {ArcticMadness.entity.Player} player The player object.
  * @param {number} tileValue The value of the tile.
- * @param {object} playerTile The tile object.
+ * @param {rune.tilemap.Tile} playerTile The tile object.
  * @param {number} playerTileIndex The index of the player's tile.
- * @param {object} timer The timer object.
+ * @param {rune.timer.Timer} timer The timer object.
  * @returns {undefined}
  * @private
  */
@@ -685,7 +691,6 @@ ArcticMadness.map.Map.prototype.m_createAnimationBlock = function (
     },
     this
   );
-
   this.game.stage.addChildAt(player.animationBlock, 0);
 };
 
@@ -695,7 +700,6 @@ ArcticMadness.map.Map.prototype.m_createAnimationBlock = function (
 
 /**
  * This method handles sound related to the player
- * @param {ArcticMadness.entity.Player} player The player object.
  * @returns {undefined}
  * @private
  */
@@ -725,24 +729,7 @@ ArcticMadness.map.Map.prototype.m_isPlayerInWater = function (player) {
     player.centerY + 18
   );
 
-  if (
-    tileValue === 9 ||
-    tileValue === 10 ||
-    tileValue === 11 ||
-    tileValue === 12 ||
-    tileValue === 13 ||
-    tileValue === 14 ||
-    tileValue === 15 ||
-    tileValue === 16 ||
-    tileValue === 17 ||
-    tileValue === 18 ||
-    tileValue === 19 ||
-    tileValue === 20 ||
-    tileValue === 21 ||
-    tileValue === 22 ||
-    tileValue === 23 ||
-    tileValue === 24
-  ) {
+  if (tileValue >= 9 && tileValue <= 24) {
     return true;
   }
 

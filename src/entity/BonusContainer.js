@@ -57,16 +57,6 @@ ArcticMadness.entity.BonusContainer.prototype.init = function () {
 };
 
 /**
- * This method runs every frame.
- * @param {number} step The time between frames
- * @returns {undefined}
- */
-
-ArcticMadness.entity.BonusContainer.prototype.update = function (step) {
-  rune.display.DisplayObjectContainer.prototype.update.call(this, step);
-};
-
-/**
  * This method is called when the object is removed from the stage and removes all children.
  * @returns {undefined}
  */
