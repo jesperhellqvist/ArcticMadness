@@ -3,6 +3,23 @@
 //--------------------------------
 
 ArcticMadness.scene.Credits = function () {
+    this.credits_bg = null;
+    this.musicCredits = null;
+    this.lobbyMusicCredits = null;
+    this.gameMusicCredits = null;
+    this.creatorsText = null;
+    this.jesperGraphics = null;
+    this.jesperText = null;
+    this.jesperInfoText = null;
+    this.mathiasGraphics = null;
+    this.mathiasText = null;
+    this.mathiasInfoText = null;
+    this.backToMenu = null;
+    this.penguin = null;
+    this.penguin2 = null;
+    this.penguin3 = null;
+    this.penguin4 = null;
+    
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
