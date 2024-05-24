@@ -73,7 +73,7 @@ ArcticMadness.scene.NewHighscore.prototype.init = function () {
   this.m_createParticleTimer();
   this.m_createEmitter();
   this.m_createCheeringSoundTimer();
-  // this.menuSound.fade(1, 3000);
+  this.menuSound.fade(1, 3000);
 };
 
 /**

@@ -133,7 +133,7 @@ ArcticMadness.scene.Game.prototype.resetPlayer = function (
 ) {
   var nearestIceTileIndex = this.map.getNearestIceTileIndex(player);
   var nearestIceTile = this.map.tileLayer.getTileAt(nearestIceTileIndex);
-
+  player.moveable = true;
   player.isInWater = false;
   player.isRevivable = false;
   player.isAlive = true;
