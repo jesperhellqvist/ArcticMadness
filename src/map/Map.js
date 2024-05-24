@@ -440,8 +440,8 @@ ArcticMadness.map.Map.prototype.m_removeIce = function (index) {
 
   // Random ice edge and water tiles
 
-  var iceEdges = [12, 14, 15];
-  var water = [20, 24];
+  var iceEdges = [12,12,12,13,15];
+  var water = [19,19,19,19,20,20,23,24];
 
   var randomiceEdge = iceEdges[Math.floor(Math.random() * iceEdges.length)];
   var randomWater = water[Math.floor(Math.random() * water.length)];
