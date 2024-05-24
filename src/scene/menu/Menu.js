@@ -268,7 +268,11 @@ ArcticMadness.scene.Menu.prototype.selectOption = function (option) {
       }, this);
       break;
     case "CREDITS":
-      console.log("CREDITS, visa ljudskapare, samt mig o jepa")
+      this.cameras.getCameraAt(0).fade.out(300, function () {
+        this.application.scenes.load([
+          new ArcticMadness.scene.Credits(),
+        ]);
+      }, this);
       break;
   }
 };

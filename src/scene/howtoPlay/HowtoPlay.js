@@ -43,16 +43,18 @@ ArcticMadness.scene.HowtoPlay.prototype.init = function () {
 ArcticMadness.scene.HowtoPlay.prototype.update = function (step) {
     rune.scene.Scene.prototype.update.call(this, step);
     if (this.gamepads.get(0).justPressed(1)) {
-        
-        this.cameras.getCameraAt(0).fade.out(300, function() {
+
+        this.cameras.getCameraAt(0).fade.out(300, function () {
             this.application.scenes.load([
-              new ArcticMadness.scene.Menu(),
+                new ArcticMadness.scene.Menu(),
             ]);
-          }, this);
-    } 
+        }, this);
+    }
 }
 
 ArcticMadness.scene.HowtoPlay.prototype.dispose = function () {
+    this.stage.removeChild(this.pointsText, true);
+    this.stage.removeChild(this.descriptionText, true);
     this.stage.removeChild(this.controller, true);
     this.stage.removeChild(this.backToMenu, true);
     this.stage.removeChild(this.howto_bg, true);
@@ -79,8 +81,8 @@ ArcticMadness.scene.HowtoPlay.prototype.m_createUI = function () {
     this.backToMenu = new rune.display.Sprite(50, 20, 220, 220, "how_to");
     this.backToMenu.animation.create("button", [14, 15], 4, true);
     this.backToMenu.animation.gotoAndPlay("button");
-    this.backToMenu.scaleX = 0.7;
-    this.backToMenu.scaleY = 0.7;
+    this.backToMenu.scaleX = 0.5;
+    this.backToMenu.scaleY = 0.5;
     this.stage.addChild(this.backToMenu);
 
 }
@@ -98,14 +100,29 @@ ArcticMadness.scene.HowtoPlay.prototype.m_createControlAnimations = function () 
 
 //Method to initialize the description
 ArcticMadness.scene.HowtoPlay.prototype.m_createDescription = function () {
-    this.descriptionText = new rune.text.BitmapField(
-       "ARCTIC MADNESS IS A SURVIVOR GAME\n\nWHERE YOU PLAY AS A PENGUIN\n\nTHE GOAL IS TO SURVIVE\n\nAS LONG AS POSSIBLE\n\nBY AVOIDING THE WATER AND\n\nTHE ENEMIES\n\nYOU CAN REPAIR THE ICE BY\n\nFILLING THE CRACKS WITH SNOW AND\n\nYOU CAN ALSO SHOOT THE ENEMIES\n\nWITH YOUR FISH GUN\n\nIF YOU FALL IN THE WATER OTHER\n\nPLAYERS CAN SAVE YOU\n\nBUT IF THEY ARENT FAST ENOUGH\n\nYOU GET EATEN\n\n         GOOD LUCK\n\n","thefont"
-    );
-    this.descriptionText.autoSize = true;
-    this.descriptionText.scaleX = 1.3;
-    this.descriptionText.scaleY = 1;
-    this.descriptionText.x= 30;
+    this.descriptionText = new rune.ui.VTList("thefont");
+    this.descriptionText.padding = 15;
+    this.descriptionText.align = rune.ui.VTList.ALIGN_LEFT;
+    this.descriptionText.add("ARCTIC MADNESS IS A SURVIVOR GAME");
+    this.descriptionText.add("REPAIR THE CRACKS SO THE ICE DOESNT BREAK");
+    this.descriptionText.add("AVOID THE WATER AND THE ENEMIES");
+    this.descriptionText.add("SHOOT THE ENEMIES WITH YOUR FISH GUN");
+    this.descriptionText.add("HELP YOUR FRIENDS IF THEY FALL IN THE WATER");
+    this.descriptionText.x = 25;
     this.descriptionText.y = 200;
     this.stage.addChild(this.descriptionText);
+
+    this.pointsText = new rune.ui.VTList("thefont");
+    this.pointsText.padding = 15;
+    this.pointsText.align = rune.ui.VTList.ALIGN_LEFT;
+    this.pointsText.add("    HOW TO SCORE POINTS");
+    this.pointsText.add("$ REPAIRED CRACK ; $# POINTS");
+    this.pointsText.add("$ KILLED ENEMY   ;  % POINTS");
+    this.pointsText.add("$ SECOND ALIVE   ;  $ POINTS");
+    this.pointsText.x = 20;
+    this.pointsText.y = 450;
+    this.pointsText.scaleX = 1.5;
+    this.pointsText.scaleY = 1.5;
+    this.stage.addChild(this.pointsText);
 }
 

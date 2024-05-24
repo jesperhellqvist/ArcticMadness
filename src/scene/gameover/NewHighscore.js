@@ -63,7 +63,7 @@ ArcticMadness.scene.NewHighscore.prototype.init = function () {
   this.m_createParticleTimer();
   this.m_createEmitter();
   this.m_createCheeringSoundTimer();
-  this.menuSound.fade(1, 3000);
+  // this.menuSound.fade(1, 3000);
 };
 
 ArcticMadness.scene.NewHighscore.prototype.update = function (step) {
@@ -98,7 +98,7 @@ ArcticMadness.scene.NewHighscore.prototype.m_createBackground = function () {
     0,
     this.application.screen.width,
     this.application.screen.height,
-    "newhighscore_bg"
+    "newhighscore_bg2"
   );
   this.stage.addChild(this.background);
 };
@@ -239,9 +239,11 @@ ArcticMadness.scene.NewHighscore.prototype.m_handleSelectBoxMovement =
       this.selectBox.x = 535;
       this.selectBox.y = 610;
       this.selectBox.scaleX = 3;
-    } else {
+    } 
+    else {
       this.selectBox.scaleX = 1;
     }
+
   };
 ArcticMadness.scene.NewHighscore.prototype.m_handleSelectBoxInput =
   function () {
@@ -328,6 +330,9 @@ ArcticMadness.scene.NewHighscore.prototype.m_handleSelectBoxInput =
       }
       if (this.selectBox.x == 885 && this.selectBox.y == 540) {
         this.updateListName("! ");
+      }
+      if (this.selectBox.x == 600 && this.selectBox.y == 610) {
+        this.m_removeLetter();
       }
       if (this.selectBox.x == 535 && this.selectBox.y == 610) {
         this.m_addHighscore(this.ListName.replace(/\s/g, ''));

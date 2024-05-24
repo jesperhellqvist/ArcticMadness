@@ -43,6 +43,6 @@ ArcticMadness.entity.Pointer.prototype.dispose = function () {
 ArcticMadness.entity.Pointer.prototype.m_initTexture = function () {
     this.texture.replaceColor(
         new rune.color.Color24(133, 144, 255),
-        new rune.color.Color24(255, 0, 0)
+        new rune.color.Color24(255, 177, 0)
     );
 }

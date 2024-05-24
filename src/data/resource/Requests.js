@@ -44,6 +44,7 @@ ArcticMadness.data.Requests.prototype.constructor = ArcticMadness.data.Requests;
 ArcticMadness.data.Requests.prototype.m_construct = function() {
     rune.resource.Requests.prototype.m_construct.call(this);
     this.add("Ice_map_64x64", "./../asset/bgs_menus/Ice_map_64x64.png");
+	this.add("credits_bg", "./../asset/bgs_menus/credits_bg.png");
 	this.add("gameover_bg", "./../asset/bgs_menus/gameover_bg.png");
 	this.add("highscores_bg", "./../asset/bgs_menus/highscores_bg.png");
 	this.add("how_to", "./../asset/bgs_menus/how_to.png");
@@ -51,6 +52,7 @@ ArcticMadness.data.Requests.prototype.m_construct = function() {
 	this.add("join_graphics", "./../asset/bgs_menus/join_graphics.png");
 	this.add("menu_bg", "./../asset/bgs_menus/menu_bg.png");
 	this.add("newhighscore_bg", "./../asset/bgs_menus/newhighscore_bg.png");
+	this.add("newhighscore_bg2", "./../asset/bgs_menus/newhighscore_bg2.png");
 	this.add("wave_bg", "./../asset/bgs_menus/wave_bg.png");
 	this.add("map", "./../asset/map.json");
 	this.add("Shoot", "./../asset/sound/Shoot.wav");
@@ -74,6 +76,7 @@ ArcticMadness.data.Requests.prototype.m_construct = function() {
 	this.add("highscorebar", "./../asset/textures/highscorebar.png");
 	this.add("howtoanimation", "./../asset/textures/howtoanimation.png");
 	this.add("penguin_texture_64x64", "./../asset/textures/penguin_texture_64x64.png");
+	this.add("profiles", "./../asset/textures/profiles.png");
 	this.add("selected", "./../asset/textures/selected.png");
 	this.add("thefont", "./../asset/textures/thefont.png");
 };

@@ -191,8 +191,8 @@ ArcticMadness.scene.Highscores.prototype.m_createUI = function () {
     this.backToMenu = new rune.display.Sprite(30, 20, 220, 220, "how_to");
     this.backToMenu.animation.create("button", [14, 15], 4, true);
     this.backToMenu.animation.gotoAndPlay("button");
-    this.backToMenu.scaleX = 0.7;
-    this.backToMenu.scaleY = 0.7;
+    this.backToMenu.scaleX = 0.5;
+    this.backToMenu.scaleY = 0.5;
     this.stage.addChild(this.backToMenu);
 
 }
