@@ -105,7 +105,7 @@ ArcticMadness.scene.Credits.prototype.m_createMusicCredits = function () {
 
     this.lobbyMusicCredits = new rune.ui.VTList("thefont");
     this.lobbyMusicCredits.padding = 10;
-    this.lobbyMusicCredits.add("LOBBY MUSIC CREDITS");
+    this.lobbyMusicCredits.add("LOBBY MUSIC");
     this.lobbyMusicCredits.add("ELECTRO DOODLE BY KEVIN MACLEOD");
     this.lobbyMusicCredits.add("INCOMPETECH.COM");
     this.lobbyMusicCredits.add("LICENSED UNDER CREATIVE COMMONS;");
@@ -117,7 +117,7 @@ ArcticMadness.scene.Credits.prototype.m_createMusicCredits = function () {
 
     this.gameMusicCredits = new rune.ui.VTList("thefont");
     this.gameMusicCredits.padding = 10;
-    this.gameMusicCredits.add("GAME MUSIC CREDITS");
+    this.gameMusicCredits.add("GAME MUSIC");
     this.gameMusicCredits.add("THE LIFT BY KEVIN MACLEOD");
     this.gameMusicCredits.add("INCOMPETECH.COM");
     this.gameMusicCredits.add("LICENSED UNDER CREATIVE COMMONS;");

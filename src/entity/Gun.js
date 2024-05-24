@@ -34,7 +34,7 @@ ArcticMadness.entity.Gun = function (x, y, color, gamepad, player) {
   /**
    * Calls the constructor method of the super class.
    */
-  rune.display.Sprite.call(this, this.x, this.y, 32, 32, "gun_directions2");
+  rune.display.Sprite.call(this, this.x, this.y, 32, 32, "gun");
 };
 
 //------------------------------------------------------------------------------
@@ -58,7 +58,7 @@ ArcticMadness.entity.Gun.prototype.constructor = ArcticMadness.entity.Gun;
 ArcticMadness.entity.Gun.prototype.init = function () {
   rune.display.Sprite.prototype.init.call(this);
   this.m_initSound();
-  this.animation.create("gun",[3],1, true);
+  // this.animation.create("gun",[3],1, true);
 };
 
 /**
