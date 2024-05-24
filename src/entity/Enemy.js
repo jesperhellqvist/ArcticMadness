@@ -13,7 +13,6 @@
  * @returns {undefined}
  * @extends {rune.display.Sprite}
  * @class
- * @public
  */
 
 ArcticMadness.entity.Enemy = function (x, y, players, map, game) {
@@ -92,7 +91,6 @@ ArcticMadness.entity.Enemy.prototype.update = function (step) {
  */
 
 ArcticMadness.entity.Enemy.prototype.dispose = function () {
-  console.log("dispose enemy");
   this.game = null;
   this.map = null;
   this.players = null;
@@ -128,10 +126,6 @@ ArcticMadness.entity.Enemy.prototype.killenemy = function () {
 // Private prototype methods
 //------------------------------------------------------------------------------
 
-
-
-
-
 /**
  * This method creates the sound for the enemy object.
  *
@@ -140,7 +134,7 @@ ArcticMadness.entity.Enemy.prototype.killenemy = function () {
 ArcticMadness.entity.Enemy.prototype.m_createSound = function () {
   this.hitSound = this.application.sounds.sound.get("sealhit");
   this.hitSound.loop = false;
-}
+};
 
 /**
  * This method makes the enemy follow the player.
@@ -212,14 +206,13 @@ ArcticMadness.entity.Enemy.prototype.m_checkPlayerCollision = function (
 ) {
   if (this.isAlive) {
     if (this.hitTestObject(player)) {
-      player.isAttacked = true;
-      player.gun.alpha = 0;
-      this.animation.gotoAndPlay("attack");
-      player.animation.gotoAndPlay("dragy");
+      if (!player.isAttacked) {
+        player.isAttacked = true;
+        player.moveable = false;
+        player.gun.alpha = 0;
+        player.animation.gotoAndPlay("dragy");
+      }
       this.m_getNearestWater(player.x, player.y, player);
-    } else {
-      player.isAttacked = false;
-      player.gun.alpha = 1;
     }
   }
 };
@@ -239,6 +232,7 @@ ArcticMadness.entity.Enemy.prototype.m_getNearestWater = function (
   y,
   player
 ) {
+  player.isAttacked = true;
   var topLeft = this.application.screen.width / 2;
   var bottomLeft = this.application.screen.height / 2;
 

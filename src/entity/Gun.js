@@ -69,6 +69,11 @@ ArcticMadness.entity.Gun.prototype.init = function () {
 
 ArcticMadness.entity.Gun.prototype.update = function (step) {
   rune.display.Sprite.prototype.update.call(this, step);
+
+  if (this.player.isAttacked) {
+    return;
+  }
+
   if (
     !this.player.isInWater &&
     this.player.isAlive &&

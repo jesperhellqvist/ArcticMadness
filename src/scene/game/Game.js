@@ -109,8 +109,6 @@ ArcticMadness.scene.Game.prototype.dispose = function () {
   this.stage.removeChild(this.liveScore, true);
   this.stage.removeChild(this.map, true);
   this.stage.removeChild(this.enemies, true);
-  this.enemies.dispose(); // kolla upp detta med henrik
-  this.enemies = null;
 
   for (var i = 0; i < this.players.length; i++) {
     this.stage.removeChild(this.players[i], true);
@@ -171,6 +169,7 @@ ArcticMadness.scene.Game.prototype.updateScore = function (score) {
 
 ArcticMadness.scene.Game.prototype.m_initLiveScore = function () {
   this.liveScore = new ArcticMadness.entity.LiveScore(this);
+  this.stage.addChild(this.liveScore);
   this.highscore = this.application.highscores.get(0, this.numberOfPlayers - 1).score;
   this.allTimeHighscoreText = new rune.text.BitmapField(
     "HIGHSCORE;" + this.highscore,
@@ -331,8 +330,9 @@ ArcticMadness.scene.Game.prototype.reviveAllPlayers = function () {
  * @returns {undefined}
  */
 ArcticMadness.scene.Game.prototype.dispose = function () {
-  console.log("dispose game scene");
+  
   for (var i = 0; i < this.players.length; i++) {
+    this.stage.removeChild(this.players[i].gun, true);
     this.stage.removeChild(this.players[i], true);
   }
   this.stage.removeChild(this.timerText, true);

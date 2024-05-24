@@ -38,6 +38,7 @@ ArcticMadness.entity.CountDown.prototype.constructor =
  * This method is automatically executed once after the scene is instantiated.
  *
  * @returns {undefined}
+ * @public
  */
 
 ArcticMadness.entity.CountDown.prototype.init = function () {
@@ -51,22 +52,13 @@ ArcticMadness.entity.CountDown.prototype.init = function () {
   );
 
   this.animation.create("5-1", [21, 0, 0, 20, 0, 0, 19, 0, 0, 18, 0, 0, 17], 3, false);
-
   this.m_setPosition();
-};
-
-/**
- * This method runs every frame.
- * @returns {undefined}
- */
-
-ArcticMadness.entity.CountDown.prototype.update = function (step) {
-  rune.display.Sprite.prototype.update.call(this, step);
 };
 
 /**
  * This method disposes the object.
  * @returns {undefined}
+ * @public
  */
 
 ArcticMadness.entity.CountDown.prototype.dispose = function () {
@@ -80,6 +72,7 @@ ArcticMadness.entity.CountDown.prototype.dispose = function () {
 /**
  * Plays the count down 3 animation.
  * @returns {undefined}
+ * @public
  */
 
 ArcticMadness.entity.CountDown.prototype.playCountDown3 = function () {
@@ -89,6 +82,7 @@ ArcticMadness.entity.CountDown.prototype.playCountDown3 = function () {
 /**
  * Plays the count down 10 animation.
  * @returns {undefined}
+ * @public
  */
 
 ArcticMadness.entity.CountDown.prototype.playCountDown10 = function () {
@@ -98,6 +92,7 @@ ArcticMadness.entity.CountDown.prototype.playCountDown10 = function () {
 /**
  * Plays the count down 5 animation.
  * @returns {undefined}
+ * @public
  */
 
 ArcticMadness.entity.CountDown.prototype.playCountDown5 = function () {
