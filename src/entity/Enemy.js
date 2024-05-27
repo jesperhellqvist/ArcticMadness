@@ -23,6 +23,7 @@ ArcticMadness.entity.Enemy = function (x, y, players, map, game) {
   this.game = game; // Reference to the game object.
   this.isInWater = false;
   this.isAlive = true;
+  this.killEnemyTimer = null;
 
   //--------------------------------------------------------------------------
   // Super call
@@ -90,6 +91,7 @@ ArcticMadness.entity.Enemy.prototype.update = function (step) {
  */
 
 ArcticMadness.entity.Enemy.prototype.dispose = function () {
+  this.killEnemyTimer = null;
   this.game = null;
   this.map = null;
   this.players = null;
@@ -122,7 +124,7 @@ ArcticMadness.entity.Enemy.prototype.killenemy = function () {
     }
   }
 
-  this.game.timers
+ this.killEnemyTimer = this.game.timers
     .create({
       duration: 1000,
       scope: this,

@@ -202,7 +202,7 @@ ArcticMadness.scene.Highscores.prototype.m_createParticleTimer = function () {
 };
 
 /**
- * This method initializes the highscore lists.
+ * This method initializes the one player highscore lists.
  * @returns {undefined}
  * @private
  */

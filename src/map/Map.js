@@ -32,6 +32,7 @@ ArcticMadness.map.Map = function (map, players, game, gamepads, enemies) {
   this.numRandamCracks = 0;
   this.repairedTilesScore = 0;
   this.repairedWaveScore = 0;
+  this.killplayerTimer = null;
 
   ArcticMadness.map.Map.prototype.init.call(this);
 };
@@ -106,6 +107,7 @@ ArcticMadness.map.Map.prototype.dispose = function () {
   this.tileLayer = null;
   this.tiles = null;
   this.map = null;
+  this.killplayerTimer = null;
 };
 
 //------------------------------------------------------------------
@@ -693,6 +695,11 @@ ArcticMadness.map.Map.prototype.m_updatePlayerState = function (player) {
       player.centerY + 18
     );
 
+    if (!player.falling) {
+      this.game.tweenWater(player, playerTile);
+      player.gun.alpha = 0;
+    }
+
     var playerTileIndex = this.tileLayer.getTileIndexOf(
       player.centerX,
       player.centerY + 18
@@ -718,10 +725,6 @@ ArcticMadness.map.Map.prototype.m_updatePlayerState = function (player) {
       this.removeReviveTile(player);
     }
 
-    if (!player.falling) {
-      this.game.tweenWater(player, playerTile);
-      player.gun.alpha = 0;
-    }
   }
 };
 
@@ -790,7 +793,7 @@ ArcticMadness.map.Map.prototype.m_setReviveTile = function (player) {
 
 ArcticMadness.map.Map.prototype.m_killPlayer = function (player) {
   player.animation.gotoAndPlay("death", 0);
-  this.game.timers
+ this.killplayerTimer = this.game.timers
     .create({
       duration: 2000,
       onComplete: function () {
