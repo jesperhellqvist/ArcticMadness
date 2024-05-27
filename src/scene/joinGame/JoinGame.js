@@ -3,7 +3,7 @@
 //------------------------------------------------------------------------------
 
 /**
- * Creates a new object.
+ * Creates a JoinGame scene where players can join the game.
  *
  * @constructor
  * @extends rune.scene.Scene
@@ -33,6 +33,10 @@ ArcticMadness.scene.JoinGame = function (menuSound) {
     { r: 255, g: 250, b: 5 }, // Player 4 Yellow
   ];
   this.menuSound = menuSound;
+
+  //--------------------------------------------------------------------------
+  // Super call
+  //--------------------------------------------------------------------------
   rune.scene.Scene.call(this);
 };
 
@@ -52,6 +56,7 @@ ArcticMadness.scene.JoinGame.prototype.constructor =
 
 /**
  * @inheritDoc
+ * @override
  */
 
 ArcticMadness.scene.JoinGame.prototype.init = function () {
@@ -62,10 +67,21 @@ ArcticMadness.scene.JoinGame.prototype.init = function () {
   this.m_initAnimations();
 };
 
+/**
+ * @inheritDoc
+ * @override
+ * @param {number} step Current step.
+ */
+
 ArcticMadness.scene.JoinGame.prototype.update = function (step) {
   rune.scene.Scene.prototype.update.call(this, step);
   this.m_playerJoinGame();
 };
+
+/**
+ * @inheritDoc
+ * @override
+ */
 
 ArcticMadness.scene.JoinGame.prototype.dispose = function () {
   this.stage.removeChild(this.background, true);
@@ -79,6 +95,7 @@ ArcticMadness.scene.JoinGame.prototype.dispose = function () {
   this.stage.removeChild(this.player4, true);
   this.colors = null;
   this.connectedGamepads = null;
+  this.gameStartTimer = null;
   this.menuSound = null;
   rune.scene.Scene.prototype.dispose.call(this);
 };
@@ -87,13 +104,16 @@ ArcticMadness.scene.JoinGame.prototype.dispose = function () {
 // Privat prototype methods
 //------------------------------------------------------------------------------
 
+/**
+ * Initializes the background.
+ * @return {undefined}
+ * @private
+ */
+
 ArcticMadness.scene.JoinGame.prototype.m_initBackground = function () {
   this.background1 = new rune.display.Sprite(0, 0, 640, 360, "join_graphics");
-
   this.background2 = new rune.display.Sprite(640, 0, 640, 360, "join_graphics");
-
   this.background3 = new rune.display.Sprite(0, 360, 640, 360, "join_graphics");
-
   this.background4 = new rune.display.Sprite(
     640,
     360,
@@ -110,6 +130,12 @@ ArcticMadness.scene.JoinGame.prototype.m_initBackground = function () {
   this.stage.addChild(this.background4);
 };
 
+/**
+ * Initializes the animations.
+ * @return {undefined}
+ * @private
+ */
+
 ArcticMadness.scene.JoinGame.prototype.m_initAnimations = function () {
   this.background1.animation.create("play", [0, 1], 2, true);
   this.background1.animation.gotoAndPlay("play");
@@ -119,7 +145,6 @@ ArcticMadness.scene.JoinGame.prototype.m_initAnimations = function () {
   this.background3.animation.gotoAndPlay("play");
   this.background4.animation.create("play", [0, 1], 2, true);
   this.background4.animation.gotoAndPlay("play");
-
   this.background1.animation.create("ice", [2], 4, false);
   this.background2.animation.create("ice", [2], 4, false);
   this.background3.animation.create("ice", [2], 4, false);
@@ -131,6 +156,12 @@ ArcticMadness.scene.JoinGame.prototype.m_initAnimations = function () {
     true
   );
 };
+
+/**
+ * Players join the game.
+ * @return {undefined}
+ * @private
+ */
 
 ArcticMadness.scene.JoinGame.prototype.m_playerJoinGame = function () {
   var positions = [
@@ -165,6 +196,12 @@ ArcticMadness.scene.JoinGame.prototype.m_playerJoinGame = function () {
   }
 };
 
+/**
+ * Starts the start game timer.
+ * @return {undefined}
+ * @private
+ */
+
 ArcticMadness.scene.JoinGame.prototype.m_startGameTimer = function () {
   if (this.gameStartTimer) {
     this.gameStartTimer.dispose();
@@ -188,6 +225,12 @@ ArcticMadness.scene.JoinGame.prototype.m_startGameTimer = function () {
     scope: this,
   });
 };
+
+/**
+ * Initializes the count down.
+ * @return {undefined}
+ * @private
+ */
 
 ArcticMadness.scene.JoinGame.prototype.m_initCountDown = function () {
   if (this.countDown !== null) {

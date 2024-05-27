@@ -33,8 +33,8 @@ ArcticMadness.scene.Menu = function () {
   this.highscoreY = 0;
   this.currentIndex = 0;
   this.divingTweenActive = false;
-  // this.highscoreList = null;  // De här kan man ta bort?
-  // this.highscoreText = null;
+  this.highscoreSlide = null;
+
 
   //--------------------------------------------------------------------------
   // Super call
@@ -55,6 +55,7 @@ ArcticMadness.scene.Menu.prototype.constructor = ArcticMadness.scene.Menu;
 
 /**
  * @inheritDoc
+ * @override
  */
 
 ArcticMadness.scene.Menu.prototype.init = function () {
@@ -110,6 +111,7 @@ ArcticMadness.scene.Menu.prototype.update = function (step) {
 
 //Kolla igenom så dessa inte är har "gamla" metoder som inte används, och är flyttade till ny scene
 ArcticMadness.scene.Menu.prototype.dispose = function () {
+  this.highscoreSlide = null;
   this.stage.removeChild(this.splashEffect, true);
   this.stage.removeChild(this.chooseSound, true);
   this.stage.removeChild(this.menuSound, true);
@@ -124,7 +126,6 @@ ArcticMadness.scene.Menu.prototype.dispose = function () {
   this.stage.removeChild(this.highscore_bg);
   this.stage.removeChild(this.menu, true);
   this.stage.removeChild(this.background, true);
-
   rune.scene.Scene.prototype.dispose.call(this);
 };
 
@@ -162,6 +163,7 @@ ArcticMadness.scene.Menu.prototype.m_initBackground = function () {
  * @returns {undefined}
  * @private
  */
+
 ArcticMadness.scene.Menu.prototype.m_createDivingTween = function () {
   if (!this.divingTweenActive) {
     this.divingTweenActive = true;
@@ -192,6 +194,7 @@ ArcticMadness.scene.Menu.prototype.m_createDivingTween = function () {
  * @returns {undefined}
  * @private
  */
+
 ArcticMadness.scene.Menu.prototype.m_initAnimations = function () {
   this.divingPenguin.animation.create("walking", [5, 6, 7, 8], 8, true);
   this.divingPenguin.animation.create("diving", [25, 26, 27, 28, 29], 9, false);
@@ -229,6 +232,7 @@ ArcticMadness.scene.Menu.prototype.m_initMenu = function () {
   this.menu.onSelect(this.selectOption, this);
   this.stage.addChild(this.menu);
 };
+
 /**
  * This method creates the highscore list.
  * @returns {undefined}
@@ -270,6 +274,7 @@ ArcticMadness.scene.Menu.prototype.m_highscoreList = function () {
 * @returns {undefined}
 * @private
 */
+
 ArcticMadness.scene.Menu.prototype.m_initSound = function () {
   this.menuSound = this.application.sounds.master.get("lobby");
   this.menuSound.play();
@@ -287,6 +292,7 @@ ArcticMadness.scene.Menu.prototype.m_initSound = function () {
  * @param {rune.ui.VTListElement} option The selected option.
  * @return {undefined}
  */
+
 ArcticMadness.scene.Menu.prototype.selectOption = function (option) {
   switch (option.text) {
     case "START GAME":

@@ -31,12 +31,17 @@ ArcticMadness.scene.Game = function (numberOfPlayers, menuSound, gamepads) {
   this.duration = 45000;
   this.highscoreList = this.numberOfPlayers - 1;
   this.enemyScore = 0;
+  this.showWaveTextTimer = null;
   this.colors = [
     { r: 133, g: 144, b: 255 }, // Player 1 orignal Blue
     { r: 244, g: 40, b: 45 }, // Player 2 Red
     { r: 16, g: 152, b: 86 }, // Player 3 Green
     { r: 255, g: 250, b: 5 }, // Player 4 Yellow
   ];
+  this.countDown = null;
+  this.allTimeHighscoreText = null;
+  this.timerText = null;
+  this.removeCountDownTimer = null;
 
   //--------------------------------------------------------------------------
   // Super call
@@ -99,17 +104,24 @@ ArcticMadness.scene.Game.prototype.update = function (step) {
  * @returns {undefined}
  */
 ArcticMadness.scene.Game.prototype.dispose = function () {
+  this.removeCountDownTimer = null;
+  this.stage.removeChild(this.timerText, true);
+  this.stage.removeChild(this.allTimeHighscoreText, true);
+  this.stage.removeChild(this.countDown, true);
+  this.colors = null;
+  this.showWaveTextTimer = null;
+  this.stage.removeChild(this.bonusContainer, true);
+  this.stage.removeChild(this.liveScore, true);
+  this.waveTimer = null;
+  this.gamepadsConected = null;
+  this.gamepadsFromJoin = null;
+  this.enemies.dispose();
   for (var i = 0; i < this.players.length; i++) {
     this.stage.removeChild(this.players[i].gun, true);
     this.stage.removeChild(this.players[i], true);
   }
-  this.stage.removeChild(this.timerText, true);
-  this.stage.removeChild(this.liveScore, true);
+  this.players = null;
   this.map.dispose();
-  this.stage.removeChild(this.map, true);
-  this.enemies.dispose();
-  this.stage.removeChild(this.enemies, true);
-
   rune.scene.Scene.prototype.dispose.call(this);
 };
 
@@ -493,7 +505,7 @@ ArcticMadness.scene.Game.prototype.m_showWaveText = function (wave) {
     this.players[i].moveable = false;
   }
 
-  this.timers
+  this.showWaveTextTimer = this.timers
     .create({
       duration: 6000,
       scope: this,
@@ -531,7 +543,7 @@ ArcticMadness.scene.Game.prototype.m_updateWaveTimerText = function () {
     this.stage.addChild(this.countDown);
     this.countDown.playCountDown5();
 
-    this.timers
+    this.removeCountDownTimer = this.timers
       .create({
         duration: 5000,
         scope: this,

@@ -77,6 +77,7 @@ ArcticMadness.entity.Pointer.prototype.m_initTexture = function () {
  * @returns {undefined}
  * @private
  */
+
 ArcticMadness.entity.Pointer.prototype.m_createanimation = function () {
     this.animation.create("selected", [0, 1], 3, true);
 }
