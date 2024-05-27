@@ -8,7 +8,7 @@
  * @constructor
  * @extends rune.scene.Scene
  * @param {number} numberOfPlayers
- * @param {rune.media.Sound} menuSound // ?? matihas?
+ * @param {rune.media.Sound} menuSound 
  * @param {Array} gamepads
  *
  * @class
@@ -303,6 +303,7 @@ ArcticMadness.scene.Game.prototype.m_initSound = function () {
   this.quakeSoundEffect = this.application.sounds.sound.get("quake");
   this.quakeSoundEffect.loop = false;
   this.gameMusic.volume = 0;
+  this.gameMusic.rate =0.9;
   this.gameMusic.fade(1, 3000);
   this.gameMusic.play();
   this.gameMusic.loop = true;
@@ -437,6 +438,7 @@ ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
       this.reviveAllPlayers();
       this.waveCompleteSoundEffect.play();
       this.m_showWaveText(this.currentWave - 1);
+      this.gameMusic.rate =0.9;
     },
     onUpdate: function () {
       if (
@@ -445,6 +447,10 @@ ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
         this.m_updateWaveTimerText();
         this.updateScore(1);
         this.lastScoreUpdate = Math.floor(this.waveTimer.progressTotal * 45);
+      }
+      if(this.duration === 30000){
+        this.gameMusic.rate =1;
+
       }
     },
   });

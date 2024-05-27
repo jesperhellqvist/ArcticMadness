@@ -111,13 +111,13 @@ ArcticMadness.scene.JoinGame.prototype.m_initBackground = function () {
 };
 
 ArcticMadness.scene.JoinGame.prototype.m_initAnimations = function () {
-  this.background1.animation.create("play", [0, 1], 4, true);
+  this.background1.animation.create("play", [0, 1], 2, true);
   this.background1.animation.gotoAndPlay("play");
-  this.background2.animation.create("play", [0, 1], 4, true);
+  this.background2.animation.create("play", [0, 1], 2, true);
   this.background2.animation.gotoAndPlay("play");
-  this.background3.animation.create("play", [0, 1], 4, true);
+  this.background3.animation.create("play", [0, 1], 2, true);
   this.background3.animation.gotoAndPlay("play");
-  this.background4.animation.create("play", [0, 1], 4, true);
+  this.background4.animation.create("play", [0, 1], 2, true);
   this.background4.animation.gotoAndPlay("play");
 
   this.background1.animation.create("ice", [2], 4, false);

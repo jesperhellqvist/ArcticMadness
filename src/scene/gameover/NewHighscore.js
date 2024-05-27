@@ -87,7 +87,6 @@ ArcticMadness.scene.NewHighscore.prototype.update = function (step) {
   rune.scene.Scene.prototype.update.call(this, step);
   this.m_handleSelectBoxMovement();
   this.m_handleSelectBoxInput();
-  this.m_removeLetter();
 };
 
 /**
@@ -172,7 +171,7 @@ ArcticMadness.scene.NewHighscore.prototype.m_createHeaderGraphics =
     );
     this.headerGraphics.animation.create(
       "lights",
-      [4, 3, 4, 3, 1, 2, 1, 2],
+      [4, 3, 4, 3, 1, 2, 1, 2,0],
       5,
       true
     );
@@ -328,12 +327,26 @@ ArcticMadness.scene.NewHighscore.prototype.m_handleSelectBoxMovement =
       this.moveSound.play();
     }
     if (this.selectBox.y > 540) {
-      this.selectBox.x = 535;
-      this.selectBox.y = 610;
-      this.selectBox.scaleX = 3;
+      if (this.selectBox.x <= 745) {
+        this.selectBox.x = 535;
+        this.selectBox.y = 610;
+        this.selectBox.scaleX = 3;
+        if ((gamepad.justPressed(15) || gamepad.stickLeftJustRight) && this.selectBox.x < 885) {
+          this.selectBox.x = 815;
+          this.selectBox.y = 610;
+          this.selectBox.scaleX = 2;
+          this.moveSound.play();
+        }
+
+      } else {
+        this.selectBox.x = 815;
+        this.selectBox.y = 610;
+        this.selectBox.scaleX = 2;
+      }
     } else {
       this.selectBox.scaleX = 1;
     }
+
   };
 
 /**
@@ -428,6 +441,9 @@ ArcticMadness.scene.NewHighscore.prototype.m_handleSelectBoxInput =
       if (this.selectBox.x == 885 && this.selectBox.y == 540) {
         this.updateListName("! ");
       }
+      if (this.selectBox.x == 815 && this.selectBox.y == 610) {
+       this.m_removeLetter();
+      }
       if (this.selectBox.x == 535 && this.selectBox.y == 610) {
         this.m_addHighscore(this.ListName.replace(/\s/g, ""));
         this.cameras.getCameraAt(0).fade.out(
@@ -439,6 +455,9 @@ ArcticMadness.scene.NewHighscore.prototype.m_handleSelectBoxInput =
         );
       }
     }
+    if(gamepad.justPressed(1)){
+      this.m_removeLetter();
+    }
   };
 
 /**
@@ -449,7 +468,6 @@ ArcticMadness.scene.NewHighscore.prototype.m_handleSelectBoxInput =
 
 ArcticMadness.scene.NewHighscore.prototype.m_removeLetter = function () {
   var gamepad = this.gamepads.get(0);
-  if (gamepad.justPressed(1)) {
     if (this.ListName.length > 0) {
       this.ListName = this.ListName.slice(0, -2);
       this.stage.removeChild(this.ListNameText, true);
@@ -463,7 +481,6 @@ ArcticMadness.scene.NewHighscore.prototype.m_removeLetter = function () {
         this.stage.addChild(this.ListNameText);
       }
     }
-  }
 };
 
 /**
