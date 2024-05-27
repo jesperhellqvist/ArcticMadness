@@ -150,12 +150,12 @@ ArcticMadness.entity.Player.prototype.m_initAnimation = function () {
   this.animation.create("drown", [30, 31], 8, true);
   this.animation.create(
     "death",
-    [31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 40, 41, 42, 43],
+    [31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 40, 41, 42, 4],
     8,
     false
   );
   //Attacked animation, injured
-  this.animation.create("dragy", [45, 46], 4, true);
+  this.animation.create("dragy", [43, 44], 4, true);
 };
 
 /**
