@@ -37,6 +37,7 @@ ArcticMadness.entity.Player = function (x, y, penguin, color, gamepad, id) {
   this.inWaterTile = null; // Index of the tile the player is in
   this.isRevivable = false; // Player is revivable
   this.revivingTileSet = false; // Player is reviving tile set
+  this.currentTileTimer = null; // Player reviving tile
 
   //--------------------------------------------------------------------------
   // Super call

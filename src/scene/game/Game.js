@@ -150,6 +150,7 @@ ArcticMadness.scene.Game.prototype.resetPlayer = function (
   player.isRevivable = false;
   player.isAlive = true;
   player.isAttacked = false;
+  player.isRepairing = false;
   player.falling = false;
   player.inWaterTile = null;
   player.revivingTileSet = false;

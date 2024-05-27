@@ -220,6 +220,10 @@ ArcticMadness.entity.Enemy.prototype.m_checkPlayerCollision = function (
   if (this.isAlive) {
     if (this.hitTestObject(player)) {
       if (!player.isAttacked) {
+        if (player.isRepairing) {
+          this.map.m_stopRepair(player, player.currentTileTimer);
+          player.isRepairing = false;
+        }
         player.isAttacked = true;
         player.moveable = false;
         player.gun.alpha = 0;

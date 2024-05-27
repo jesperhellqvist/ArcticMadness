@@ -847,6 +847,7 @@ ArcticMadness.map.Map.prototype.m_startRepair = function (
 ) {
   timer.pause();
   player.isRepairing = true;
+  player.currentTileTimer = timer; // Set the current tile timer
   player.velocity.x = 0;
   player.velocity.y = 0;
   player.animation.gotoAndPlay("repair");
@@ -876,6 +877,7 @@ ArcticMadness.map.Map.prototype.m_stopRepair = function (player, timer) {
 
   if (player.isRepairing) {
     player.isRepairing = false;
+    player.currentTileTimer = null; // Reset the current tile timer
     player.gun.alpha = 1; // Show the gun
     player.animation.gotoAndPlay("idle");
   }
