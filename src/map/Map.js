@@ -69,7 +69,8 @@ ArcticMadness.map.Map.prototype.update = function (step) {
       if (this.m_isPlayerInWater(player)) {
         revivablePlayers.push(player);
         this.m_updatePlayerState(player);
-      } else {
+      } 
+      else if(!player.isAttacked) {
         alivePlayers.push(player);
         player.isInWater = false;
         player.inWaterTile = null;

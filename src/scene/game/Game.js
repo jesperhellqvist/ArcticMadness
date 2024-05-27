@@ -226,7 +226,7 @@ ArcticMadness.scene.Game.prototype.tweenWater = function (player, playerTile) {
     scope: this,
     duration: 550,
     onUpdate: function (player) {
-      player.animation.gotoAndPlay("falling");
+      player.animation.gotoAndPlay("falling",0);
       this.drownSoundEffect.play();
     },
     onDispose: function (player) {
