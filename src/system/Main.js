@@ -30,7 +30,7 @@ ArcticMadness.system.Main = function() {
         useGamepads:true,
         useKeyboard:true,
         framerate: 30,
-        debug: true,
+        debug: false,
         screenResolutionX: 1280,
         screenResolutionY: 720,
         numHighscoreTables: 4
