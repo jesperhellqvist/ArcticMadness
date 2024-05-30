@@ -8,7 +8,7 @@
  * @constructor
  * @extends rune.scene.Scene
  * @param {number} numberOfPlayers
- * @param {rune.media.Sound} menuSound 
+ * @param {rune.media.Sound} menuSound
  * @param {Array} gamepads
  *
  * @class
@@ -153,6 +153,8 @@ ArcticMadness.scene.Game.prototype.resetPlayer = function (
   player.isRepairing = false;
   player.falling = false;
   player.inWaterTile = null;
+  player.revivingTile = null;
+  player.animationBlock = null;
   player.revivingTileSet = false;
   player.health = 250;
   player.gun.alpha = 1;
@@ -227,7 +229,7 @@ ArcticMadness.scene.Game.prototype.tweenWater = function (player, playerTile) {
     scope: this,
     duration: 550,
     onUpdate: function (player) {
-      player.animation.gotoAndPlay("falling",0);
+      player.animation.gotoAndPlay("falling", 0);
       this.drownSoundEffect.play();
     },
     onDispose: function (player) {
@@ -316,7 +318,7 @@ ArcticMadness.scene.Game.prototype.m_initSound = function () {
   this.quakeSoundEffect = this.application.sounds.sound.get("quake");
   this.quakeSoundEffect.loop = false;
   this.gameMusic.volume = 0;
-  this.gameMusic.rate =0.9;
+  this.gameMusic.rate = 0.9;
   this.gameMusic.fade(1, 3000);
   this.gameMusic.play();
   this.gameMusic.loop = true;
@@ -446,12 +448,19 @@ ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
       this.currentWave++;
       this.duration = 45000;
       this.m_updateWaveTimerText();
-      this.map.resetMap();
       this.map.stopWave();
+      for (var i = 0; i < this.players.length; i++) {
+      if(this.players[i].animationBlock != null){
+        this.stage.removeChild(this.players.animationBlock, true);
+        this.players[i].animationBlock = null;
+      }
+      }
+      this.map.resetMap();
+      
       this.reviveAllPlayers();
       this.waveCompleteSoundEffect.play();
       this.m_showWaveText(this.currentWave - 1);
-      this.gameMusic.rate =0.9;
+      this.gameMusic.rate = 0.9;
     },
     onUpdate: function () {
       if (
@@ -461,9 +470,8 @@ ArcticMadness.scene.Game.prototype.m_startWaveTimer = function () {
         this.updateScore(1);
         this.lastScoreUpdate = Math.floor(this.waveTimer.progressTotal * 45);
       }
-      if(this.duration === 30000){
-        this.gameMusic.rate =1;
-
+      if (this.duration === 30000) {
+        this.gameMusic.rate = 1;
       }
     },
   });

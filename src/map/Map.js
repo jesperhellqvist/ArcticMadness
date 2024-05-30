@@ -69,8 +69,7 @@ ArcticMadness.map.Map.prototype.update = function (step) {
       if (this.m_isPlayerInWater(player)) {
         revivablePlayers.push(player);
         this.m_updatePlayerState(player);
-      } 
-      else if(!player.isAttacked) {
+      } else if (!player.isAttacked) {
         alivePlayers.push(player);
         player.isInWater = false;
         player.inWaterTile = null;
@@ -306,6 +305,12 @@ ArcticMadness.map.Map.prototype.stopWave = function () {
   this.game.enemies.disposeEnemies();
   this.m_stopNewCrackTimer();
   this.m_stopNewEnemyTimer();
+
+  for (var i = 0; i < this.players.length; i++) {
+    if (this.players[i].isRepairing) {
+      this.m_stopRepair(this.players[i], this.players[i].currentTileTimer);
+    }
+  }
 };
 
 //------------------------------------------------------------------------------
@@ -443,8 +448,8 @@ ArcticMadness.map.Map.prototype.m_removeIce = function (index) {
 
   // Random ice edge and water tiles
 
-  var iceEdges = [12,12,12,13,15];
-  var water = [19,19,19,19,20,20,23,24];
+  var iceEdges = [12, 12, 12, 13, 15];
+  var water = [19, 19, 19, 19, 20, 20, 23, 24];
 
   var randomiceEdge = iceEdges[Math.floor(Math.random() * iceEdges.length)];
   var randomWater = water[Math.floor(Math.random() * water.length)];
@@ -725,7 +730,6 @@ ArcticMadness.map.Map.prototype.m_updatePlayerState = function (player) {
       this.m_killPlayer(player);
       this.removeReviveTile(player);
     }
-
   }
 };
 
@@ -794,7 +798,7 @@ ArcticMadness.map.Map.prototype.m_setReviveTile = function (player) {
 
 ArcticMadness.map.Map.prototype.m_killPlayer = function (player) {
   player.animation.gotoAndPlay("death", 0);
- this.killplayerTimer = this.game.timers
+  this.killplayerTimer = this.game.timers
     .create({
       duration: 2000,
       onComplete: function () {
